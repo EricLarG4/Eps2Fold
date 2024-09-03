@@ -2,6 +2,11 @@
 
 librarian::shelf(tidyverse, data.table, tictoc, readxl)
 
+library('tidyverse')
+library('data.table')
+library('tictoc')
+library('readxl')
+
 #UV parameters database----
 
 #parameters for the extinction coefficient of oligodeoxynucleotides at 260 nm
