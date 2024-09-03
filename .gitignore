@@ -47,3 +47,5 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
+G4_IDS.Rproj
+app/scree.rdata
