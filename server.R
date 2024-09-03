@@ -1,19 +1,19 @@
 # libraries----
 
-packages <- c("librarian")
+#packages <- c("librarian")
 
-installed_packages <- packages %in% rownames(installed.packages())
-if (any(installed_packages == FALSE)) {
-  install.packages(packages[!installed_packages])
-}
+#installed_packages <- packages %in% rownames(installed.packages())
+#if (any(installed_packages == FALSE)) {
+#  install.packages(packages[!installed_packages])
+#}
 
-librarian::shelf(
-  shiny,
-  tidyverse, readxl, data.table, DT, magrittr,
-  FactoMineR, cluster, FactoInvestigate,
-  thematic, ggrepel, ggdark, ggthemes, patchwork, plotly,
-  update_all = FALSE
-)
+#librarian::shelf(
+#  shiny,
+#  tidyverse, readxl, data.table, DT, magrittr,
+#  FactoMineR, cluster, FactoInvestigate,
+#  thematic, ggrepel, ggdark, ggthemes, patchwork, plotly,
+#  update_all = FALSE
+#)
 
 library('shiny')
 library('tidyverse')
@@ -21,7 +21,7 @@ library('readxl')
 library('data.table')
 library('DT')
 library('magrittr')
-libary('FactoMineR')
+library('FactoMineR')
 library('cluster')
 library('FactoInvestigate')
 library('thematic')
