@@ -12,6 +12,13 @@ librarian::shelf(
   update_all = FALSE
 )
 
+library('shiny')
+library('shinydashboard')
+library('shinydashboardPlus')
+library('shinyWidgets')
+library('DT')
+library('plotly')
+
 
 # ui----
 
