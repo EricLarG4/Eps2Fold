@@ -11,9 +11,25 @@ librarian::shelf(
   shiny,
   tidyverse, readxl, data.table, DT, magrittr,
   FactoMineR, cluster, FactoInvestigate,
-  thematic, ggrepel, ggdark, ggthemes, patchwork, plotly, plotly,
+  thematic, ggrepel, ggdark, ggthemes, patchwork, plotly,
   update_all = FALSE
 )
+
+library('shiny')
+library('tidyverse')
+library('readxl')
+library('data.table')
+library('DT')
+library('magrittr')
+libary('FactoMineR')
+library('cluster')
+library('FactoInvestigate')
+library('thematic')
+library('ggrepel')
+library('ggdark')
+library('ggthemes')
+library('patchwork')
+library('plotly')
 
 # sources----
 source('R/functions.R')
