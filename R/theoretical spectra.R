@@ -1,6 +1,6 @@
 #Dependencies----
 
-librarian::shelf(tidyverse, data.table, tictoc, readxl)
+#librarian::shelf(tidyverse, data.table, tictoc, readxl)
 
 library('tidyverse')
 library('data.table')
