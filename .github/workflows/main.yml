@@ -27,7 +27,7 @@ on:
         type: string
         default: "1"
         required: false
-   push:
+  push:
     branches: ["main"]
 
 jobs:
