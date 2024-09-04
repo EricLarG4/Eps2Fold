@@ -88,13 +88,14 @@ ui <- shinydashboardPlus::dashboardPage(
         fileInput(
           "ref.data", 
           "Select reference data file",
-          multiple = TRUE,
+          multiple = FALSE,
           accept = c(".xlsx", ".xls")
         ),
+        verbatimTextOutput("file_toggle_value"),
         fileInput(
           "user.data", 
           "Select user data file",
-          multiple = TRUE,
+          multiple = FALSE,
           accept = c(".xlsx", ".xls")
         )
         ##data filtering----
