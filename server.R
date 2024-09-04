@@ -88,8 +88,7 @@ server <- shinyServer(function(input, output) {
   ### Reference set----
   ref.set <- reactive({
     ref.set <- read_excel(
-      #input.file()$datapath
-      input.file()
+      input.file()$datapath
     ) 
     
     if(input$ids.ref.select == TRUE){
