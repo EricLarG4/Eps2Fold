@@ -6,7 +6,11 @@ The app can be used natively in R, or in a Docker container. Either way, there i
 
 It is also possible to test the app in the cloud wihtout installing anything. It only requires a Docker account.
 
-### 1. Run the app directly in R
+### 1. Run the app online
+
+A web app is available on [Posit Connect Cloud](https://EricLarG4-epsilon-2-fold.share.connect.posit.cloud))
+
+### 2. Run the app directly in R
 
 *Requires to have R installed: https://www.r-project.org/* 
 
@@ -37,7 +41,7 @@ shiny::shinyApp(ui, server)
 ```
 or open app.R in RStudio and click on the Run button.
 
-### 2. Run the app in a Docker container
+### 3. Run the app in a Docker container
 
 *Does not require to have R installed*
 
@@ -45,15 +49,15 @@ or open app.R in RStudio and click on the Run button.
 
 For the first use or to update the app, pull the image, otherwise proceed directly to 2.2.
 
-#### 2.1 Pulling the image
+#### 3.1 Pulling the image
 
 In a terminal, pull the Docker image: `docker pull ericlarg4/shiny-ids-app:release` 
 
-#### 2.2 Running the app
+#### 3.2 Running the app
 
 Proceed to either 2.2.1 or 2.2.2 if you prefer to use a GUI.
 
-##### 2.2.1 Terminal
+##### 3.2.1 Terminal
 
 - Launch the app: `docker run --rm -p 3838:3838 ericlarg4/shiny-ids-app:release`
 
@@ -63,7 +67,7 @@ If you want to stop and remove the container once you are done with the app, use
 
 `docker ps -q --filter ancestor=ericlarg4/shiny-ids-app:release | xargs docker stop`
 
-##### 2.2.2 Docker desktop program
+##### 3.2.2 Docker desktop program
 
 - In the image tab, run the image using 3838 as Local Host in the optional settings.
 
@@ -71,7 +75,7 @@ If you want to stop and remove the container once you are done with the app, use
 
 If you want to stop and remove the container once you're done with the app, click on the remove icon.
 
-### 3. Test the app in a Docker playground
+### 4. Test the app in a Docker playground
 
 *Requires a free Docker account: https://hub.docker.com/signup*
 
