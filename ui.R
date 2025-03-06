@@ -84,14 +84,36 @@ ui <- shinydashboardPlus::dashboardPage(
           text = "View data",
           tabName = "tabinput",
           selected = TRUE
-        ),    
+        ),  
+        prettyToggle(
+          inputId = "data_source",
+          label_on = "Use Online Data",
+          label_off = "Upload File",
+          bigger = TRUE
+        ),
+        # radioButtons(
+        #   inputId = "data_source",
+        #   label = "Select Reference Data Source:",
+        #   choices = c("Upload File" = "upload", "Use Online File" = "online"),
+        #   selected = "upload",
+        #   inline = TRUE
+        # ),        
+        div(
+        tags$a(
+          href = "https://github.com/EricLarG4/G4_IDS/raw/refs/heads/main/data/Reference_data.xlsx",
+          "Download Reference Data",
+          target = "_blank",
+          style = "font-size: 14px; color: pink; text-decoration: underline;",
+          download = NA  # Optional, allows browsers to download instead of opening
+        ),
+        style = "display: flex; align-items: center; padding-left: 15px;"  
+        ),  
         fileInput(
           "ref.data", 
           "Select reference data file",
           multiple = FALSE,
           accept = c(".xlsx", ".xls")
         ),
-        verbatimTextOutput("file_toggle_value"),
         fileInput(
           "user.data", 
           "Select user data file",
@@ -1058,12 +1080,3 @@ ui <- shinydashboardPlus::dashboardPage(
     )
   )
 )
-
-
-
-
-
-
-
-
-

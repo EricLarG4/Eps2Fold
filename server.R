@@ -71,9 +71,23 @@ server <- shinyServer(function(input, output) {
   # Reference input----
   
   ## Data files----
+  # input.file <- reactive({
+  #   input$ref.data
+  # })
+
   input.file <- reactive({
-    input$ref.data
+    if (isFALSE(input$data_source) && !is.null(input$ref.data)) {
+      return(input$ref.data)
+    } else if (isTRUE(input$data_source)) {
+      url <- "https://github.com/EricLarG4/G4_IDS/raw/refs/heads/main/data/Reference_data.xlsx"
+      temp_file <- tempfile(fileext = ".xlsx")
+      download.file(url, temp_file, mode = "wb")
+      return(temp_file)
+    } else {
+      return(NULL)
+    }
   })
+  
   
   
   ### File import toggle----
@@ -86,15 +100,19 @@ server <- shinyServer(function(input, output) {
   })
   
   # outputs the value of the file toggle
-  output$file_toggle_value <- renderPrint({
-    file.toggle()
-  })
+  # output$file_toggle_value <- renderPrint({
+  #   file.toggle()
+  # })
   
   ### Reference set----
   ref.set <- reactive({
-    ref.set <- read_excel(
-      input.file()$datapath
-    ) 
+
+    if (isFALSE(input$data_source)) {
+      ref.set <- read_excel(input.file()$datapath) 
+    } else {
+      ref.set <- read_excel(input.file())
+    }
+    
     
     if(input$ids.ref.select == TRUE){
       ref.set <- ref.set %>% 
@@ -5143,6 +5161,3 @@ server <- shinyServer(function(input, output) {
   })
   
 })
-
-
-
