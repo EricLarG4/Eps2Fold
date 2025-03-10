@@ -33,6 +33,7 @@ library('plotly')
 
 # sources----
 source('R/functions.R')
+source('R/theoretical spectra.R')
 
 # options----
 # Set options to suppress warnings in the app
@@ -51,16 +52,17 @@ custom.theme <- theme(
   legend.background = element_blank(),
   legend.box.background = element_blank(),
   legend.key = element_blank(),
-  legend.text = element_text(size = 18),
-  legend.title = element_text(size = 22),
-  axis.text = element_text(size = 18),
-  axis.title = element_text(size = 22),
-  strip.text = element_text(size = 20),
-  axis.line = element_line(size = 0.5)
+  legend.text = element_text(size = 18, color = 'white'),
+  legend.title = element_text(size = 22, color = 'white'),
+  axis.text = element_text(size = 18, color = 'white'),
+  axis.title = element_text(size = 22, color = 'white'),
+  strip.text = element_text(size = 20, color = 'white'),
+  axis.line = element_line(size = 0.75, color = 'white'),
+  axis.ticks = element_line(size = 0.75, color = 'white')
 ) 
 
 thematic_rmd(
-  bg = '#272c30', fg = '#EEE8D5', accent = 'auto',
+  bg = '#292c33', fg = '#EEE8D5', accent = 'auto',
   sequential = hcl.colors(n = 42, palette = 'viridis')
 )
 
@@ -1558,7 +1560,7 @@ server <- shinyServer(function(input, output) {
     pca.cd.scree <- data.frame(pca.cd()$eig) %>% 
       mutate(dim = 1:nrow(data.frame(pca.cd()$eig))) %>% 
       # mutate(dim.cum.sum = cumsum(dim)) %>% 
-      # filter(dim <= 10) %>%
+      filter(dim <= 10) %>%
       ggplot(aes(x = dim, y = percentage.of.variance)) +
       geom_bar(
         stat = 'identity',
@@ -1582,6 +1584,8 @@ server <- shinyServer(function(input, output) {
         color = "white"
       ) +
       custom.theme +
+      scale_x_continuous(expand = c(0,0), limits = c(0, NA)) +
+      scale_y_continuous(expand = c(0,NA), limits = c(0, 105)) +
       labs(
         y = 'Variance contribution (%)',
         x = 'Dimension'
@@ -1602,7 +1606,7 @@ server <- shinyServer(function(input, output) {
   })
   
   ##### Factor map----
-  output$pca.cd.fac.map <- renderPlot({
+  pca.cd.fac.map <- reactive({
     
     pca.cd.fac.map <- data.frame(pca.cd()$var$cos2) %>% 
       select(input$dim.cd) %>% 
@@ -1643,46 +1647,18 @@ server <- shinyServer(function(input, output) {
     return(pca.cd.fac.map)
   }) 
   
+  output$pca.cd.fac.map <- renderPlot({
+    pca.cd.fac.map()
+  }) 
   output$pca.cd.fac.map.2 <- renderPlot({
-    data.frame(pca.cd()$var$cos2) %>% 
-      select(input$dim.cd.2) %>% 
-      mutate(
-        var = as.numeric(substr(rownames(data.frame(pca.cd()$var$cos2)), 4,6))
-      ) %>%
-      pivot_longer(
-        cols = 1:length(input$dim.cd.2),
-        names_to = 'dim',
-        values_to = 'cos2'
-      ) %>% 
-      mutate(
-        dim = substr(dim, 5, 5)
-      ) %>% 
-      ggplot(
-        aes(
-          x = dim,
-          y = var,
-          size = cos2
-        )
-      ) +
-      geom_point(
-        color = "#2AA198",
-        alpha = 0.5
-      ) +
-      labs(
-        y = 'Variable',
-        x = 'Dimension'
-      ) +
-      custom.theme +
-      scale_size_continuous(limits = c(0,1),
-                            range = c(0,25),
-                            name = bquote(cos^2))
+    pca.cd.fac.map()
   }) 
   
   ##### Correlation circle----
   
   circle <- circleFun(c(0,0), 2, npoints = 100)
   
-  output$pca.cd.var.cor <- renderPlot({
+  pca.cd.var.cor <- reactive({
     
     data.frame(pca.cd()$var$cor) %>% 
       select(input$dim.cd[1], input$dim.cd[2]) %>%
@@ -1719,10 +1695,12 @@ server <- shinyServer(function(input, output) {
         ),
         show.legend = TRUE
       ) +
-      geom_text_repel(
-        aes(label = var),
-        show.legend = FALSE
-      ) +
+        geom_text_repel(
+          aes(label = stringr::str_extract(var, "\\d+") %>% as.numeric()),
+          show.legend = FALSE,
+          size = 5,
+          fontface = 'bold'
+        ) +
       scale_x_continuous(limits = c(-1,1)) +
       scale_y_continuous(limits = c(-1,1)) +
       labs(
@@ -1733,81 +1711,34 @@ server <- shinyServer(function(input, output) {
       scale_color_continuous(
         type = 'viridis',
         limits = c(0,1),
-        name = bquote(sum~cos^2)
+        name = bquote(sum~cos^2),
+        guide = guide_colorbar(barwidth = 15)
       )
   }) 
   
+  output$pca.cd.var.cor <- renderPlot({
+    pca.cd.var.cor()
+  }) 
   output$pca.cd.var.cor.2 <- renderPlot({
-    
-    data.frame(pca.cd()$var$cor) %>% 
-      select(input$dim.cd.2[1], input$dim.cd.2[2]) %>%
-      mutate(var = rownames(data.frame(pca.cd()$var$cor))) %>% 
-      magrittr::set_colnames(c("Dim.1", "Dim.2", "var")) %>%
-      left_join(
-        data.frame(pca.cd()$var$cos2) %>% 
-          select(input$dim.cd.2[1], input$dim.cd.2[2]) %>%
-          magrittr::set_colnames(c("Dim.1", "Dim.2")) %>% 
-          mutate(sum.cos2 = Dim.1 + Dim.2) %>% 
-          select(sum.cos2) %>% 
-          mutate(var = rownames(data.frame(pca.cd()$var$cos2))),
-        by = 'var'
-      ) %>% 
-      ggplot(
-        aes(
-          x = Dim.1,
-          y = Dim.2,
-          color = sum.cos2
-        )
-      ) +
-      geom_path(
-        data = circle, 
-        aes(x=cir.x, y=cir.y), 
-        inherit.aes = FALSE,
-        color = "white"
-      ) +
-      geom_segment(
-        aes(
-          x = 0, y = 0,
-          xend = Dim.1, yend = Dim.2
-        ),
-        arrow = arrow(length = unit(0.1, "inches")
-        ),
-        show.legend = TRUE
-      ) +
-      geom_text_repel(
-        aes(label = var),
-        show.legend = FALSE
-      ) +
-      scale_x_continuous(limits = c(-1,1)) +
-      scale_y_continuous(limits = c(-1,1)) +
-      labs(
-        y = input$dim.cd.2[2],
-        x = input$dim.cd.2[1]
-      ) +
-      custom.theme +
-      scale_color_continuous(
-        type = 'viridis',
-        limits = c(0,1),
-        name = bquote(sum~cos^2)
-      )
+    pca.cd.var.cor()
   }) 
   
   
   #### Variable coordinates-------
-  output$pca.cd.var.coord <- renderPlot({
-    data.frame(pca.cd()$var$coord) %>% 
+  pca.cd.var.coord <- reactive({
+    data.frame(pca.cd()$var$coord) %>%
       select(input$dim.cd[1], input$dim.cd[2]) %>%
-      magrittr::set_colnames(c("Dim.1", "Dim.2")) %>% 
-      mutate(var = rownames(data.frame(pca.cd()$var$coord))) %>% 
+      magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
+      mutate(var = rownames(data.frame(pca.cd()$var$coord))) %>%
       left_join(
         data.frame(pca.cd()$var$cos2) %>%
           select(input$dim.cd[1], input$dim.cd[2]) %>%
           magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
-          mutate(sum.cos2 = Dim.1 + Dim.2) %>% 
-          select(sum.cos2) %>% 
+          mutate(sum.cos2 = Dim.1 + Dim.2) %>%
+          select(sum.cos2) %>%
           mutate(var = rownames(data.frame(pca.cd()$var$cos2))),
         by = 'var'
-      ) %>% 
+      ) %>%
       ggplot(
         aes(
           x = Dim.1,
@@ -1818,64 +1749,37 @@ server <- shinyServer(function(input, output) {
       ) +
       geom_segment(
         aes(
-          x = 0, y = 0, 
-          xend = Dim.1, yend = Dim.2
+          x = 0,
+          y = 0,
+          xend = Dim.1,
+          yend = Dim.2
         ),
-        arrow = arrow(length = unit(0.1, "inches")
-        ),
+        arrow = arrow(length = unit(0.1, "inches")),
         show.legend = TRUE
       ) +
       geom_text_repel(
-        aes(label = var),
-        show.legend = FALSE
+        aes(label = stringr::str_extract(var, "\\d+") %>% as.numeric()),
+        show.legend = FALSE,
+        size = 5, fontface = 'bold'
       ) +
       custom.theme +
+      scale_color_continuous(
+        type = 'viridis',
+        limits = c(0, 1),
+        name = bquote(sum ~ cos^2),
+        guide = guide_colorbar(barwidth = 15)
+      ) +
       labs(
         y = input$dim.cd[2],
         x = input$dim.cd[1]
       )
   }) 
-  
+   
+  output$pca.cd.var.coord <- renderPlot({
+    pca.cd.var.coord()
+  })  
   output$pca.cd.var.coord.2 <- renderPlot({
-    data.frame(pca.cd()$var$coord) %>% 
-      select(input$dim.cd.2[1], input$dim.cd.2[2]) %>%
-      magrittr::set_colnames(c("Dim.1", "Dim.2")) %>% 
-      mutate(var = rownames(data.frame(pca.cd()$var$coord))) %>% 
-      left_join(
-        data.frame(pca.cd()$var$cos2) %>%
-          select(input$dim.cd.2[1], input$dim.cd.2[2]) %>%
-          magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
-          mutate(sum.cos2 = Dim.1 + Dim.2) %>% 
-          select(sum.cos2) %>% 
-          mutate(var = rownames(data.frame(pca.cd()$var$cos2))),
-        by = 'var'
-      ) %>% 
-      ggplot(
-        aes(
-          x = Dim.1,
-          y = Dim.2,
-          color = sum.cos2
-        ),
-        show.legend = FALSE
-      ) +
-      geom_segment(
-        aes(
-          x = 0, y = 0, 
-          xend = Dim.1, yend = Dim.2
-        ),
-        arrow = arrow(length = unit(0.1, "inches")
-        ),
-        show.legend = TRUE
-      ) +
-      geom_text_repel(
-        aes(label = var),
-        show.legend = FALSE
-      ) +
-      custom.theme +
-      labs(
-        y = input$dim.cd.2[2],
-        x = input$dim.cd.2[1]
-      )
+    pca.cd.var.coord()
   }) 
   
   #### Individuals coordinates--------
@@ -1893,7 +1797,10 @@ server <- shinyServer(function(input, output) {
             select(oligo, topo, feature, gba, tetrad, tetrad.id, loop, plus.minus, groove, salt),
           by = 'oligo'
         ) %>%  
-        setcolorder(c('oligo', 'topo', 'feature', 'gba', 'tetrad', 'tetrad.id', 'loop', 'plus.minus', 'groove', 'salt', 'km')) %>%
+        setcolorder(
+          c('oligo', 'topo', 'feature', 'gba', 'tetrad', 'tetrad.id', 
+          'loop', 'plus.minus', 'groove', 'salt', 'km')
+        ) %>%
         datatable(
           style = "bootstrap",
           extensions = c('Buttons', 'Responsive', 'Scroller'),
@@ -1936,7 +1843,7 @@ server <- shinyServer(function(input, output) {
           )
         ) %>% 
         formatStyle(columns = 0:(11+input$ncp),  target = "cell",
-                    backgroundColor = "#272c30") %>% 
+                    backgroundColor = "#272c30", color = 'white') %>% 
         formatSignif(columns = 11:(11+input$ncp), digits = 5)
     }
   })
@@ -2091,7 +1998,11 @@ server <- shinyServer(function(input, output) {
           title = NULL,
           columnDefs = list(list(visible = FALSE, targets = c(0:8)))
         )
-      ) 
+      )  %>%       
+        formatStyle(
+          columns = 0:17,  
+          target = "cell",
+      backgroundColor = "#272c30", color = 'white') 
   })
   
   ### IDS----
@@ -2232,6 +2143,8 @@ server <- shinyServer(function(input, output) {
         color = "white"
       ) +
       custom.theme +
+      scale_x_continuous(expand = c(0,0), limits = c(0, NA)) +
+      scale_y_continuous(expand = c(0,NA), limits = c(0, 105)) +
       labs(
         y = 'Variance contribution (%)',
         x = 'Dimension'
@@ -2252,7 +2165,7 @@ server <- shinyServer(function(input, output) {
   }) 
   
   ##### Factor map----
-  output$pca.ids.fac.map <- renderPlot({
+pca.ids.fac.map <- reactive({
     pca.cd.fac.map <- data.frame(pca.ids()$var$cos2) %>% 
       select(input$dim.ids) %>% 
       mutate(
@@ -2288,48 +2201,20 @@ server <- shinyServer(function(input, output) {
     
     
     #diagnostics
-    save(pca.cd.fac.map, file = "factormap.rdata")
+    # save(pca.cd.fac.map, file = "factormap.rdata")
     
     return(pca.cd.fac.map)
   })
-  
+    
+  output$pca.ids.fac.map <- renderPlot({
+    pca.ids.fac.map()
+  })
   output$pca.ids.fac.map.2 <- renderPlot({
-    data.frame(pca.ids()$var$cos2) %>% 
-      select(input$dim.ids.2) %>% 
-      mutate(
-        var = as.numeric(substr(rownames(data.frame(pca.ids()$var$cos2)), 5,7))
-      ) %>%
-      pivot_longer(
-        cols = 1:length(input$dim.ids.2),
-        names_to = 'dim',
-        values_to = 'cos2'
-      ) %>% 
-      mutate(
-        dim = substr(dim, 5, 5)
-      ) %>% 
-      ggplot(
-        aes(
-          x = dim,
-          y = var,
-          size = cos2
-        )
-      ) +
-      geom_point(
-        color = "#2AA198",
-        alpha = 0.5
-      ) +
-      labs(
-        y = 'Variable',
-        x = 'Dimension'
-      ) +
-      custom.theme +
-      scale_size_continuous(limits = c(0,1),
-                            range = c(0,25),
-                            name = bquote(cos^2))
+    pca.ids.fac.map()
   })
   
   ##### Correlation circle----
-  output$pca.ids.var.cor <- renderPlot({
+  pca.ids.var.cor <- reactive({
     data.frame(pca.ids()$var$cor) %>%
       select(input$dim.ids[1], input$dim.ids[2]) %>%
       mutate(var = rownames(data.frame(pca.ids()$var$cor))) %>%
@@ -2365,10 +2250,11 @@ server <- shinyServer(function(input, output) {
         ),
         show.legend = TRUE
       ) +
-      geom_text_repel(
-        aes(label = var),
-        show.legend = FALSE
-      ) +
+        geom_text_repel(
+          aes(label = stringr::str_extract(var, "\\d+") %>% as.numeric()),
+          show.legend = FALSE,
+          size = 5, fontface = 'bold'
+        ) +
       scale_x_continuous(limits = c(-1,1)) +
       scale_y_continuous(limits = c(-1,1)) +
       labs(
@@ -2376,70 +2262,25 @@ server <- shinyServer(function(input, output) {
         x = input$dim.ids[1]
       ) +
       custom.theme +
-      scale_color_continuous(
-        type = 'viridis',
-        limits = c(0,1),
-        name = bquote(sum~cos^2)
-      )
+        scale_color_continuous(
+          type = 'viridis',
+          limits = c(0, 1),
+          name = bquote(sum ~ cos^2),
+          guide = guide_colorbar(barwidth = 15)
+        ) 
+  })
+  
+  output$pca.ids.var.cor <- renderPlot({
+    pca.ids.var.cor()
   })
   
   output$pca.ids.var.cor.2 <- renderPlot({
-    data.frame(pca.ids()$var$cor) %>%
-      select(input$dim.ids.2[1], input$dim.ids.2[2]) %>%
-      mutate(var = rownames(data.frame(pca.ids()$var$cor))) %>%
-      magrittr::set_colnames(c("Dim.1", "Dim.2", "var")) %>%
-      left_join(
-        data.frame(pca.ids()$var$cos2) %>%
-          select(input$dim.ids.2[1], input$dim.ids.2[2]) %>%
-          magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
-          mutate(sum.cos2 = Dim.1 + Dim.2) %>%
-          select(sum.cos2) %>%
-          mutate(var = rownames(data.frame(pca.ids()$var$cos2))),
-        by = 'var'
-      ) %>%
-      ggplot(
-        aes(
-          x = Dim.1,
-          y = Dim.2,
-          color = sum.cos2
-        )
-      ) +
-      geom_path(
-        data = circle,
-        aes(x=cir.x, y=cir.y),
-        inherit.aes = FALSE,
-        color = "white"
-      ) +
-      geom_segment(
-        aes(
-          x = 0, y = 0,
-          xend = Dim.1, yend = Dim.2
-        ),
-        arrow = arrow(length = unit(0.1, "inches")
-        ),
-        show.legend = TRUE
-      ) +
-      geom_text_repel(
-        aes(label = var),
-        show.legend = FALSE
-      ) +
-      scale_x_continuous(limits = c(-1,1)) +
-      scale_y_continuous(limits = c(-1,1)) +
-      labs(
-        y = input$dim.ids.2[2],
-        x = input$dim.ids.2[1]
-      ) +
-      custom.theme +
-      scale_color_continuous(
-        type = 'viridis',
-        limits = c(0,1),
-        name = bquote(sum~cos^2)
-      )
+    pca.ids.var.cor()
   })
   
   #### Variable coordinates-----
   
-  output$pca.ids.var.coord <- renderPlot({
+pca.ids.var.coord <- reactive({
     data.frame(pca.ids()$var$coord) %>% 
       select(input$dim.ids[1], input$dim.ids[2]) %>%
       magrittr::set_colnames(c("Dim.1", "Dim.2")) %>% 
@@ -2470,57 +2311,29 @@ server <- shinyServer(function(input, output) {
         ),
         show.legend = TRUE
       ) +
-      geom_text_repel(
-        aes(label = var),
-        show.legend = FALSE
-      ) +
+        geom_text_repel(
+          aes(label = stringr::str_extract(var, "\\d+") %>% as.numeric()),
+          show.legend = FALSE,
+          size = 5, fontface = 'bold'
+        ) +
       custom.theme +
       labs(
         y = input$dim.ids[2],
         x = input$dim.ids[1]
-      )
+      )+
+        scale_color_continuous(
+          type = 'viridis',
+          limits = c(0, 1),
+          name = bquote(sum ~ cos^2),
+          guide = guide_colorbar(barwidth = 15)
+        ) 
   })
-  
+    
+  output$pca.ids.var.coord <- renderPlot({
+		pca.ids.var.coord()
+  })
   output$pca.ids.var.coord.2 <- renderPlot({
-    data.frame(pca.ids()$var$coord) %>% 
-      select(input$dim.ids.2[1], input$dim.ids.2[2]) %>%
-      magrittr::set_colnames(c("Dim.1", "Dim.2")) %>% 
-      mutate(var = rownames(data.frame(pca.ids()$var$coord))) %>% 
-      left_join(
-        data.frame(pca.ids()$var$cos2) %>%
-          select(input$dim.ids.2[1], input$dim.ids.2[2]) %>%
-          magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
-          mutate(sum.cos2 = Dim.1 + Dim.2) %>% 
-          select(sum.cos2) %>% 
-          mutate(var = rownames(data.frame(pca.ids()$var$cos2))),
-        by = 'var'
-      ) %>% 
-      ggplot(
-        aes(
-          x = Dim.1,
-          y = Dim.2,
-          color = sum.cos2
-        ),
-        show.legend = FALSE
-      ) +
-      geom_segment(
-        aes(
-          x = 0, y = 0, 
-          xend = Dim.1, yend = Dim.2
-        ),
-        arrow = arrow(length = unit(0.1, "inches")
-        ),
-        show.legend = TRUE
-      ) +
-      geom_text_repel(
-        aes(label = var),
-        show.legend = FALSE
-      ) +
-      custom.theme +
-      labs(
-        y = input$dim.ids.2[2],
-        x = input$dim.ids.2[1]
-      )
+		pca.ids.var.coord()
   })
   
   #### Individuals coordinates----
@@ -2883,6 +2696,8 @@ server <- shinyServer(function(input, output) {
         color = "white"
       ) +
       custom.theme +
+        scale_x_continuous(expand = c(0,0), limits = c(0, 21)) +
+        scale_y_continuous(expand = c(0,NA), limits = c(0, 105)) +
       labs(
         y = 'Variance contribution (%)',
         x = 'Dimension'
@@ -3543,9 +3358,9 @@ server <- shinyServer(function(input, output) {
   ##### CD----
   
   user.cd.input <- reactive({
-    read_excel(
+    user_cd_input <- read_excel(
       input.file.user()$datapath,
-      sheet = "cd"
+      sheet = "CD"
     ) %>% 
       pivot_longer(
         cols = 2:(ncol(.)),
@@ -3557,7 +3372,15 @@ server <- shinyServer(function(input, output) {
         by = "oligo"
       ) %>% 
       filter(wl%%1 == 0) %>% #removing non integer wl to have the same number of data points than in IDS
-      group_by(oligo) %>% 
+      group_by(oligo) 
+
+    
+    writexl::write_xlsx(
+      user_cd_input,
+      path = "user_cd.xlsx"
+    )
+
+    user_cd_input %>%
       left_join(
         user.uv.input() %>%
           filter(cation == "none") %>% 
@@ -3568,7 +3391,7 @@ server <- shinyServer(function(input, output) {
       ) %>% 
       mutate(
         cd = cd - mean(cd[wl > 320]),
-        delta.eps = cd/(32980*l*CF/1E6)
+        delta.eps = cd/(32980*l*Concentration/1E6)
       ) %>% 
       mutate(
         norm.cd = case_when(
@@ -3594,7 +3417,7 @@ server <- shinyServer(function(input, output) {
   user.uv.input.cation <- reactive({
     read_excel(
       input.file.user()$datapath,
-      sheet = "uv cation"
+      sheet = "UV"
     ) %>% 
       add_column(cation = 'cation') %>% 
       arrange(wl)
@@ -3604,7 +3427,7 @@ server <- shinyServer(function(input, output) {
   user.uv.input.no.cation <- reactive({
     read_excel(
       input.file.user()$datapath,
-      sheet = "uv no cation"
+      sheet = "UV - no cation"
     ) %>% 
       add_column(cation = 'no cation')
   })
@@ -3635,7 +3458,7 @@ server <- shinyServer(function(input, output) {
       group_by(oligo, cation) %>% 
       mutate(
         abs = abs - mean(abs[wl > 320]),
-        eps = abs/(1*CF/1E6)
+        eps = abs/(1*Concentration/1E6)
       ) %>% 
       ungroup() %>% 
       filter(
@@ -3679,7 +3502,7 @@ server <- shinyServer(function(input, output) {
     } else {
       
       withProgress(
-        message = 'Calculating IDS spectra',
+        message = 'Calculating theoretical spectra',
         detail = 'Please wait', value = 0, {
           
           incProgress(amount = 1/3)
@@ -3726,12 +3549,12 @@ server <- shinyServer(function(input, output) {
     } else {
       user.cd.input() %>%
         mutate(
-          CF = round(CF, 2),
+          Concentration = round(Concentration, 2),
           cd = round(cd, 2),          
           delta.eps = round(delta.eps, 2),
           norm.cd = round(norm.cd, 2)
         ) %>%
-        setcolorder(c("oligo", "CF", "wl", "cd", "delta.eps", "norm.cd")) %>%
+        setcolorder(c("oligo", "Concentration", "wl", "cd", "delta.eps", "norm.cd")) %>%
         datatable(
           style = "bootstrap",
           extensions = c('Buttons', 'Responsive', 'Scroller'),
@@ -3740,7 +3563,7 @@ server <- shinyServer(function(input, output) {
             "Name" = "oligo",
             "Molar ellipticity" = "delta.eps",
             "Ellipticity (mdeg)" = "cd",
-            "Concentration (µM)" = "CF",
+            "Concentration (µM)" = "Concentration",
             "Normalized CD" = "norm.cd"
           ),
           rownames = F,
@@ -3840,10 +3663,10 @@ server <- shinyServer(function(input, output) {
     } else {
       user.uv.input() %>%
         mutate(
-          CF = round(CF, 2),
+          Concentration = round(Concentration, 2),
           abs = round(abs, 2)
         ) %>% 
-        setcolorder(c("oligo", "cation", "CF", "wl", "abs", "eps")) %>%
+        setcolorder(c("oligo", "cation", "Concentration", "wl", "abs", "eps")) %>%
         datatable(
           style = "bootstrap",
           extensions = c('Buttons', 'Responsive', 'Scroller'),
@@ -3852,7 +3675,7 @@ server <- shinyServer(function(input, output) {
             "Name" = "oligo",
             "A" = "abs",
             "Cation?" = "cation",
-            "Concentration (µM)" = "CF",
+            "Concentration (µM)" = "Concentration",
             "Molar extinction coefficient" = "eps"
           ),
           rownames = F,
@@ -3932,11 +3755,11 @@ server <- shinyServer(function(input, output) {
       user.ids.input() %>%
         select(-c("cation", "abs")) %>%
         mutate(
-          CF = round(CF, 2),
+          Concentration = round(Concentration, 2),
           delta.eps = round(delta.eps, 0),
           norm.ids = round(norm.ids, 2)
         ) %>%
-        setcolorder(c("oligo", "CF", "wl", "delta.eps", "norm.ids")) %>%
+        setcolorder(c("oligo", "Concentration", "wl", "delta.eps", "norm.ids")) %>%
         datatable(
           style = "bootstrap",
           extensions = c('Buttons', 'Responsive', 'Scroller'),
@@ -3945,7 +3768,7 @@ server <- shinyServer(function(input, output) {
             "Wavelength (nm)" = "wl",
             "Name" = "oligo",
             "IDS" = "delta.eps",
-            "C (µM)" = "CF",
+            "C (µM)" = "Concentration",
             "Normalized IDS" = "norm.ids",
             "Molar extinction coefficient" = "eps"
           ),
