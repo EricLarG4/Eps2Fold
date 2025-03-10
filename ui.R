@@ -18,17 +18,38 @@ library('shinydashboardPlus')
 library('shinyWidgets')
 library('DT')
 library('plotly')
+library('fresh')
+
+mytheme <- create_theme(
+  adminlte_color(
+    light_blue = "#292c33"
+  ),
+  adminlte_sidebar(
+    width = "400px",
+    dark_bg = "#292c33",
+    dark_hover_bg = "#292c33",
+    dark_color = "white"
+  ),
+  adminlte_global(
+    content_bg = "#292c33",
+    box_bg = "#292c33", 
+    info_box_bg = "#292c33"
+  ),
+  theme = "darkly"
+)
+
 
 
 # ui----
 
 ui <- shinydashboardPlus::dashboardPage(
-  skin = "midnight",
+  # skin = "midnight",
+  freshTheme = mytheme,
   title = "EricLarG4: G4 CD/IDS PCA",
   options = list(sidebarExpandOnHover = TRUE),
   scrollToTop = TRUE,
   header = dashboardHeader(
-    title = "G4 CD/IDS PCA",
+    title = "Eps2Fold",
     fixed = FALSE,
     leftUi = tagList(
       dropdownBlock(
@@ -51,7 +72,7 @@ ui <- shinydashboardPlus::dashboardPage(
     width = 300,
     collapsed = TRUE,        
     controlbarMenu(
-      id = 'datafilter',        
+      id = 'datafilter',    
       controlbarItem(
         title = 'Data filters',
         icon = icon('filter'),
@@ -87,8 +108,8 @@ ui <- shinydashboardPlus::dashboardPage(
         ),  
         prettyToggle(
           inputId = "data_source",
-          label_on = "Use Online Data",
-          label_off = "Upload File",
+          label_on = "Online reference data in use",
+          label_off = "Upload your own reference file",
           bigger = TRUE
         ),
         # radioButtons(
@@ -103,7 +124,7 @@ ui <- shinydashboardPlus::dashboardPage(
           href = "https://github.com/EricLarG4/G4_IDS/raw/refs/heads/main/data/Reference_data.xlsx",
           "Download Reference Data",
           target = "_blank",
-          style = "font-size: 14px; color: pink; text-decoration: underline;",
+          style = "font-size: 14px; color: coral; text-decoration: underline;",
           download = NA  # Optional, allows browsers to download instead of opening
         ),
         style = "display: flex; align-items: center; padding-left: 15px;"  
