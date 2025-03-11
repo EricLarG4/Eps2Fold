@@ -135,6 +135,16 @@ ui <- shinydashboardPlus::dashboardPage(
           multiple = FALSE,
           accept = c(".xlsx", ".xls")
         ),
+        div(
+          tags$a(
+            href = "https://github.com/EricLarG4/G4_IDS/raw/refs/heads/main/data/User%20data.xlsx",
+            "Download User Data Template",
+            target = "_blank",
+            style = "font-size: 14px; color: coral; text-decoration: underline;",
+            download = NA  # Optional, allows browsers to download instead of opening
+          ),
+          style = "display: flex; align-items: center; padding-left: 15px;"  
+          ), 
         fileInput(
           "user.data", 
           "Select user data file",
