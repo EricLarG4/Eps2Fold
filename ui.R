@@ -1,25 +1,4 @@
-#libraries----
-
-#packages <- c("librarian")
-
-#installed_packages <- packages %in% rownames(installed.packages())
-#if (any(installed_packages == FALSE)) {
-#  install.packages(packages[!installed_packages])
-#}
-
-#librarian::shelf(
-#  shiny, shinydashboard, shinydashboardPlus, shinyWidgets, DT, plotly,
-#  update_all = FALSE
-#)
-
-library('shiny')
-library('shinydashboard')
-library('shinydashboardPlus')
-library('shinyWidgets')
-library('DT')
-library('plotly')
-library('fresh')
-
+# theme----
 mytheme <- create_theme(
   adminlte_color(
     light_blue = "#292c33"
