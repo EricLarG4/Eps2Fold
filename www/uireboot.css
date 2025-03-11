@@ -219,3 +219,24 @@ h3 {
 .irs--shiny .irs-grid-pol {
   background-color: #999999;
 }
+
+
+/* ============================== */
+/* Datatables */
+/* ============================== */
+
+.dt-right {
+  color: white !important;
+}
+
+.form-inline .form-control {
+  color: white !important;
+}
+
+.table.dataTable {
+ color: white !important;
+}
+
+.table.dataTable tbody  {
+  color: white !important;
+}
