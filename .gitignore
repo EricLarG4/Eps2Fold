@@ -49,3 +49,5 @@ po/*~
 rsconnect/
 G4_IDS.Rproj
 app/scree.rdata
+user_cd.xlsx
+R/buffer.R
