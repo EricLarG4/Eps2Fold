@@ -8,8 +8,8 @@ library('magrittr')
 
 ## shiny----
 library('shiny')
-library('shinydashboard')
-library('shinydashboardPlus')
+# library('shinydashboard')
+# library('shinydashboardPlus')
 library('shinyWidgets')
 
 ## Theming----
@@ -20,7 +20,7 @@ library('bslib')
 
 ## data display----
 library('ggrepel')
-library('ggdark')
+# library('ggdark')
 library('ggthemes')
 library('patchwork')
 library('plotly')
