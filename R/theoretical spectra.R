@@ -4,7 +4,6 @@
 
 library('tidyverse')
 library('data.table')
-library('tictoc')
 library('readxl')
 
 #UV parameters database----

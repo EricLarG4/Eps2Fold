@@ -85,7 +85,7 @@ ui <- page_navbar(
           open = TRUE,
           class = "collapse in",
           multiple = TRUE,
-          shinywidgets::prettyToggle(
+          prettyToggle(
             inputId = "data_source",
             label_on = "Online reference data in use",
             label_off = "Upload custom reference file",
@@ -130,7 +130,7 @@ ui <- page_navbar(
           icon = icon("compass-drafting"),
           open = TRUE,
           multiple = TRUE,
-          shinyWidgets::prettyToggle(
+          prettyToggle(
             inputId = "ids.ref.select",
             label_on = "Theoretical UV reference",
             label_off = "User UV reference",
@@ -228,7 +228,7 @@ ui <- page_navbar(
             value = 3,
             step = 1
           ),
-          shinyWidgets::prettyToggle(
+          prettyToggle(
             inputId = "scale.unit",
             label_on = "Scaled to unit variance",
             label_off = "Not scaled to variance",
@@ -272,9 +272,12 @@ ui <- page_navbar(
           open = TRUE,
           multiple = TRUE,
           actionButton("add_row", "Add oligonucleotide", icon = icon("plus")),
-          #add spacer
-          br(),
-          br(),
+        ),
+        accordion_panel(
+          title = "Plot parameters",
+          icon = icon('compass-drafting'),
+          open = TRUE,
+          multiple = TRUE,
           sliderInput(
             inputId = "calc_wavelength",
             label = "Wavelength (nm)",
