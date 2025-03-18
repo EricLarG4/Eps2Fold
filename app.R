@@ -8,15 +8,16 @@ library('magrittr')
 
 ## shiny----
 library('shiny')
-library('shinydashboard')
-library('shinydashboardPlus')
+library('bslib')
+
+library('bsicons')
+# library('shinydashboard')
+# library('shinydashboardPlus')
 library('shinyWidgets')
 
 ## Theming----
 library('thematic')
-library('fresh')
-library('bsicons')
-library('bslib')
+# library('fresh')
 
 ## data display----
 library('ggrepel')

@@ -85,13 +85,18 @@ ui <- page_navbar(
           open = TRUE,
           class = "collapse in",
           multiple = TRUE,
-          prettyToggle(
-            inputId = "data_source",
-            label_on = "Online reference data in use",
-            label_off = "Upload custom reference file",
-            value = TRUE,
-            # bigger = TRUE
+          input_switch(
+            id = "data_source",
+            label = "Online data source",
+            value = TRUE
           ),
+          # prettyToggle(
+          #   inputId = "data_source",
+          #   label_on = "Online reference data in use",
+          #   label_off = "Upload custom reference file",
+          #   value = TRUE,
+          #   # bigger = TRUE
+          # ),
           fileInput(
             "ref.data",
             "Select reference data file",
@@ -130,16 +135,21 @@ ui <- page_navbar(
           icon = icon("compass-drafting"),
           open = TRUE,
           multiple = TRUE,
-          prettyToggle(
-            inputId = "ids.ref.select",
-            label_on = "Theoretical UV reference",
-            label_off = "User UV reference",
-            value = TRUE,
-            shape = "round",
-            width = "100%",
-            bigger = TRUE,
-            animation = "pulse"
+          input_switch(
+            id = "ids.ref.select",
+            label = "Theoretical UV reference",
+            value = TRUE
           ),
+          # prettyToggle(
+          #   inputId = "ids.ref.select",
+          #   label_on = "Theoretical UV reference",
+          #   label_off = "User UV reference",
+          #   value = TRUE,
+          #   shape = "round",
+          #   width = "100%",
+          #   bigger = TRUE,
+          #   animation = "pulse"
+          # ),
           sliderInput(
             inputId = "wl",
             label = "Wavelength (nm)",
@@ -228,16 +238,21 @@ ui <- page_navbar(
             value = 3,
             step = 1
           ),
-          prettyToggle(
-            inputId = "scale.unit",
-            label_on = "Scaled to unit variance",
-            label_off = "Not scaled to variance",
-            value = FALSE,
-            shape = "round",
-            width = "100%",
-            bigger = TRUE,
-            animation = "pulse"
+          input_switch(
+            id = "scale.unit",
+            label = "Scale to unit variance",
+            value = FALSE
           ),
+          # prettyToggle(
+          #   inputId = "scale.unit",
+          #   label_on = "Scaled to unit variance",
+          #   label_off = "Not scaled to variance",
+          #   value = FALSE,
+          #   shape = "round",
+          #   width = "100%",
+          #   bigger = TRUE,
+          #   animation = "pulse"
+          # ),
           selectInput(
             inputId = "k.mean.algo",
             label = "k-means algorithm",
