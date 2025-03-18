@@ -4945,7 +4945,12 @@ server <- shinyServer(function(input, output) {
   # Render editable DataTable
   output$spectra_user_input <- renderDT({
     datatable(
-      user_oligos(),
+      user_oligos() %>% 
+        group_by(oligo, seq) %>%
+        mutate(eps_260 = dt.spec.calcR(
+          input.contrib = dt.contributR(input.seq = seq),
+          input.wl = 260
+        )),
       colnames = c(
         "Oligonucleotide",
         "Sequence",
