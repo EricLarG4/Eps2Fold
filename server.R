@@ -3504,10 +3504,10 @@ server <- shinyServer(function(input, output) {
       filter(wl %% 1 == 0) %>% #removing non integer wl to have the same number of data points than in IDS
       group_by(oligo)
 
-    writexl::write_xlsx(
-      user_cd_input,
-      path = "user_cd.xlsx"
-    )
+    # writexl::write_xlsx(
+    #   user_cd_input,
+    #   path = "user_cd.xlsx"
+    # )
 
     user_cd_input %>%
       left_join(
