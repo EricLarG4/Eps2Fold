@@ -34,7 +34,7 @@ library('FactoInvestigate')
 # sources----
 source('R/functions.R')
 source('R/theoretical spectra.R')
-source('bsui.R')
+source('ui.R')
 source('server.R')
 
 

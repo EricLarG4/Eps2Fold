@@ -44,7 +44,7 @@ link_template_user <- tags$a(
   download = NA # Optional, allows browsers to download instead of opening
 )
 
-bsui <- page_navbar(
+ui <- page_navbar(
   title = 'Eps2Fold',
   id = "nav",
   window_title = "Eps2Fold - a Shiny app for Eps2Fold analysis",
@@ -884,6 +884,3 @@ bsui <- page_navbar(
     nav_item(link_template_user)
   )
 )
-
-
-shinyApp(ui = bsui, server = server)
