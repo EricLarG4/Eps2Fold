@@ -51,3 +51,7 @@ G4_IDS.Rproj
 app/scree.rdata
 user_cd.xlsx
 R/buffer.R
+bsui.R
+fluidui.R
+Investigate.html
+scree.rdata
