@@ -13,7 +13,7 @@ library('bslib')
 library('bsicons')
 # library('shinydashboard')
 # library('shinydashboardPlus')
-library('shinyWidgets')
+# library('shinyWidgets')
 
 ## Theming----
 library('thematic')

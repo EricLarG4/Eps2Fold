@@ -90,13 +90,6 @@ ui <- page_navbar(
             label = "Online data source",
             value = TRUE
           ),
-          # prettyToggle(
-          #   inputId = "data_source",
-          #   label_on = "Online reference data in use",
-          #   label_off = "Upload custom reference file",
-          #   value = TRUE,
-          #   # bigger = TRUE
-          # ),
           fileInput(
             "ref.data",
             "Select reference data file",
@@ -140,16 +133,6 @@ ui <- page_navbar(
             label = "Theoretical UV reference",
             value = TRUE
           ),
-          # prettyToggle(
-          #   inputId = "ids.ref.select",
-          #   label_on = "Theoretical UV reference",
-          #   label_off = "User UV reference",
-          #   value = TRUE,
-          #   shape = "round",
-          #   width = "100%",
-          #   bigger = TRUE,
-          #   animation = "pulse"
-          # ),
           sliderInput(
             inputId = "wl",
             label = "Wavelength (nm)",
@@ -170,13 +153,13 @@ ui <- page_navbar(
             choices = c("Δε", "Δε/ε", "-1/+1"),
             selected = "Δε"
           ),
-          pickerInput(
+          selectInput(
             inputId = "ref.panel",
             label = "Layout",
             choices = c("Panels", "Superimposed", "Mean"),
             selected = "Panels"
           ),
-          pickerInput(
+          selectInput(
             inputId = "ref.color",
             label = "Coloring",
             choices = c(
@@ -213,7 +196,7 @@ ui <- page_navbar(
           open = TRUE,
           multiple = TRUE,
           uiOutput("user.seq.oligo"),
-          pickerInput(
+          selectInput(
             inputId = "user.panel",
             label = "Layout",
             choices = c("Panels", "Superimposed"),
@@ -243,16 +226,6 @@ ui <- page_navbar(
             label = "Scale to unit variance",
             value = FALSE
           ),
-          # prettyToggle(
-          #   inputId = "scale.unit",
-          #   label_on = "Scaled to unit variance",
-          #   label_off = "Not scaled to variance",
-          #   value = FALSE,
-          #   shape = "round",
-          #   width = "100%",
-          #   bigger = TRUE,
-          #   animation = "pulse"
-          # ),
           selectInput(
             inputId = "k.mean.algo",
             label = "k-means algorithm",
@@ -453,7 +426,7 @@ ui <- page_navbar(
               fillable = TRUE,
               sidebar = sidebar(
                 position = 'right',
-                pickerInput(
+                selectInput(
                   inputId = "dim.cd",
                   label = "Dimensions",
                   choices = paste0("Dim.", 1:10),
@@ -514,7 +487,7 @@ ui <- page_navbar(
               fillable = TRUE,
               sidebar = sidebar(
                 position = 'right',
-                pickerInput(
+                selectInput(
                   inputId = "dim.cd.2",
                   label = "Dimensions",
                   choices = paste0("Dim.", 1:10),
@@ -668,7 +641,7 @@ ui <- page_navbar(
               fillable = TRUE,
               sidebar = sidebar(
                 position = 'right',
-                pickerInput(
+                selectInput(
                   inputId = "dim.ids",
                   label = "Dimensions",
                   choices = paste0("Dim.", 1:10),
@@ -729,7 +702,7 @@ ui <- page_navbar(
               fillable = TRUE,
               sidebar = sidebar(
                 position = 'right',
-                pickerInput(
+                selectInput(
                   inputId = "dim.ids.2",
                   label = "Dimensions",
                   choices = paste0("Dim.", 1:10),
