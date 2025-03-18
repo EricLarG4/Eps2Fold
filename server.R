@@ -9,26 +9,48 @@ custom.theme <- theme(
   legend.background = element_blank(),
   legend.box.background = element_blank(),
   legend.key = element_blank(),
-  legend.text = element_text(size = 18, color = 'white'),
-  legend.title = element_text(size = 22, color = 'white'),
-  axis.text = element_text(size = 18, color = 'white'),
-  axis.title = element_text(size = 22, color = 'white'),
-  strip.text = element_text(size = 20, color = 'white'),
-  axis.line = element_line(size = 0.75, color = 'white'),
-  axis.ticks = element_line(size = 0.75, color = 'white')
-) 
-
-thematic_rmd(
-  bg = '#292c33', fg = '#EEE8D5', accent = 'auto',
-  sequential = hcl.colors(n = 42, palette = 'viridis')
+  legend.text = element_text(
+    size = 18,
+  ),
+  legend.title = element_text(
+    size = 22
+  ),
+  axis.text = element_text(
+    size = 18
+  ),
+  axis.title.x = element_text(
+    size = 22
+  ),
+  axis.title.y = element_text(size = 22, angle = 90),
+  strip.text = element_text(
+    size = 20
+  ),
+  axis.line = element_line(
+    size = 0.75
+  ),
+  axis.ticks = element_line(
+    size = 0.75
+  )
 )
 
+# thematic_rmd(
+#   bg = '#292c33', fg = '#EEE8D5', accent = 'auto',
+#   sequential = hcl.colors(n = 42, palette = 'viridis')
+# )
 
 #server----
 server <- shinyServer(function(input, output) {
-  
+  bslib::bs_themer()
+
+  # Enable thematic
+  thematic::thematic_shiny(font = "auto")
+  thematic::thematic_rmd(font = "auto")
+
+  # Change ggplot2's default "gray" theme
+  theme_set(custom.theme)
+
   # Reference input----
-  
+
   ## Data files----
   # input.file <- reactive({
   #   input$ref.data
@@ -46,35 +68,31 @@ server <- shinyServer(function(input, output) {
       return(NULL)
     }
   })
-  
-  
-  
+
   ### File import toggle----
   file.toggle <- reactive({
-    if(!is.null(input.file())){
+    if (!is.null(input.file())) {
       return('yes')
     } else {
       return('no')
     }
   })
-  
+
   # outputs the value of the file toggle
   # output$file_toggle_value <- renderPrint({
   #   file.toggle()
   # })
-  
+
   ### Reference set----
   ref.set <- reactive({
-
     if (isFALSE(input$data_source)) {
-      ref.set <- read_excel(input.file()$datapath) 
+      ref.set <- read_excel(input.file()$datapath)
     } else {
       ref.set <- read_excel(input.file())
     }
-    
-    
-    if(input$ids.ref.select == TRUE){
-      ref.set <- ref.set %>% 
+
+    if (input$ids.ref.select == TRUE) {
+      ref.set <- ref.set %>%
         mutate(
           delta.eps.ids = delta.eps.ids.th,
           uv.eps = if_else(
@@ -82,571 +100,576 @@ server <- shinyServer(function(input, output) {
             th.eps,
             uv.eps
           )
-        ) 
+        )
     }
-    
-    ref.set %>% 
-      select(-c(delta.eps.ids.th, th.eps)) %>% 
+
+    ref.set %>%
+      select(-c(delta.eps.ids.th, th.eps)) %>%
       filter(
         wl <= max(input$wl),
         wl >= min(input$wl),
         wl %% 1 == 0
-      ) %>% 
-      group_by(oligo, salt) %>% 
+      ) %>%
+      group_by(oligo, salt) %>%
       mutate(
         plus.minus = gsub("\"", "", plus.minus),
         salt = gsub('<sup>', '', salt),
         salt = gsub('</sup>', '', salt),
         norm.ids = case_when(
-          input$ids.norm=="-1/+1" ~ 2*(delta.eps.ids-min(delta.eps.ids))/(max(delta.eps.ids)-min(delta.eps.ids))-1,
+          input$ids.norm == "-1/+1" ~
+            2 *
+              (delta.eps.ids - min(delta.eps.ids)) /
+              (max(delta.eps.ids) - min(delta.eps.ids)) -
+              1,
           TRUE ~ delta.eps.ids
         ),
         norm.cd = case_when(
-          input$cd.norm=="Δε/ε" ~ delta.eps.cd/eps,
-          input$cd.norm=="-1/+1" ~ 2*(delta.eps.cd-min(delta.eps.cd, na.rm = TRUE))/
-            (max(delta.eps.cd, na.rm = TRUE)-min(delta.eps.cd, na.rm = TRUE))-1,
+          input$cd.norm == "Δε/ε" ~ delta.eps.cd / eps,
+          input$cd.norm == "-1/+1" ~
+            2 *
+              (delta.eps.cd - min(delta.eps.cd, na.rm = TRUE)) /
+              (max(delta.eps.cd, na.rm = TRUE) -
+                min(delta.eps.cd, na.rm = TRUE)) -
+              1,
           TRUE ~ delta.eps.cd
         )
-      ) 
+      )
   })
-  
+
   #### Sequences----
   ref.seq <- reactive({
-    ref.set() %>% 
+    ref.set() %>%
       select(
-        c("oligo.number", "oligo", "description", "sequence", "nt", "eps",
-          "salt", "topo", "feature", "gba", "tetrad", "tetrad.id", "loop", 
-          "plus.minus", "groove", "conc")
-      ) %>% 
-      filter(salt != 'none') %>% 
+        c(
+          "oligo.number",
+          "oligo",
+          "description",
+          "sequence",
+          "nt",
+          "eps",
+          "salt",
+          "topo",
+          "feature",
+          "gba",
+          "tetrad",
+          "tetrad.id",
+          "loop",
+          "plus.minus",
+          "groove",
+          "conc"
+        )
+      ) %>%
+      filter(salt != 'none') %>%
       unique()
   })
-  
-  
+
   #### Picker inputs: filtering source----
   output$ref.seq.topo.0 <- renderUI({
-    
-    if(file.toggle()=='no') {
-      pickerInput("ref.seq.topo.0",
-                  label = "Topology",
-                  choices = "upload data first",
-                  multiple = T,
-                  options = pickerOptions(
-                    noneSelectedText = 'upload data first'
-                  )
+    if (file.toggle() == 'no') {
+      pickerInput(
+        "ref.seq.topo.0",
+        label = "Topology",
+        choices = "upload data first",
+        multiple = T,
+        options = pickerOptions(
+          noneSelectedText = 'upload data first'
+        )
       )
     } else {
-      
       choices <- sort(unique(ref.seq()$topo))
-      
-      pickerInput("ref.seq.topo.0",
-                  label = "Topology",
-                  choices = choices,
-                  selected = choices,
-                  multiple = T,
-                  options = pickerOptions(
-                    actionsBox = T,
-                    liveSearch = T
-                  )
+
+      pickerInput(
+        "ref.seq.topo.0",
+        label = "Topology",
+        choices = choices,
+        selected = choices,
+        multiple = T,
+        options = pickerOptions(
+          actionsBox = T,
+          liveSearch = T
+        )
       )
     }
-    
   })
-  
+
   output$ref.seq.gba.0 <- renderUI({
-    
-    if(file.toggle()=='no') {
-      pickerInput("ref.seq.gba.0",
-                  label = "GBA",
-                  choices = "upload data first",
-                  multiple = T,
-                  options = pickerOptions(
-                    noneSelectedText = 'upload data first'
-                  )
+    if (file.toggle() == 'no') {
+      pickerInput(
+        "ref.seq.gba.0",
+        label = "GBA",
+        choices = "upload data first",
+        multiple = T,
+        options = pickerOptions(
+          noneSelectedText = 'upload data first'
+        )
       )
     } else {
-      
       choices <- sort(unique(ref.seq()$gba))
-      
-      pickerInput("ref.seq.gba.0",
-                  label = "GBA",
-                  choices = choices,
-                  selected = choices,
-                  multiple = T,
-                  options = pickerOptions(
-                    actionsBox = T,
-                    liveSearch = T
-                  )
+
+      pickerInput(
+        "ref.seq.gba.0",
+        label = "GBA",
+        choices = choices,
+        selected = choices,
+        multiple = T,
+        options = pickerOptions(
+          actionsBox = T,
+          liveSearch = T
+        )
       )
     }
-    
   })
-  
+
   output$ref.seq.tetrad.0 <- renderUI({
-    
-    if(file.toggle()=='no') {
-      pickerInput("ref.seq.tetrad.0",
-                  label = "Tetrads",
-                  choices = "upload data first",
-                  multiple = T,
-                  options = pickerOptions(
-                    noneSelectedText = 'upload data first'
-                  )
+    if (file.toggle() == 'no') {
+      pickerInput(
+        "ref.seq.tetrad.0",
+        label = "Tetrads",
+        choices = "upload data first",
+        multiple = T,
+        options = pickerOptions(
+          noneSelectedText = 'upload data first'
+        )
       )
     } else {
-      
       choices <- sort(unique(ref.seq()$tetrad))
-      
-      pickerInput("ref.seq.tetrad.0",
-                  label = "Tetrads",
-                  choices = choices,
-                  selected = choices,
-                  multiple = T,
-                  options = pickerOptions(
-                    actionsBox = T,
-                    liveSearch = T
-                  )
+
+      pickerInput(
+        "ref.seq.tetrad.0",
+        label = "Tetrads",
+        choices = choices,
+        selected = choices,
+        multiple = T,
+        options = pickerOptions(
+          actionsBox = T,
+          liveSearch = T
+        )
       )
     }
-    
   })
-  
+
   output$ref.seq.tetrad.id.0 <- renderUI({
-    
-    if(file.toggle()=='no') {
-      pickerInput("ref.seq.tetrad.id.0",
-                  label = "Tetrad combination",
-                  choices = "upload data first",
-                  multiple = T,
-                  options = pickerOptions(
-                    noneSelectedText = 'upload data first'
-                  )
+    if (file.toggle() == 'no') {
+      pickerInput(
+        "ref.seq.tetrad.id.0",
+        label = "Tetrad combination",
+        choices = "upload data first",
+        multiple = T,
+        options = pickerOptions(
+          noneSelectedText = 'upload data first'
+        )
       )
     } else {
-      
       choices <- sort(unique(ref.seq()$tetrad.id))
-      
-      pickerInput("ref.seq.tetrad.id.0",
-                  label = "Tetrad combination",
-                  choices = choices,
-                  selected = choices,
-                  multiple = T,
-                  options = pickerOptions(
-                    actionsBox = T,
-                    liveSearch = T
-                  )
+
+      pickerInput(
+        "ref.seq.tetrad.id.0",
+        label = "Tetrad combination",
+        choices = choices,
+        selected = choices,
+        multiple = T,
+        options = pickerOptions(
+          actionsBox = T,
+          liveSearch = T
+        )
       )
     }
-    
   })
-  
+
   output$ref.seq.loop.0 <- renderUI({
-    
-    if(file.toggle()=='no') {
-      pickerInput("ref.seq.loop.0",
-                  label = "Loop progression",
-                  choices = "upload data first",
-                  multiple = T,
-                  options = pickerOptions(
-                    noneSelectedText = 'upload data first'
-                  )
+    if (file.toggle() == 'no') {
+      pickerInput(
+        "ref.seq.loop.0",
+        label = "Loop progression",
+        choices = "upload data first",
+        multiple = T,
+        options = pickerOptions(
+          noneSelectedText = 'upload data first'
+        )
       )
     } else {
-      
       choices <- sort(unique(ref.seq()$loop))
-      
-      pickerInput("ref.seq.loop.0",
-                  label = "Loop progression",
-                  choices = choices,
-                  selected = choices,
-                  multiple = T,
-                  options = pickerOptions(
-                    actionsBox = T,
-                    liveSearch = T
-                  )
+
+      pickerInput(
+        "ref.seq.loop.0",
+        label = "Loop progression",
+        choices = choices,
+        selected = choices,
+        multiple = T,
+        options = pickerOptions(
+          actionsBox = T,
+          liveSearch = T
+        )
       )
     }
-    
   })
-  
+
   output$ref.seq.plus.minus.0 <- renderUI({
-    
-    if(file.toggle()=='no') {
-      pickerInput("ref.seq.plus.minus.0",
-                  label = "Tetrad handedness",
-                  choices = "upload data first",
-                  multiple = T,
-                  options = pickerOptions(
-                    noneSelectedText = 'upload data first'
-                  )
+    if (file.toggle() == 'no') {
+      pickerInput(
+        "ref.seq.plus.minus.0",
+        label = "Tetrad handedness",
+        choices = "upload data first",
+        multiple = T,
+        options = pickerOptions(
+          noneSelectedText = 'upload data first'
+        )
       )
     } else {
-      
       choices <- sort(unique(ref.seq()$plus.minus))
-      
-      pickerInput("ref.seq.plus.minus.0",
-                  label = "Tetrad handedness",
-                  choices = choices,
-                  selected = choices,
-                  multiple = T,
-                  options = pickerOptions(
-                    actionsBox = T,
-                    liveSearch = T
-                  )
+
+      pickerInput(
+        "ref.seq.plus.minus.0",
+        label = "Tetrad handedness",
+        choices = choices,
+        selected = choices,
+        multiple = T,
+        options = pickerOptions(
+          actionsBox = T,
+          liveSearch = T
+        )
       )
     }
-    
   })
-  
+
   output$ref.seq.groove.0 <- renderUI({
-    
-    if(file.toggle()=='no') {
-      pickerInput("ref.seq.groove.0",
-                  label = "Grooves",
-                  choices = "upload data first",
-                  multiple = T,
-                  options = pickerOptions(
-                    noneSelectedText = 'upload data first'
-                  )
+    if (file.toggle() == 'no') {
+      pickerInput(
+        "ref.seq.groove.0",
+        label = "Grooves",
+        choices = "upload data first",
+        multiple = T,
+        options = pickerOptions(
+          noneSelectedText = 'upload data first'
+        )
       )
     } else {
-      
       choices <- sort(unique(ref.seq()$groove))
-      
-      pickerInput("ref.seq.groove.0",
-                  label = "Grooves",
-                  choices = choices,
-                  selected = choices,
-                  multiple = T,
-                  options = pickerOptions(
-                    actionsBox = T,
-                    liveSearch = T
-                  )
+
+      pickerInput(
+        "ref.seq.groove.0",
+        label = "Grooves",
+        choices = choices,
+        selected = choices,
+        multiple = T,
+        options = pickerOptions(
+          actionsBox = T,
+          liveSearch = T
+        )
       )
     }
-    
   })
-  
+
   output$ref.seq.cation.0 <- renderUI({
-    
-    if(file.toggle()=='no') {
-      pickerInput("ref.seq.cation.0",
-                  label = "Cation",
-                  choices = "upload data first",
-                  multiple = T,
-                  options = pickerOptions(
-                    noneSelectedText = 'upload data first'
-                  )
+    if (file.toggle() == 'no') {
+      pickerInput(
+        "ref.seq.cation.0",
+        label = "Cation",
+        choices = "upload data first",
+        multiple = T,
+        options = pickerOptions(
+          noneSelectedText = 'upload data first'
+        )
       )
     } else {
-      
       choices <- sort(unique(ref.seq()$salt))
-      
-      pickerInput("ref.seq.cation.0",
-                  label = "Cation",
-                  choices = choices,
-                  selected = choices,
-                  multiple = T,
-                  options = pickerOptions(
-                    actionsBox = T,
-                    liveSearch = T
-                  )
+
+      pickerInput(
+        "ref.seq.cation.0",
+        label = "Cation",
+        choices = choices,
+        selected = choices,
+        multiple = T,
+        options = pickerOptions(
+          actionsBox = T,
+          liveSearch = T
+        )
       )
     }
-    
   })
-  
+
   output$ref.seq.oligo.0 <- renderUI({
-    
-    if(file.toggle()=='no') {
-      pickerInput("ref.seq.oligo.0",
-                  label = "Oligonucleotide",
-                  choices = "upload data first",
-                  multiple = T,
-                  options = pickerOptions(
-                    noneSelectedText = 'upload data first'
-                  )
+    if (file.toggle() == 'no') {
+      pickerInput(
+        "ref.seq.oligo.0",
+        label = "Oligonucleotide",
+        choices = "upload data first",
+        multiple = T,
+        options = pickerOptions(
+          noneSelectedText = 'upload data first'
+        )
       )
     } else {
-      
-      
       choices <- sort(unique(ref.seq()$oligo))
-      
-      pickerInput("ref.seq.oligo.0",
-                  label = "Oligonucleotide",
-                  choices = choices,
-                  selected = choices,
-                  multiple = T,
-                  options = pickerOptions(
-                    actionsBox = T,
-                    liveSearch = T
-                  )
+
+      pickerInput(
+        "ref.seq.oligo.0",
+        label = "Oligonucleotide",
+        choices = choices,
+        selected = choices,
+        multiple = T,
+        options = pickerOptions(
+          actionsBox = T,
+          liveSearch = T
+        )
       )
     }
-    
   })
-  
+
   #### Picker inputs: filtering plots----
   output$ref.seq.topo <- renderUI({
-    
-    if(file.toggle()=='no') {
-      pickerInput("ref.seq.topo",
-                  label = "Topology",
-                  choices = "upload data first",
-                  multiple = T,
-                  options = pickerOptions(
-                    noneSelectedText = 'upload data first'
-                  )
+    if (file.toggle() == 'no') {
+      pickerInput(
+        "ref.seq.topo",
+        label = "Topology",
+        choices = "upload data first",
+        multiple = T,
+        options = pickerOptions(
+          noneSelectedText = 'upload data first'
+        )
       )
     } else {
-      
       choices <- unique(input$ref.seq.topo.0)
-      
-      pickerInput("ref.seq.topo",
-                  label = "Topology",
-                  choices = choices,
-                  selected = choices,
-                  multiple = T,
-                  options = pickerOptions(
-                    actionsBox = T,
-                    liveSearch = T
-                  )
+
+      pickerInput(
+        "ref.seq.topo",
+        label = "Topology",
+        choices = choices,
+        selected = choices,
+        multiple = T,
+        options = pickerOptions(
+          actionsBox = T,
+          liveSearch = T
+        )
       )
     }
-    
   })
-  
+
   output$ref.seq.gba <- renderUI({
-    
-    if(file.toggle()=='no') {
-      pickerInput("ref.seq.gba",
-                  label = "GBA",
-                  choices = "upload data first",
-                  multiple = T,
-                  options = pickerOptions(
-                    noneSelectedText = 'upload data first'
-                  )
+    if (file.toggle() == 'no') {
+      pickerInput(
+        "ref.seq.gba",
+        label = "GBA",
+        choices = "upload data first",
+        multiple = T,
+        options = pickerOptions(
+          noneSelectedText = 'upload data first'
+        )
       )
     } else {
-      
       choices <- unique(input$ref.seq.gba.0)
-      
-      pickerInput("ref.seq.gba",
-                  label = "GBA",
-                  choices = choices,
-                  selected = choices,
-                  multiple = T,
-                  options = pickerOptions(
-                    actionsBox = T,
-                    liveSearch = T
-                  )
+
+      pickerInput(
+        "ref.seq.gba",
+        label = "GBA",
+        choices = choices,
+        selected = choices,
+        multiple = T,
+        options = pickerOptions(
+          actionsBox = T,
+          liveSearch = T
+        )
       )
     }
-    
   })
-  
+
   output$ref.seq.tetrad <- renderUI({
-    
-    if(file.toggle()=='no') {
-      pickerInput("ref.seq.tetrad",
-                  label = "Tetrads",
-                  choices = "upload data first",
-                  multiple = T,
-                  options = pickerOptions(
-                    noneSelectedText = 'upload data first'
-                  )
+    if (file.toggle() == 'no') {
+      pickerInput(
+        "ref.seq.tetrad",
+        label = "Tetrads",
+        choices = "upload data first",
+        multiple = T,
+        options = pickerOptions(
+          noneSelectedText = 'upload data first'
+        )
       )
     } else {
-      
       choices <- unique(input$ref.seq.tetrad.0)
-      
-      pickerInput("ref.seq.tetrad",
-                  label = "Tetrads",
-                  choices = choices,
-                  selected = choices,
-                  multiple = T,
-                  options = pickerOptions(
-                    actionsBox = T,
-                    liveSearch = T
-                  )
+
+      pickerInput(
+        "ref.seq.tetrad",
+        label = "Tetrads",
+        choices = choices,
+        selected = choices,
+        multiple = T,
+        options = pickerOptions(
+          actionsBox = T,
+          liveSearch = T
+        )
       )
     }
-    
   })
-  
+
   output$ref.seq.tetrad.id <- renderUI({
-    
-    if(file.toggle()=='no') {
-      pickerInput("ref.seq.tetrad.id",
-                  label = "Tetrad combination",
-                  choices = "upload data first",
-                  multiple = T,
-                  options = pickerOptions(
-                    noneSelectedText = 'upload data first'
-                  )
+    if (file.toggle() == 'no') {
+      pickerInput(
+        "ref.seq.tetrad.id",
+        label = "Tetrad combination",
+        choices = "upload data first",
+        multiple = T,
+        options = pickerOptions(
+          noneSelectedText = 'upload data first'
+        )
       )
     } else {
-      
       choices <- unique(input$ref.seq.tetrad.id.0)
-      
-      pickerInput("ref.seq.tetrad.id",
-                  label = "Tetrad combination",
-                  choices = choices,
-                  selected = choices,
-                  multiple = T,
-                  options = pickerOptions(
-                    actionsBox = T,
-                    liveSearch = T
-                  )
+
+      pickerInput(
+        "ref.seq.tetrad.id",
+        label = "Tetrad combination",
+        choices = choices,
+        selected = choices,
+        multiple = T,
+        options = pickerOptions(
+          actionsBox = T,
+          liveSearch = T
+        )
       )
     }
-    
   })
-  
+
   output$ref.seq.loop <- renderUI({
-    
-    if(file.toggle()=='no') {
-      pickerInput("ref.seq.loop",
-                  label = "Loop progression",
-                  choices = "upload data first",
-                  multiple = T,
-                  options = pickerOptions(
-                    noneSelectedText = 'upload data first'
-                  )
+    if (file.toggle() == 'no') {
+      pickerInput(
+        "ref.seq.loop",
+        label = "Loop progression",
+        choices = "upload data first",
+        multiple = T,
+        options = pickerOptions(
+          noneSelectedText = 'upload data first'
+        )
       )
     } else {
-      
       choices <- unique(input$ref.seq.loop.0)
-      
-      pickerInput("ref.seq.loop",
-                  label = "Loop progression",
-                  choices = choices,
-                  selected = choices,
-                  multiple = T,
-                  options = pickerOptions(
-                    actionsBox = T,
-                    liveSearch = T
-                  )
+
+      pickerInput(
+        "ref.seq.loop",
+        label = "Loop progression",
+        choices = choices,
+        selected = choices,
+        multiple = T,
+        options = pickerOptions(
+          actionsBox = T,
+          liveSearch = T
+        )
       )
     }
-    
   })
-  
+
   output$ref.seq.plus.minus <- renderUI({
-    
-    if(file.toggle()=='no') {
-      pickerInput("ref.seq.plus.minus",
-                  label = "Tetrad handedness",
-                  choices = "upload data first",
-                  multiple = T,
-                  options = pickerOptions(
-                    noneSelectedText = 'upload data first'
-                  )
+    if (file.toggle() == 'no') {
+      pickerInput(
+        "ref.seq.plus.minus",
+        label = "Tetrad handedness",
+        choices = "upload data first",
+        multiple = T,
+        options = pickerOptions(
+          noneSelectedText = 'upload data first'
+        )
       )
     } else {
-      
       choices <- unique(input$ref.seq.plus.minus.0)
-      
-      pickerInput("ref.seq.plus.minus",
-                  label = "Tetrad handedness",
-                  choices = choices,
-                  selected = choices,
-                  multiple = T,
-                  options = pickerOptions(
-                    actionsBox = T,
-                    liveSearch = T
-                  )
+
+      pickerInput(
+        "ref.seq.plus.minus",
+        label = "Tetrad handedness",
+        choices = choices,
+        selected = choices,
+        multiple = T,
+        options = pickerOptions(
+          actionsBox = T,
+          liveSearch = T
+        )
       )
     }
-    
   })
-  
+
   output$ref.seq.groove <- renderUI({
-    
-    if(file.toggle()=='no') {
-      pickerInput("ref.seq.groove",
-                  label = "Grooves",
-                  choices = "upload data first",
-                  multiple = T,
-                  options = pickerOptions(
-                    noneSelectedText = 'upload data first'
-                  )
+    if (file.toggle() == 'no') {
+      pickerInput(
+        "ref.seq.groove",
+        label = "Grooves",
+        choices = "upload data first",
+        multiple = T,
+        options = pickerOptions(
+          noneSelectedText = 'upload data first'
+        )
       )
     } else {
-      
       choices <- unique(input$ref.seq.groove.0)
-      
-      pickerInput("ref.seq.groove",
-                  label = "Grooves",
-                  choices = choices,
-                  selected = choices,
-                  multiple = T,
-                  options = pickerOptions(
-                    actionsBox = T,
-                    liveSearch = T
-                  )
+
+      pickerInput(
+        "ref.seq.groove",
+        label = "Grooves",
+        choices = choices,
+        selected = choices,
+        multiple = T,
+        options = pickerOptions(
+          actionsBox = T,
+          liveSearch = T
+        )
       )
     }
-    
   })
-  
+
   output$ref.seq.cation <- renderUI({
-    if(file.toggle()=='no') {
-      pickerInput("ref.seq.cation",
-                  label = "Cation",
-                  choices = "upload data first",
-                  multiple = T,
-                  options = pickerOptions(
-                    noneSelectedText = 'upload data first'
-                  )
+    if (file.toggle() == 'no') {
+      pickerInput(
+        "ref.seq.cation",
+        label = "Cation",
+        choices = "upload data first",
+        multiple = T,
+        options = pickerOptions(
+          noneSelectedText = 'upload data first'
+        )
       )
     } else {
-      pickerInput("ref.seq.cation",
-                  label = "Cation",
-                  choices = unique(input$ref.seq.cation.0),
-                  selected = unique(input$ref.seq.cation.0),
-                  multiple = T,
-                  options = pickerOptions(
-                    actionsBox = T,
-                    liveSearch = T
-                  )
+      pickerInput(
+        "ref.seq.cation",
+        label = "Cation",
+        choices = unique(input$ref.seq.cation.0),
+        selected = unique(input$ref.seq.cation.0),
+        multiple = T,
+        options = pickerOptions(
+          actionsBox = T,
+          liveSearch = T
+        )
       )
     }
-    
   })
-  
+
   output$ref.seq.oligo <- renderUI({
-    if(file.toggle()=='no') {
-      pickerInput("ref.seq.oligo",
-                  label = "Oligonucleotide",
-                  choices = "upload data first",
-                  multiple = T,
-                  options = pickerOptions(
-                    noneSelectedText = 'upload data first'
-                  )
+    if (file.toggle() == 'no') {
+      pickerInput(
+        "ref.seq.oligo",
+        label = "Oligonucleotide",
+        choices = "upload data first",
+        multiple = T,
+        options = pickerOptions(
+          noneSelectedText = 'upload data first'
+        )
       )
     } else {
-      pickerInput("ref.seq.oligo",
-                  label = "Oligonucleotide",
-                  choices = unique(input$ref.seq.oligo.0),
-                  selected = unique(input$ref.seq.oligo.0),
-                  multiple = T,
-                  options = pickerOptions(
-                    actionsBox = T,
-                    liveSearch = T
-                  )
+      pickerInput(
+        "ref.seq.oligo",
+        label = "Oligonucleotide",
+        choices = unique(input$ref.seq.oligo.0),
+        selected = unique(input$ref.seq.oligo.0),
+        multiple = T,
+        options = pickerOptions(
+          actionsBox = T,
+          liveSearch = T
+        )
       )
     }
-    
   })
-  
-  
+
   ## Outputs of inputs----
-  
+
   ### Reference sequences----
-  output$seq <- renderDT(server = FALSE,{
-    
-    if(file.toggle()=='no') {
+  output$seq <- renderDT(server = FALSE, {
+    if (file.toggle() == 'no') {
       return(NULL)
     } else {
       ref.seq() %>%
@@ -661,7 +684,7 @@ server <- shinyServer(function(input, output) {
           plus.minus %in% input$ref.seq.plus.minus.0,
           groove %in% input$ref.seq.groove.0
         ) %>%
-        mutate(conc = round(conc, 2)) %>% 
+        mutate(conc = round(conc, 2)) %>%
         datatable(
           style = "bootstrap",
           extensions = c('Buttons', 'Responsive', 'Scroller'),
@@ -693,42 +716,60 @@ server <- shinyServer(function(input, output) {
             scroller = F,
             pageLength = 50,
             autoWidth = F,
-            dom = 'Bfrtip', 
+            dom = 'Bfrtip',
             buttons = list(
-              list(extend='copy'),
-              list(extend='csv',
-                   title=NULL,
-                   filename="reference oligos"),
-              list(extend='excel',
-                   title=NULL,
-                   filename="reference oligos"),
-              list(extend='colvis')
+              list(extend = 'copy'),
+              list(extend = 'csv', title = NULL, filename = "reference oligos"),
+              list(
+                extend = 'excel',
+                title = NULL,
+                filename = "reference oligos"
+              ),
+              list(extend = 'colvis')
             ),
             title = NULL,
-            columnDefs = list(list(visible=FALSE, targets=c(0,5,6,15)))
+            columnDefs = list(list(visible = FALSE, targets = c(0, 5, 6, 15)))
           )
-        ) %>% 
-        formatStyle(columns = 0:15, target = "cell", 
-                    backgroundColor = "#272c30")
+        )
+      # formatStyle(
+      #   columns = 0:15,
+      #   target = "cell",
+      #   backgroundColor = "#272c30"
+      # )
     }
-    
   })
-  
+
   ### Reference UV----
-  output$ref.uv <- renderDT(server = FALSE,{
-    
-    if(file.toggle()=='no') {
+  output$ref.uv <- renderDT(server = FALSE, {
+    if (file.toggle() == 'no') {
       return(NULL)
     } else {
-      
       ref.set() %>%
         mutate(
           conc = round(conc, 2),
           abs = round(abs, 3)
-        ) %>% 
-        select(c("oligo.number", "oligo", "description", "sequence", "nt", "eps",
-                 "salt", "topo", "feature", "gba", "tetrad", "tetrad.id", "loop", "plus.minus", "groove",
-                 "conc", "wl", "abs", "uv.eps")) %>%
+        ) %>%
+        select(c(
+          "oligo.number",
+          "oligo",
+          "description",
+          "sequence",
+          "nt",
+          "eps",
+          "salt",
+          "topo",
+          "feature",
+          "gba",
+          "tetrad",
+          "tetrad.id",
+          "loop",
+          "plus.minus",
+          "groove",
+          "conc",
+          "wl",
+          "abs",
+          "uv.eps"
+        )) %>%
         datatable(
           style = "bootstrap",
           extensions = c('Buttons', 'Responsive', 'Scroller'),
@@ -764,35 +805,32 @@ server <- shinyServer(function(input, output) {
             scroller = F,
             pageLength = 25,
             autoWidth = F,
-            dom = 'Bfrtip', 
+            dom = 'Bfrtip',
             buttons = list(
-              list(extend='copy'),
-              list(extend='csv',
-                   title=NULL,
-                   filename="reference uv"),
-              list(extend='excel',
-                   title=NULL,
-                   filename="reference uv"),
-              list(extend='colvis')
+              list(extend = 'copy'),
+              list(extend = 'csv', title = NULL, filename = "reference uv"),
+              list(extend = 'excel', title = NULL, filename = "reference uv"),
+              list(extend = 'colvis')
             ),
             title = NULL,
-            columnDefs = list(list(visible=FALSE, targets=c(2:6,8,15)))
+            columnDefs = list(list(visible = FALSE, targets = c(2:6, 8, 15)))
           )
-        ) %>% 
-        formatStyle(columns = 0:18, target = "cell", 
-                    backgroundColor = "#272c30")
+        )
+      # formatStyle(
+      #   columns = 0:18,
+      #   target = "cell",
+      #   backgroundColor = "#272c30"
+      # )
     }
-    
   })
-  
+
   output$p.ref.uv <- renderPlot({
-    
-    if(file.toggle()=='no') {
-      ggplot() +
-        dark_mode(theme_pander(base_size = 18)) +
-        custom.theme
+    if (file.toggle() == 'no') {
+      ggplot()
+      # dark_mode(theme_pander(base_size = 18)) +
+      # custom.theme
     } else {
-      ref.set() %>% 
+      ref.set() %>%
         filter(
           topo %in% input$ref.seq.topo,
           gba %in% input$ref.seq.gba,
@@ -806,7 +844,8 @@ server <- shinyServer(function(input, output) {
         ) %>%
         ggplot(
           aes(
-            x = wl, y = uv.eps,
+            x = wl,
+            y = uv.eps,
             color = salt,
             group = salt
           )
@@ -820,37 +859,50 @@ server <- shinyServer(function(input, output) {
           # ncol = 4
         ) +
         labs(
-          x = bquote(lambda~(nm)),
-          y = bquote(epsilon~(M^-1*cm^-1)),
+          x = bquote(lambda ~ (nm)),
+          y = bquote(epsilon ~ (M^-1 * cm^-1)),
           color = "Cation"
         ) +
-        custom.theme +
+        # custom.theme +
         scale_y_continuous(n.breaks = 3) +
-        scale_x_continuous(expand = c(0,0)) 
+        scale_x_continuous(expand = c(0, 0))
     }
   })
-  
-  
+
   ### Reference IDS----
-  output$ref.ids <- renderDT(server = FALSE,{
-    
-    if(file.toggle()=='no') {
+  output$ref.ids <- renderDT(server = FALSE, {
+    if (file.toggle() == 'no') {
       return(NULL)
     } else {
       ref.set() %>%
-        ungroup() %>% 
+        ungroup() %>%
         filter(
           salt != 'none',
           !is.na(delta.eps.ids),
           !is.na(delta.eps.ids.th)
-        ) %>% 
+        ) %>%
         mutate(
           conc = round(conc, 2),
           delta.eps.ids = round(delta.eps.ids, 0)
         ) %>%
-        select(c("oligo.number", "oligo", "description", "sequence", "nt", "eps",
-                 "salt", "topo", "feature", "gba", "tetrad", "loop",
-                 "conc", "wl", "delta.eps.ids", "norm.ids")) %>%
+        select(c(
+          "oligo.number",
+          "oligo",
+          "description",
+          "sequence",
+          "nt",
+          "eps",
+          "salt",
+          "topo",
+          "feature",
+          "gba",
+          "tetrad",
+          "loop",
+          "conc",
+          "wl",
+          "delta.eps.ids",
+          "norm.ids"
+        )) %>%
         datatable(
           style = "bootstrap",
           extensions = c('Buttons', 'Responsive', 'Scroller'),
@@ -882,33 +934,32 @@ server <- shinyServer(function(input, output) {
             scroller = F,
             pageLength = 25,
             autoWidth = F,
-            dom = 'Bfrtip', 
+            dom = 'Bfrtip',
             buttons = list(
-              list(extend='copy'),
-              list(extend='csv',
-                   title=NULL,
-                   filename="reference ids"),
-              list(extend='excel',
-                   title=NULL,
-                   filename="reference ids"),
-              list(extend='colvis')
+              list(extend = 'copy'),
+              list(extend = 'csv', title = NULL, filename = "reference ids"),
+              list(extend = 'excel', title = NULL, filename = "reference ids"),
+              list(extend = 'colvis')
             ),
             title = NULL,
-            columnDefs = list(list(visible=FALSE, targets=c(2:6, 8, 12, 15)))
+            columnDefs = list(list(
+              visible = FALSE,
+              targets = c(2:6, 8, 12, 15)
+            ))
           )
-        ) %>% 
-        formatStyle(columns = 0:15, target = "cell", 
-                    backgroundColor = "#272c30")
+        )
+      # formatStyle(
+      #   columns = 0:15,
+      #   target = "cell",
+      #   backgroundColor = "#272c30"
+      # )
     }
-    
   })
-  
-  
+
   output$p.ref.ids <- renderPlot({
-    
-    ref.ids <- ref.set() %>% 
-      ungroup() %>% 
-      filter(salt != 'none') %>% 
+    ref.ids <- ref.set() %>%
+      ungroup() %>%
+      filter(salt != 'none') %>%
       filter(
         topo %in% input$ref.seq.topo,
         gba %in% input$ref.seq.gba,
@@ -925,52 +976,53 @@ server <- shinyServer(function(input, output) {
         color = NA,
         sd.y = NA
       )
-    
-    if(input$ids.norm=="Δε"){
+
+    if (input$ids.norm == "Δε") {
       ref.ids$y <- ref.ids$delta.eps.ids
-      axis.label <- bquote(Delta*epsilon~(M^-1*cm^-1))
+      axis.label <- bquote(Delta * epsilon ~ (M^-1 * cm^-1))
     } else {
       ref.ids$y <- ref.ids$norm.ids
-      axis.label <- "Normalized IDS" 
+      axis.label <- "Normalized IDS"
     }
-    
+
     #coloring
-    if(input$ref.color=="Topology"){
+    if (input$ref.color == "Topology") {
       ref.ids$color <- ref.ids$topo
-    } else if(input$ref.color=="GBA"){
+    } else if (input$ref.color == "GBA") {
       ref.ids$color <- ref.ids$gba
-    } else if(input$ref.color=="Tetrads"){
+    } else if (input$ref.color == "Tetrads") {
       ref.ids$color <- factor(ref.ids$tetrad)
-    } else if(input$ref.color=="Tetrad combination"){
+    } else if (input$ref.color == "Tetrad combination") {
       ref.ids$color <- ref.ids$tetrad.id
-    } else if(input$ref.color=="Loop progression"){
+    } else if (input$ref.color == "Loop progression") {
       ref.ids$color <- ref.ids$loop
-    } else if(input$ref.color=="Tetrad handedness"){
+    } else if (input$ref.color == "Tetrad handedness") {
       ref.ids$color <- ref.ids$plus.minus
-    } else if(input$ref.color=="Grooves"){
+    } else if (input$ref.color == "Grooves") {
       ref.ids$color <- ref.ids$groove
     } else {
       ref.ids$color <- ref.ids$salt
     }
-    
-    if(input$ref.panel=="Mean"){
-      ref.ids <- ref.ids %>% 
-        group_by(color, wl) %>% 
+
+    if (input$ref.panel == "Mean") {
+      ref.ids <- ref.ids %>%
+        group_by(color, wl) %>%
         mutate(
           sd.y = sd(y),
           y = mean(y)
         )
     }
-    
-    if(file.toggle()=='no') {
+
+    if (file.toggle() == 'no') {
       ggplot() +
         dark_mode(theme_pander(base_size = 18)) +
         custom.theme
     } else {
-      p.ref.ids <- ref.ids %>% 
+      p.ref.ids <- ref.ids %>%
         ggplot(
           aes(
-            x = wl, y = y,
+            x = wl,
+            y = y,
             color = color
           )
         ) +
@@ -1013,34 +1065,32 @@ server <- shinyServer(function(input, output) {
           show.legend = FALSE
         ) +
         labs(
-          x = bquote(lambda~(nm)),
+          x = bquote(lambda ~ (nm)),
           y = axis.label,
           color = input$ref.color,
           fill = input$ref.color
         ) +
         custom.theme +
         scale_y_continuous(n.breaks = 3) +
-        scale_x_continuous(expand = c(0,0)) 
+        scale_x_continuous(expand = c(0, 0))
     }
-    
-    if(input$ref.panel=="Panels"){
-      p.ref.ids <- p.ref.ids + 
+
+    if (input$ref.panel == "Panels") {
+      p.ref.ids <- p.ref.ids +
         facet_wrap(
-          ~oligo 
+          ~oligo
           # ncol = 4
-        ) 
-      
+        )
+
       return(p.ref.ids)
     } else {
       return(p.ref.ids)
     }
-    
   })
-  
+
   ### Reference CD----
-  output$ref.cd <- renderDT(server = FALSE,{
-    
-    if(file.toggle()=='no') {
+  output$ref.cd <- renderDT(server = FALSE, {
+    if (file.toggle() == 'no') {
       return(NULL)
     } else {
       ref.set() %>%
@@ -1049,9 +1099,24 @@ server <- shinyServer(function(input, output) {
           delta.eps.cd = round(delta.eps.cd, 2),
           norm.cd = round(norm.cd, 2)
         ) %>%
-        select(c("oligo.number", "oligo", "description", "sequence", "nt", "eps",
-                 "salt", "topo", "feature", "gba", "tetrad", "loop",
-                 "conc", "wl", "delta.eps.cd", "norm.cd")) %>%
+        select(c(
+          "oligo.number",
+          "oligo",
+          "description",
+          "sequence",
+          "nt",
+          "eps",
+          "salt",
+          "topo",
+          "feature",
+          "gba",
+          "tetrad",
+          "loop",
+          "conc",
+          "wl",
+          "delta.eps.cd",
+          "norm.cd"
+        )) %>%
         datatable(
           style = "bootstrap",
           extensions = c('Buttons', 'Responsive', 'Scroller'),
@@ -1083,30 +1148,27 @@ server <- shinyServer(function(input, output) {
             scroller = F,
             pageLength = 25,
             autoWidth = F,
-            dom = 'Bfrtip', 
+            dom = 'Bfrtip',
             buttons = list(
-              list(extend='copy'),
-              list(extend='csv',
-                   title=NULL,
-                   filename="reference cd"),
-              list(extend='excel',
-                   title=NULL,
-                   filename="reference cd"),
-              list(extend='colvis')
+              list(extend = 'copy'),
+              list(extend = 'csv', title = NULL, filename = "reference cd"),
+              list(extend = 'excel', title = NULL, filename = "reference cd"),
+              list(extend = 'colvis')
             ),
             title = NULL,
-            columnDefs = list(list(visible=FALSE, targets = c(2:6,12,16)))
+            columnDefs = list(list(visible = FALSE, targets = c(2:6, 12, 16)))
           )
-        ) %>% 
-        formatStyle(columns = 0:16, target = "cell", 
-                    backgroundColor = "#272c30")
+        )
+      # formatStyle(
+      #   columns = 0:16,
+      #   target = "cell",
+      #   backgroundColor = "#272c30"
+      # )
     }
-    
   })
-  
+
   output$p.ref.cd <- renderPlot({
-    
-    ref.cd <- ref.set() %>% 
+    ref.cd <- ref.set() %>%
       filter(
         topo %in% input$ref.seq.topo,
         gba %in% input$ref.seq.gba,
@@ -1122,53 +1184,53 @@ server <- shinyServer(function(input, output) {
         color = NA,
         sd.y = NA
       )
-    
-    if(input$cd.norm == "Δε"){
+
+    if (input$cd.norm == "Δε") {
       ref.cd$y <- ref.cd$delta.eps.cd
-      axis.label <- bquote(Delta*epsilon~(M^-1*cm^-1))
+      axis.label <- bquote(Delta * epsilon ~ (M^-1 * cm^-1))
     } else {
       ref.cd$y <- ref.cd$norm.cd
-      axis.label <- "Normalized CD" 
+      axis.label <- "Normalized CD"
     }
-    
+
     #coloring
-    if(input$ref.color=="Topology"){
+    if (input$ref.color == "Topology") {
       ref.cd$color <- ref.cd$topo
-    } else if(input$ref.color=="GBA"){
+    } else if (input$ref.color == "GBA") {
       ref.cd$color <- ref.cd$gba
-    } else if(input$ref.color=="Tetrads"){
+    } else if (input$ref.color == "Tetrads") {
       ref.cd$color <- factor(ref.cd$tetrad)
-    } else if(input$ref.color=="Tetrad combination"){
+    } else if (input$ref.color == "Tetrad combination") {
       ref.cd$color <- ref.cd$tetrad.id
-    } else if(input$ref.color=="Loop progression"){
+    } else if (input$ref.color == "Loop progression") {
       ref.cd$color <- ref.cd$loop
-    } else if(input$ref.color=="Tetrad handedness"){
+    } else if (input$ref.color == "Tetrad handedness") {
       ref.cd$color <- ref.cd$plus.minus
-    } else if(input$ref.color=="Grooves"){
+    } else if (input$ref.color == "Grooves") {
       ref.cd$color <- ref.cd$groove
     } else {
       ref.cd$color <- ref.cd$salt
     }
-    
-    
-    if(input$ref.panel=="Mean"){
-      ref.cd <- ref.cd %>% 
-        group_by(color, wl) %>% 
+
+    if (input$ref.panel == "Mean") {
+      ref.cd <- ref.cd %>%
+        group_by(color, wl) %>%
         mutate(
           sd.y = sd(y),
           y = mean(y),
         )
     }
-    
-    if(file.toggle()=='no') {
+
+    if (file.toggle() == 'no') {
       ggplot() +
         dark_mode(theme_pander(base_size = 18)) +
         custom.theme
     } else {
-      p.ref.cd <- ref.cd %>% 
+      p.ref.cd <- ref.cd %>%
         ggplot(
           aes(
-            x = wl, y = y,
+            x = wl,
+            y = y,
             color = color
           )
         ) +
@@ -1206,43 +1268,38 @@ server <- shinyServer(function(input, output) {
           show.legend = FALSE
         ) +
         labs(
-          x = bquote(lambda~(nm)),
+          x = bquote(lambda ~ (nm)),
           y = axis.label,
           color = input$ref.color,
           fill = input$ref.color
         ) +
         custom.theme +
         scale_y_continuous(n.breaks = 4) +
-        scale_x_continuous(expand = c(0,0))
+        scale_x_continuous(expand = c(0, 0))
     }
-    
-    
-    if(input$ref.panel == "Panels") {
-      p.ref.cd <- p.ref.cd + 
+
+    if (input$ref.panel == "Panels") {
+      p.ref.cd <- p.ref.cd +
         facet_wrap(
           ~oligo
           # ncol = 4
-        ) 
-      
+        )
+
       return(p.ref.cd)
     } else {
       return(p.ref.cd)
     }
-    
-    
   })
-  
-  
+
   # PCA----
-  
+
   ## training set----
-  
+
   ### CD----
-  
+
   training.cd <- reactive({
-    
     ref.set() %>%
-      ungroup() %>% 
+      ungroup() %>%
       filter(
         salt %in% input$ref.seq.cation.0,
         topo %in% input$ref.seq.topo.0,
@@ -1253,26 +1310,24 @@ server <- shinyServer(function(input, output) {
         loop %in% input$ref.seq.loop.0,
         plus.minus %in% input$ref.seq.plus.minus.0,
         groove %in% input$ref.seq.groove.0
-      ) %>% 
+      ) %>%
       mutate(
         delta.eps = case_when(
-          input$cd.norm=="Δε" ~ delta.eps.cd,
-          input$cd.norm=="Δε/ε" ~ norm.cd,
-          input$cd.norm=="-1/+1" ~ norm.cd
+          input$cd.norm == "Δε" ~ delta.eps.cd,
+          input$cd.norm == "Δε/ε" ~ norm.cd,
+          input$cd.norm == "-1/+1" ~ norm.cd
         )
       ) %>%
-      select(oligo, wl, delta.eps) %>% 
+      select(oligo, wl, delta.eps) %>%
       mutate(wl = paste0("cd-", wl)) %>%
       pivot_wider(
         names_from = wl,
         values_from = delta.eps
       )
-    
-  }) 
-  
-  output$training.cd <- renderDT(server = FALSE,{
-    
-    if(file.toggle() == 'no') {
+  })
+
+  output$training.cd <- renderDT(server = FALSE, {
+    if (file.toggle() == 'no') {
       return(NULL)
     } else {
       training.cd() %>%
@@ -1293,30 +1348,27 @@ server <- shinyServer(function(input, output) {
             dom = 'Bfrtip',
             buttons = list(
               list(extend = 'copy'),
-              list(extend = 'csv',
-                   title = NULL,
-                   filename = "training cd"),
-              list(extend = 'excel',
-                   title = NULL,
-                   filename = "training cd"),
+              list(extend = 'csv', title = NULL, filename = "training cd"),
+              list(extend = 'excel', title = NULL, filename = "training cd"),
               list(extend = 'colvis')
             ),
             title = NULL
             # columnDefs = list(list(visible=FALSE, targets=c(0,2:6,9,12)))
           )
-        ) %>%
-        formatStyle(columns = 0:17, target = "cell",
-                    backgroundColor = "#272c30")
+        )
+      # formatStyle(
+      #   columns = 0:17,
+      #   target = "cell",
+      #   backgroundColor = "#272c30"
+      # )
     }
-    
   })
-  
-  ### IDS---- 
-  
+
+  ### IDS----
+
   training.ids <- reactive({
-    
     ref.set() %>%
-      ungroup() %>% 
+      ungroup() %>%
       filter(
         !is.na(delta.eps.ids),
         salt %in% input$ref.seq.cation.0,
@@ -1328,27 +1380,27 @@ server <- shinyServer(function(input, output) {
         loop %in% input$ref.seq.loop.0,
         plus.minus %in% input$ref.seq.plus.minus.0,
         groove %in% input$ref.seq.groove.0
-      ) %>% 
-      mutate(delta.eps = case_when(
-        input$ids.norm=="Δε" ~ delta.eps.ids,
-        input$ids.norm=="-1/+1" ~ norm.ids
-      )) %>% 
-      select(oligo, wl, delta.eps) %>% 
+      ) %>%
+      mutate(
+        delta.eps = case_when(
+          input$ids.norm == "Δε" ~ delta.eps.ids,
+          input$ids.norm == "-1/+1" ~ norm.ids
+        )
+      ) %>%
+      select(oligo, wl, delta.eps) %>%
       mutate(wl = paste0("ids-", wl)) %>%
       pivot_wider(
         names_from = wl,
         values_from = delta.eps
       )
-    
   })
-  
-  output$training.ids <- renderDT(server = FALSE,{
-    
-    if(file.toggle()=='no') {
+
+  output$training.ids <- renderDT(server = FALSE, {
+    if (file.toggle() == 'no') {
       return(NULL)
     } else {
       training.ids() %>%
-        # mutate_at(., vars(2:last_col()), round, 2) %>% 
+        # mutate_at(., vars(2:last_col()), round, 2) %>%
         datatable(
           style = "bootstrap",
           extensions = c('Buttons', 'Responsive', 'Scroller'),
@@ -1364,72 +1416,66 @@ server <- shinyServer(function(input, output) {
             autoWidth = F,
             dom = 'Bfrtip',
             buttons = list(
-              list(extend='copy'),
-              list(extend='csv',
-                   title=NULL,
-                   filename="training ids"),
-              list(extend='excel',
-                   title=NULL,
-                   filename="training ids"),
-              list(extend='colvis')
+              list(extend = 'copy'),
+              list(extend = 'csv', title = NULL, filename = "training ids"),
+              list(extend = 'excel', title = NULL, filename = "training ids"),
+              list(extend = 'colvis')
             ),
             title = NULL
             # columnDefs = list(list(visible=FALSE, targets=c(0,2:6,9,12)))
           )
-        ) %>%
-        formatStyle(columns = 0:17, target = "cell",
-                    backgroundColor = "#272c30")
+        )
+      # formatStyle(
+      #   columns = 0:17,
+      #   target = "cell",
+      #   backgroundColor = "#272c30"
+      # )
     }
-    
   })
-  
+
   training.cd.ids <- reactive({
-    
-    training.cd() %>% 
+    training.cd() %>%
       left_join(
-        training.ids(), 
-        by = "oligo") 
-    
+        training.ids(),
+        by = "oligo"
+      )
   })
-  
+
   ## Calculation----
-  
+
   ### CD----
-  
+
   #### PCA----
   pca.cd <- reactive({
-    
     pca.cd <- FactoMineR::PCA(
-      X = training.cd()[,-1],
+      X = training.cd()[, -1],
       ncp = input$ncp,
       scale.unit = input$scale.unit,
       graph = FALSE
     )
-    
+
     # save(pca.cd, file = "pca.cd.RData")
-    
+
     return(pca.cd)
-    
   })
-  
-  
+
   #### Clusters----
-  
+
   #Optimal number of clusters
-  
+
   pca.cd.twss <- reactive({
     data.frame(
       clusters = 1:10
     ) %>%
-      group_by(clusters) %>% 
+      group_by(clusters) %>%
       mutate(
         totwithin = kmeans(
-          pca.cd()$ind$coord, 
+          pca.cd()$ind$coord,
           algorithm = input$k.mean.algo,
-          centers = clusters, 
+          centers = clusters,
           nstart = 100
         )$tot.withinss
-      ) %>% 
+      ) %>%
       ggplot(
         aes(x = clusters, y = totwithin)
       ) +
@@ -1442,15 +1488,15 @@ server <- shinyServer(function(input, output) {
       ) +
       custom.theme
   })
-  
+
   output$pca.cd.twss <- renderPlot({
     pca.cd.twss()
   })
-  
+
   output$pca.cd.twss.2 <- renderPlot({
     pca.cd.twss()
   })
-  
+
   pca.cd.gap <- reactive({
     clusGap(
       pca.cd()$ind$coord,
@@ -1458,13 +1504,13 @@ server <- shinyServer(function(input, output) {
       nstart = 25,
       K.max = 10,
       B = 50
-    )$Tab %>% 
-      as_tibble() %>% 
-      rownames_to_column(var = "cluster") %>% 
-      mutate(cluster = as.numeric(cluster)) %>% 
+    )$Tab %>%
+      as_tibble() %>%
+      rownames_to_column(var = "cluster") %>%
+      mutate(cluster = as.numeric(cluster)) %>%
       ggplot(
         aes(x = cluster, y = gap)
-      ) +  
+      ) +
       geom_vline(
         data = . %>% filter(gap == max(gap)),
         aes(xintercept = cluster),
@@ -1473,7 +1519,7 @@ server <- shinyServer(function(input, output) {
         color = "tomato"
       ) +
       geom_errorbar(
-        aes(x = cluster, ymin = gap-SE.sim, ymax = gap+SE.sim),
+        aes(x = cluster, ymin = gap - SE.sim, ymax = gap + SE.sim),
         width = 0
       ) +
       geom_point(size = 5, color = "white") +
@@ -1485,38 +1531,35 @@ server <- shinyServer(function(input, output) {
       ) +
       custom.theme
   })
-  
+
   output$pca.cd.gap <- renderPlot({
     pca.cd.gap()
   })
-  
+
   output$pca.cd.gap.2 <- renderPlot({
     pca.cd.gap()
   })
-  
+
   #k-means clustering
   pca.cd.km <- reactive({
-    
     set.seed(42)
-    
+
     kmeans(
-      pca.cd()$ind$coord, 
+      pca.cd()$ind$coord,
       algorithm = input$k.mean.algo,
-      centers = input$cluster.center, 
+      centers = input$cluster.center,
       nstart = 100
     )
-  }) 
-  
-  
+  })
+
   #### Analytics ----
-  
+
   ##### Scree----
-  
+
   pca.cd.scree <- reactive({
-    
-    pca.cd.scree <- data.frame(pca.cd()$eig) %>% 
-      mutate(dim = 1:nrow(data.frame(pca.cd()$eig))) %>% 
-      # mutate(dim.cum.sum = cumsum(dim)) %>% 
+    pca.cd.scree <- data.frame(pca.cd()$eig) %>%
+      mutate(dim = 1:nrow(data.frame(pca.cd()$eig))) %>%
+      # mutate(dim.cum.sum = cumsum(dim)) %>%
       filter(dim <= 10) %>%
       ggplot(aes(x = dim, y = percentage.of.variance)) +
       geom_bar(
@@ -1526,58 +1569,57 @@ server <- shinyServer(function(input, output) {
       ) +
       geom_point(
         aes(
-          x = dim, 
+          x = dim,
           y = cumsum(percentage.of.variance)
-        ), 
+        ),
         size = 5,
         color = "white"
       ) +
       geom_line(
         aes(
-          x = dim, 
+          x = dim,
           y = cumsum(percentage.of.variance)
         ),
         size = 1,
         color = "white"
       ) +
       custom.theme +
-      scale_x_continuous(expand = c(0,0), limits = c(0, NA)) +
-      scale_y_continuous(expand = c(0,NA), limits = c(0, 105)) +
+      scale_x_continuous(expand = c(0, 0), limits = c(0, NA)) +
+      scale_y_continuous(expand = c(0, NA), limits = c(0, 105)) +
       labs(
         y = 'Variance contribution (%)',
         x = 'Dimension'
       )
-    
+
     #diagnostics
     # save(pca.cd.scree, file = "scree.rdata")
-    
+
     return(pca.cd.scree)
-  }) 
-  
+  })
+
   output$pca.cd.scree <- renderPlot({
     pca.cd.scree()
   })
-  
+
   output$pca.cd.scree.2 <- renderPlot({
     pca.cd.scree()
   })
-  
+
   ##### Factor map----
   pca.cd.fac.map <- reactive({
-    
-    pca.cd.fac.map <- data.frame(pca.cd()$var$cos2) %>% 
-      select(input$dim.cd) %>% 
+    pca.cd.fac.map <- data.frame(pca.cd()$var$cos2) %>%
+      select(input$dim.cd) %>%
       mutate(
-        var = as.numeric(substr(rownames(data.frame(pca.cd()$var$cos2)), 4,6))
+        var = as.numeric(substr(rownames(data.frame(pca.cd()$var$cos2)), 4, 6))
       ) %>%
       pivot_longer(
         cols = 1:length(input$dim.cd),
         names_to = 'dim',
         values_to = 'cos2'
-      ) %>% 
+      ) %>%
       mutate(
         dim = substr(dim, 5, 5)
-      ) %>% 
+      ) %>%
       ggplot(
         aes(
           x = dim,
@@ -1594,42 +1636,43 @@ server <- shinyServer(function(input, output) {
         x = 'Dimension'
       ) +
       custom.theme +
-      scale_size_continuous(limits = c(0,1),
-                            range = c(0,25),
-                            name = bquote(cos^2))
-    
+      scale_size_continuous(
+        limits = c(0, 1),
+        range = c(0, 25),
+        name = bquote(cos^2)
+      )
+
     #diagnostics
     # save(pca.cd.fac.map, file = "factormap.rdata")
-    
+
     return(pca.cd.fac.map)
-  }) 
-  
+  })
+
   output$pca.cd.fac.map <- renderPlot({
     pca.cd.fac.map()
-  }) 
+  })
   output$pca.cd.fac.map.2 <- renderPlot({
     pca.cd.fac.map()
-  }) 
-  
+  })
+
   ##### Correlation circle----
-  
-  circle <- circleFun(c(0,0), 2, npoints = 100)
-  
+
+  circle <- circleFun(c(0, 0), 2, npoints = 100)
+
   pca.cd.var.cor <- reactive({
-    
-    data.frame(pca.cd()$var$cor) %>% 
+    data.frame(pca.cd()$var$cor) %>%
       select(input$dim.cd[1], input$dim.cd[2]) %>%
-      mutate(var = rownames(data.frame(pca.cd()$var$cor))) %>% 
+      mutate(var = rownames(data.frame(pca.cd()$var$cor))) %>%
       magrittr::set_colnames(c("Dim.1", "Dim.2", "var")) %>%
       left_join(
-        data.frame(pca.cd()$var$cos2) %>% 
+        data.frame(pca.cd()$var$cos2) %>%
           select(input$dim.cd[1], input$dim.cd[2]) %>%
-          magrittr::set_colnames(c("Dim.1", "Dim.2")) %>% 
-          mutate(sum.cos2 = Dim.1 + Dim.2) %>% 
-          select(sum.cos2) %>% 
+          magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
+          mutate(sum.cos2 = Dim.1 + Dim.2) %>%
+          select(sum.cos2) %>%
           mutate(var = rownames(data.frame(pca.cd()$var$cos2))),
         by = 'var'
-      ) %>% 
+      ) %>%
       ggplot(
         aes(
           x = Dim.1,
@@ -1638,28 +1681,29 @@ server <- shinyServer(function(input, output) {
         )
       ) +
       geom_path(
-        data = circle, 
-        aes(x=cir.x, y=cir.y), 
+        data = circle,
+        aes(x = cir.x, y = cir.y),
         inherit.aes = FALSE,
         color = "white"
       ) +
       geom_segment(
         aes(
-          x = 0, y = 0,
-          xend = Dim.1, yend = Dim.2
+          x = 0,
+          y = 0,
+          xend = Dim.1,
+          yend = Dim.2
         ),
-        arrow = arrow(length = unit(0.1, "inches")
-        ),
+        arrow = arrow(length = unit(0.1, "inches")),
         show.legend = TRUE
       ) +
-        geom_text_repel(
-          aes(label = stringr::str_extract(var, "\\d+") %>% as.numeric()),
-          show.legend = FALSE,
-          size = 5,
-          fontface = 'bold'
-        ) +
-      scale_x_continuous(limits = c(-1,1)) +
-      scale_y_continuous(limits = c(-1,1)) +
+      geom_text_repel(
+        aes(label = stringr::str_extract(var, "\\d+") %>% as.numeric()),
+        show.legend = FALSE,
+        size = 5,
+        fontface = 'bold'
+      ) +
+      scale_x_continuous(limits = c(-1, 1)) +
+      scale_y_continuous(limits = c(-1, 1)) +
       labs(
         y = input$dim.cd[2],
         x = input$dim.cd[1]
@@ -1667,20 +1711,19 @@ server <- shinyServer(function(input, output) {
       custom.theme +
       scale_color_continuous(
         type = 'viridis',
-        limits = c(0,1),
-        name = bquote(sum~cos^2),
+        limits = c(0, 1),
+        name = bquote(sum ~ cos^2),
         guide = guide_colorbar(barwidth = 15)
       )
-  }) 
-  
+  })
+
   output$pca.cd.var.cor <- renderPlot({
     pca.cd.var.cor()
-  }) 
+  })
   output$pca.cd.var.cor.2 <- renderPlot({
     pca.cd.var.cor()
-  }) 
-  
-  
+  })
+
   #### Variable coordinates-------
   pca.cd.var.coord <- reactive({
     data.frame(pca.cd()$var$coord) %>%
@@ -1717,7 +1760,8 @@ server <- shinyServer(function(input, output) {
       geom_text_repel(
         aes(label = stringr::str_extract(var, "\\d+") %>% as.numeric()),
         show.legend = FALSE,
-        size = 5, fontface = 'bold'
+        size = 5,
+        fontface = 'bold'
       ) +
       custom.theme +
       scale_color_continuous(
@@ -1730,33 +1774,54 @@ server <- shinyServer(function(input, output) {
         y = input$dim.cd[2],
         x = input$dim.cd[1]
       )
-  }) 
-   
+  })
+
   output$pca.cd.var.coord <- renderPlot({
     pca.cd.var.coord()
-  })  
+  })
   output$pca.cd.var.coord.2 <- renderPlot({
     pca.cd.var.coord()
-  }) 
-  
+  })
+
   #### Individuals coordinates--------
-  
-  output$pca.cd.table <- renderDT(server = FALSE,{
-    
-    if(file.toggle()=='no') {
+
+  output$pca.cd.table <- renderDT(server = FALSE, {
+    if (file.toggle() == 'no') {
       return(NULL)
     } else {
       data.frame(pca.cd()$ind$coord) %>%
         cbind(training.cd() %>% select(oligo)) %>%
-        add_column(km = pca.cd.km()$cluster) %>% 
+        add_column(km = pca.cd.km()$cluster) %>%
         left_join(
-          ref.seq() %>% 
-            select(oligo, topo, feature, gba, tetrad, tetrad.id, loop, plus.minus, groove, salt),
+          ref.seq() %>%
+            select(
+              oligo,
+              topo,
+              feature,
+              gba,
+              tetrad,
+              tetrad.id,
+              loop,
+              plus.minus,
+              groove,
+              salt
+            ),
           by = 'oligo'
-        ) %>%  
+        ) %>%
         setcolorder(
-          c('oligo', 'topo', 'feature', 'gba', 'tetrad', 'tetrad.id', 
-          'loop', 'plus.minus', 'groove', 'salt', 'km')
+          c(
+            'oligo',
+            'topo',
+            'feature',
+            'gba',
+            'tetrad',
+            'tetrad.id',
+            'loop',
+            'plus.minus',
+            'groove',
+            'salt',
+            'km'
+          )
         ) %>%
         datatable(
           style = "bootstrap",
@@ -1784,59 +1849,93 @@ server <- shinyServer(function(input, output) {
             scroller = F,
             pageLength = 25,
             autoWidth = F,
-            dom = 'Bfrtip', 
+            dom = 'Bfrtip',
             buttons = list(
-              list(extend='copy'),
-              list(extend='csv',
-                   title=NULL,
-                   filename="pca cd"),
-              list(extend='excel',
-                   title=NULL,
-                   filename="pca cd"),
-              list(extend='colvis')
+              list(extend = 'copy'),
+              list(extend = 'csv', title = NULL, filename = "pca cd"),
+              list(extend = 'excel', title = NULL, filename = "pca cd"),
+              list(extend = 'colvis')
             ),
             title = NULL,
-            columnDefs = list(list(visible=FALSE, targets=c(2:9)))
+            columnDefs = list(list(visible = FALSE, targets = c(2:9)))
           )
-        ) %>% 
-        formatStyle(columns = 0:(11+input$ncp),  target = "cell",
-                    backgroundColor = "#272c30", color = 'white') %>% 
-        formatSignif(columns = 11:(11+input$ncp), digits = 5)
+        ) %>%
+        # formatStyle(
+        #   columns = 0:(11 + input$ncp),
+        #   target = "cell",
+        #   backgroundColor = "#272c30",
+        #   color = 'white'
+        # ) %>%
+        formatSignif(columns = 11:(11 + input$ncp), digits = 5)
     }
   })
-  
+
   pca.cd.coord <- reactive({
     data.frame(pca.cd()$ind$coord) %>%
       select(input$dim.cd[1], input$dim.cd[2]) %>%
-      cbind(training.cd()) %>% 
-      add_column(km = pca.cd.km()$cluster) %>% 
+      cbind(training.cd()) %>%
+      add_column(km = pca.cd.km()$cluster) %>%
       left_join(
-        ref.seq() %>% 
-          select(oligo, topo, gba, tetrad, tetrad.id, loop, plus.minus, groove, salt),
+        ref.seq() %>%
+          select(
+            oligo,
+            topo,
+            gba,
+            tetrad,
+            tetrad.id,
+            loop,
+            plus.minus,
+            groove,
+            salt
+          ),
         by = 'oligo'
-      ) %>% 
-      pca.plotR(., dim.1 = input$dim.cd[1], dim.2 = input$dim.cd[2], 
-                color = input$pca.color.cd, shape = input$pca.shape.cd)
+      ) %>%
+      pca.plotR(
+        .,
+        dim.1 = input$dim.cd[1],
+        dim.2 = input$dim.cd[2],
+        color = input$pca.color.cd,
+        shape = input$pca.shape.cd
+      )
   })
-  
-  output$pca.cd.coord <- renderPlot({pca.cd.coord()}) 
-  
+
+  output$pca.cd.coord <- renderPlot({
+    pca.cd.coord()
+  })
+
   pca.cd.coord.2 <- reactive({
     data.frame(pca.cd()$ind$coord) %>%
       select(input$dim.cd.2[1], input$dim.cd.2[2]) %>%
-      cbind(training.cd()) %>% 
-      add_column(km = pca.cd.km()$cluster) %>% 
+      cbind(training.cd()) %>%
+      add_column(km = pca.cd.km()$cluster) %>%
       left_join(
-        ref.seq() %>% 
-          select(oligo, topo, gba, tetrad, tetrad.id, loop, plus.minus, groove, salt),
+        ref.seq() %>%
+          select(
+            oligo,
+            topo,
+            gba,
+            tetrad,
+            tetrad.id,
+            loop,
+            plus.minus,
+            groove,
+            salt
+          ),
         by = 'oligo'
-      ) %>% 
-      pca.plotR(., dim.1 = input$dim.cd.2[1], dim.2 = input$dim.cd.2[2],
-                color = input$pca.color.cd.2, shape = input$pca.shape.cd.2)
+      ) %>%
+      pca.plotR(
+        .,
+        dim.1 = input$dim.cd.2[1],
+        dim.2 = input$dim.cd.2[2],
+        color = input$pca.color.cd.2,
+        shape = input$pca.shape.cd.2
+      )
   })
-  
-  output$pca.cd.coord.2 <- renderPlot({pca.cd.coord.2()}) 
-  
+
+  output$pca.cd.coord.2 <- renderPlot({
+    pca.cd.coord.2()
+  })
+
   output$dwn.pca.cd <- downloadHandler(
     filename = function() {
       paste("PCA - CD -- view 1", input$device, sep = ".")
@@ -1862,16 +1961,14 @@ server <- shinyServer(function(input, output) {
           height = input$height
         )
       }
-      
     }
-  )  
-  
+  )
+
   output$dwn.pca.cd.2 <- downloadHandler(
     filename = function() {
       paste("PCA - CD -- view 2", input$device, sep = ".")
     },
     content = function(file) {
-      
       if (input$device == "png") {
         ggsave(
           file,
@@ -1894,19 +1991,18 @@ server <- shinyServer(function(input, output) {
       }
     }
   )
-  
+
   #### Parameter table----
-  
-  output$param.cd.table <- renderDT(server = FALSE,{
-    
+
+  output$param.cd.table <- renderDT(server = FALSE, {
     combined_list <- list(
       'Cations' = input$ref.seq.cation.0,
       'Topologies' = input$ref.seq.topo.0,
-      'GBA' =  input$ref.seq.gba.0,
+      'GBA' = input$ref.seq.gba.0,
       'Oligonucleotides' = input$ref.seq.oligo.0,
       'Tetrad #' = input$ref.seq.tetrad.0,
       'Tetrad combination' = input$ref.seq.tetrad.id.0,
-      'Loops' =  input$ref.seq.loop.0,
+      'Loops' = input$ref.seq.loop.0,
       '+/-' = input$ref.seq.plus.minus.0,
       'Grooves' = input$ref.seq.groove.0,
       'Max wavelength' = max(input$wl),
@@ -1919,15 +2015,14 @@ server <- shinyServer(function(input, output) {
       'k-means algorithm' = input$k.mean.algo,
       'k-means centers' = input$cluster.center
     )
-    
-    
+
     max.length <- max(sapply(combined_list, length))
-    
+
     for (i in 1:length(combined_list)) {
       length(combined_list[[i]]) <- max.length
     }
-    
-    do.call(cbind, combined_list) %>% 
+
+    do.call(cbind, combined_list) %>%
       datatable(
         style = "bootstrap",
         extensions = c('Buttons', 'Responsive', 'Scroller'),
@@ -1941,57 +2036,55 @@ server <- shinyServer(function(input, output) {
           scroller = F,
           pageLength = 25,
           autoWidth = F,
-          dom = 'Bfrtip', 
+          dom = 'Bfrtip',
           buttons = list(
             list(extend = 'copy'),
-            list(extend = 'csv',
-                 title = NULL,
-                 filename = "pca parameters"),
-            list(extend = 'excel',
-                 title = NULL,
-                 filename = "pca parameters"),
+            list(extend = 'csv', title = NULL, filename = "pca parameters"),
+            list(extend = 'excel', title = NULL, filename = "pca parameters"),
             list(extend = 'colvis')
           ),
           title = NULL,
           columnDefs = list(list(visible = FALSE, targets = c(0:8)))
         )
-      )  %>%       
-        formatStyle(
-          columns = 0:17,  
-          target = "cell",
-      backgroundColor = "#272c30", color = 'white') 
+      )
+    # formatStyle(
+    #   columns = 0:17,
+    #   target = "cell",
+    #   backgroundColor = "#272c30",
+    #   color = 'white'
+    # )
   })
-  
+
   ### IDS----
-  
+
   ####PCA----
-  
+
   pca.ids <- reactive({
     FactoMineR::PCA(
-      X = training.ids()[,-1],
+      X = training.ids()[, -1],
       # select(-salt),
       ncp = input$ncp,
       scale.unit = input$scale.unit,
       graph = FALSE
     )
   })
-  
+
   #### Clusters----
-  
+
   #Optimal number of clusters
   pca.ids.twss <- reactive({
     data.frame(
       clusters = 1:10
     ) %>%
-      group_by(clusters) %>% 
+      group_by(clusters) %>%
       mutate(
         totwithin = kmeans(
-          pca.ids()$ind$coord, 
+          pca.ids()$ind$coord,
           algorithm = input$k.mean.algo,
-          centers = clusters, 
+          centers = clusters,
           nstart = 100
         )$tot.withinss
-      ) %>% 
+      ) %>%
       ggplot(
         aes(x = clusters, y = totwithin)
       ) +
@@ -2004,15 +2097,15 @@ server <- shinyServer(function(input, output) {
       ) +
       custom.theme
   })
-  
+
   output$pca.ids.twss <- renderPlot({
     pca.ids.twss()
   })
-  
+
   output$pca.ids.twss.2 <- renderPlot({
     pca.ids.twss()
   })
-  
+
   pca.ids.gap <- reactive({
     clusGap(
       pca.ids()$ind$coord,
@@ -2020,13 +2113,13 @@ server <- shinyServer(function(input, output) {
       nstart = 25,
       K.max = 10,
       B = 50
-    )$Tab %>% 
-      as_tibble() %>% 
-      rownames_to_column(var = "cluster") %>% 
-      mutate(cluster = as.numeric(cluster)) %>% 
+    )$Tab %>%
+      as_tibble() %>%
+      rownames_to_column(var = "cluster") %>%
+      mutate(cluster = as.numeric(cluster)) %>%
       ggplot(
         aes(x = cluster, y = gap)
-      ) +  
+      ) +
       geom_vline(
         data = . %>% filter(gap == max(gap)),
         aes(xintercept = cluster),
@@ -2047,35 +2140,34 @@ server <- shinyServer(function(input, output) {
       ) +
       custom.theme
   })
-  
+
   output$pca.ids.gap <- renderPlot({
     pca.ids.gap()
   })
-  
+
   output$pca.ids.gap.2 <- renderPlot({
     pca.ids.gap()
   })
-  
+
   #k-means clustering
   #done on all 5 kept dimensions
   pca.ids.km <- reactive({
-    
     set.seed(42)
-    
+
     kmeans(
-      pca.ids()$ind$coord, 
+      pca.ids()$ind$coord,
       algorithm = input$k.mean.algo,
-      centers = input$cluster.center, 
+      centers = input$cluster.center,
       nstart = 100
     )
-  }) 
-  
+  })
+
   #### Analytics----
-  
+
   ##### Scree----
   pca.ids.scree <- reactive({
-    pca.ids.scree <- data.frame(pca.ids()$eig) %>% 
-      mutate(dim = 1:nrow(data.frame(pca.ids()$eig))) %>% 
+    pca.ids.scree <- data.frame(pca.ids()$eig) %>%
+      mutate(dim = 1:nrow(data.frame(pca.ids()$eig))) %>%
       filter(dim <= 10) %>%
       ggplot(aes(x = dim, y = percentage.of.variance)) +
       geom_bar(
@@ -2085,57 +2177,57 @@ server <- shinyServer(function(input, output) {
       ) +
       geom_point(
         aes(
-          x = dim, 
+          x = dim,
           y = cumsum(percentage.of.variance)
-        ), 
+        ),
         size = 5,
         color = "white"
       ) +
       geom_line(
         aes(
-          x = dim, 
+          x = dim,
           y = cumsum(percentage.of.variance)
         ),
         size = 1,
         color = "white"
       ) +
       custom.theme +
-      scale_x_continuous(expand = c(0,0), limits = c(0, NA)) +
-      scale_y_continuous(expand = c(0,NA), limits = c(0, 105)) +
+      scale_x_continuous(expand = c(0, 0), limits = c(0, NA)) +
+      scale_y_continuous(expand = c(0, NA), limits = c(0, 105)) +
       labs(
         y = 'Variance contribution (%)',
         x = 'Dimension'
       )
-    
+
     #diagnostics
     save(pca.ids.scree, file = "scree.rdata")
-    
+
     return(pca.ids.scree)
   })
-  
+
   output$pca.ids.scree <- renderPlot({
     pca.ids.scree()
-  }) 
-  
+  })
+
   output$pca.ids.scree.2 <- renderPlot({
     pca.ids.scree()
-  }) 
-  
+  })
+
   ##### Factor map----
-pca.ids.fac.map <- reactive({
-    pca.cd.fac.map <- data.frame(pca.ids()$var$cos2) %>% 
-      select(input$dim.ids) %>% 
+  pca.ids.fac.map <- reactive({
+    pca.cd.fac.map <- data.frame(pca.ids()$var$cos2) %>%
+      select(input$dim.ids) %>%
       mutate(
-        var = as.numeric(substr(rownames(data.frame(pca.ids()$var$cos2)), 5,7))
+        var = as.numeric(substr(rownames(data.frame(pca.ids()$var$cos2)), 5, 7))
       ) %>%
       pivot_longer(
         cols = 1:length(input$dim.ids),
         names_to = 'dim',
         values_to = 'cos2'
-      ) %>% 
+      ) %>%
       mutate(
         dim = substr(dim, 5, 5)
-      ) %>% 
+      ) %>%
       ggplot(
         aes(
           x = dim,
@@ -2152,24 +2244,25 @@ pca.ids.fac.map <- reactive({
         x = 'Dimension'
       ) +
       custom.theme +
-      scale_size_continuous(limits = c(0,1),
-                            range = c(0,25),
-                            name = bquote(cos^2))
-    
-    
+      scale_size_continuous(
+        limits = c(0, 1),
+        range = c(0, 25),
+        name = bquote(cos^2)
+      )
+
     #diagnostics
     # save(pca.cd.fac.map, file = "factormap.rdata")
-    
+
     return(pca.cd.fac.map)
   })
-    
+
   output$pca.ids.fac.map <- renderPlot({
     pca.ids.fac.map()
   })
   output$pca.ids.fac.map.2 <- renderPlot({
     pca.ids.fac.map()
   })
-  
+
   ##### Correlation circle----
   pca.ids.var.cor <- reactive({
     data.frame(pca.ids()$var$cor) %>%
@@ -2194,63 +2287,65 @@ pca.ids.fac.map <- reactive({
       ) +
       geom_path(
         data = circle,
-        aes(x=cir.x, y=cir.y),
+        aes(x = cir.x, y = cir.y),
         inherit.aes = FALSE,
         color = "white"
       ) +
       geom_segment(
         aes(
-          x = 0, y = 0,
-          xend = Dim.1, yend = Dim.2
+          x = 0,
+          y = 0,
+          xend = Dim.1,
+          yend = Dim.2
         ),
-        arrow = arrow(length = unit(0.1, "inches")
-        ),
+        arrow = arrow(length = unit(0.1, "inches")),
         show.legend = TRUE
       ) +
-        geom_text_repel(
-          aes(label = stringr::str_extract(var, "\\d+") %>% as.numeric()),
-          show.legend = FALSE,
-          size = 5, fontface = 'bold'
-        ) +
-      scale_x_continuous(limits = c(-1,1)) +
-      scale_y_continuous(limits = c(-1,1)) +
+      geom_text_repel(
+        aes(label = stringr::str_extract(var, "\\d+") %>% as.numeric()),
+        show.legend = FALSE,
+        size = 5,
+        fontface = 'bold'
+      ) +
+      scale_x_continuous(limits = c(-1, 1)) +
+      scale_y_continuous(limits = c(-1, 1)) +
       labs(
         y = input$dim.ids[2],
         x = input$dim.ids[1]
       ) +
       custom.theme +
-        scale_color_continuous(
-          type = 'viridis',
-          limits = c(0, 1),
-          name = bquote(sum ~ cos^2),
-          guide = guide_colorbar(barwidth = 15)
-        ) 
+      scale_color_continuous(
+        type = 'viridis',
+        limits = c(0, 1),
+        name = bquote(sum ~ cos^2),
+        guide = guide_colorbar(barwidth = 15)
+      )
   })
-  
+
   output$pca.ids.var.cor <- renderPlot({
     pca.ids.var.cor()
   })
-  
+
   output$pca.ids.var.cor.2 <- renderPlot({
     pca.ids.var.cor()
   })
-  
+
   #### Variable coordinates-----
-  
-pca.ids.var.coord <- reactive({
-    data.frame(pca.ids()$var$coord) %>% 
+
+  pca.ids.var.coord <- reactive({
+    data.frame(pca.ids()$var$coord) %>%
       select(input$dim.ids[1], input$dim.ids[2]) %>%
-      magrittr::set_colnames(c("Dim.1", "Dim.2")) %>% 
-      mutate(var = rownames(data.frame(pca.ids()$var$coord))) %>% 
+      magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
+      mutate(var = rownames(data.frame(pca.ids()$var$coord))) %>%
       left_join(
         data.frame(pca.ids()$var$cos2) %>%
           select(input$dim.ids[1], input$dim.ids[2]) %>%
           magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
-          mutate(sum.cos2 = Dim.1 + Dim.2) %>% 
-          select(sum.cos2) %>% 
+          mutate(sum.cos2 = Dim.1 + Dim.2) %>%
+          select(sum.cos2) %>%
           mutate(var = rownames(data.frame(pca.ids()$var$cos2))),
         by = 'var'
-      ) %>% 
+      ) %>%
       ggplot(
         aes(
           x = Dim.1,
@@ -2261,54 +2356,78 @@ pca.ids.var.coord <- reactive({
       ) +
       geom_segment(
         aes(
-          x = 0, y = 0, 
-          xend = Dim.1, yend = Dim.2
+          x = 0,
+          y = 0,
+          xend = Dim.1,
+          yend = Dim.2
         ),
-        arrow = arrow(length = unit(0.1, "inches")
-        ),
+        arrow = arrow(length = unit(0.1, "inches")),
         show.legend = TRUE
       ) +
-        geom_text_repel(
-          aes(label = stringr::str_extract(var, "\\d+") %>% as.numeric()),
-          show.legend = FALSE,
-          size = 5, fontface = 'bold'
-        ) +
+      geom_text_repel(
+        aes(label = stringr::str_extract(var, "\\d+") %>% as.numeric()),
+        show.legend = FALSE,
+        size = 5,
+        fontface = 'bold'
+      ) +
       custom.theme +
       labs(
         y = input$dim.ids[2],
         x = input$dim.ids[1]
-      )+
-        scale_color_continuous(
-          type = 'viridis',
-          limits = c(0, 1),
-          name = bquote(sum ~ cos^2),
-          guide = guide_colorbar(barwidth = 15)
-        ) 
+      ) +
+      scale_color_continuous(
+        type = 'viridis',
+        limits = c(0, 1),
+        name = bquote(sum ~ cos^2),
+        guide = guide_colorbar(barwidth = 15)
+      )
   })
-    
+
   output$pca.ids.var.coord <- renderPlot({
-		pca.ids.var.coord()
+    pca.ids.var.coord()
   })
   output$pca.ids.var.coord.2 <- renderPlot({
-		pca.ids.var.coord()
+    pca.ids.var.coord()
   })
-  
+
   #### Individuals coordinates----
-  
-  output$pca.ids.table <- renderDT(server = FALSE,{
-    
-    if(file.toggle()=='no') {
+
+  output$pca.ids.table <- renderDT(server = FALSE, {
+    if (file.toggle() == 'no') {
       return(NULL)
     } else {
       data.frame(pca.ids()$ind$coord) %>%
         cbind(training.ids() %>% select(oligo)) %>%
-        add_column(km = pca.ids.km()$cluster) %>% 
+        add_column(km = pca.ids.km()$cluster) %>%
         left_join(
-          ref.seq() %>% 
-            select(oligo, topo, feature, gba, tetrad, tetrad.id, loop, plus.minus, groove, salt),
+          ref.seq() %>%
+            select(
+              oligo,
+              topo,
+              feature,
+              gba,
+              tetrad,
+              tetrad.id,
+              loop,
+              plus.minus,
+              groove,
+              salt
+            ),
           by = 'oligo'
-        ) %>%  
-        setcolorder(c('oligo', 'topo', 'feature', 'gba', 'tetrad', 'tetrad.id', 'loop', 'plus.minus', 'groove', 'salt', 'km')) %>%
+        ) %>%
+        setcolorder(c(
+          'oligo',
+          'topo',
+          'feature',
+          'gba',
+          'tetrad',
+          'tetrad.id',
+          'loop',
+          'plus.minus',
+          'groove',
+          'salt',
+          'km'
+        )) %>%
         datatable(
           style = "bootstrap",
           extensions = c('Buttons', 'Responsive', 'Scroller'),
@@ -2335,70 +2454,97 @@ pca.ids.var.coord <- reactive({
             scroller = F,
             pageLength = 25,
             autoWidth = F,
-            dom = 'Bfrtip', 
+            dom = 'Bfrtip',
             buttons = list(
-              list(extend='copy'),
-              list(extend='csv',
-                   title=NULL,
-                   filename="pca ids"),
-              list(extend='excel',
-                   title=NULL,
-                   filename="pca ids"),
-              list(extend='colvis')
+              list(extend = 'copy'),
+              list(extend = 'csv', title = NULL, filename = "pca ids"),
+              list(extend = 'excel', title = NULL, filename = "pca ids"),
+              list(extend = 'colvis')
             ),
             title = NULL,
-            columnDefs = list(list(visible=FALSE, targets=c(2:9)))
+            columnDefs = list(list(visible = FALSE, targets = c(2:9)))
           )
-        ) %>% 
-        formatStyle(columns = 0:(11+input$ncp),  target = "cell",
-                    backgroundColor = "#272c30") %>% 
-        formatRound(columns = 11:(11+input$ncp), digits = 2)
+        ) %>%
+        # formatStyle(
+        #   columns = 0:(11 + input$ncp),
+        #   target = "cell",
+        #   backgroundColor = "#272c30"
+        # ) %>%
+        formatRound(columns = 11:(11 + input$ncp), digits = 2)
     }
   })
-  
+
   pca.ids.coord <- reactive({
     data.frame(pca.ids()$ind$coord) %>%
       select(input$dim.ids[1], input$dim.ids[2]) %>%
-      cbind(training.ids()) %>% 
-      add_column(km = pca.ids.km()$cluster) %>% 
+      cbind(training.ids()) %>%
+      add_column(km = pca.ids.km()$cluster) %>%
       left_join(
-        ref.seq() %>% 
-          select(oligo, topo, gba, tetrad, tetrad.id, loop, plus.minus, groove, salt),
+        ref.seq() %>%
+          select(
+            oligo,
+            topo,
+            gba,
+            tetrad,
+            tetrad.id,
+            loop,
+            plus.minus,
+            groove,
+            salt
+          ),
         by = 'oligo'
-      ) %>% 
-      pca.plotR(., dim.1 = input$dim.ids[1], dim.2 = input$dim.ids[2],
-                color = input$pca.color.ids, shape = input$pca.shape.ids)
+      ) %>%
+      pca.plotR(
+        .,
+        dim.1 = input$dim.ids[1],
+        dim.2 = input$dim.ids[2],
+        color = input$pca.color.ids,
+        shape = input$pca.shape.ids
+      )
   })
-  
+
   output$pca.ids.coord <- renderPlot({
     pca.ids.coord()
   })
-  
+
   pca.ids.coord.2 <- reactive({
     data.frame(pca.ids()$ind$coord) %>%
       select(input$dim.ids.2[1], input$dim.ids.2[2]) %>%
-      cbind(training.ids()) %>% 
-      add_column(km = pca.ids.km()$cluster) %>% 
+      cbind(training.ids()) %>%
+      add_column(km = pca.ids.km()$cluster) %>%
       left_join(
-        ref.seq() %>% 
-          select(oligo, topo, gba, tetrad, tetrad.id, loop, plus.minus, groove, salt),
+        ref.seq() %>%
+          select(
+            oligo,
+            topo,
+            gba,
+            tetrad,
+            tetrad.id,
+            loop,
+            plus.minus,
+            groove,
+            salt
+          ),
         by = 'oligo'
-      ) %>% 
-      pca.plotR(., dim.1 = input$dim.ids.2[1], dim.2 = input$dim.ids.2[2],
-                color = input$pca.color.ids.2, shape = input$pca.shape.ids.2)
+      ) %>%
+      pca.plotR(
+        .,
+        dim.1 = input$dim.ids.2[1],
+        dim.2 = input$dim.ids.2[2],
+        color = input$pca.color.ids.2,
+        shape = input$pca.shape.ids.2
+      )
   })
-  
+
   output$pca.ids.coord.2 <- renderPlot({
     pca.ids.coord.2()
-  }) 
-  
-  
+  })
+
   output$dwn.pca.ids <- downloadHandler(
     filename = function() {
       paste("PCA - IDS -- view 1", input$device, sep = ".")
     },
     content = function(file) {
-      
       if (input$device == "png") {
         ggsave(
           file,
@@ -2420,14 +2566,13 @@ pca.ids.var.coord <- reactive({
         )
       }
     }
-  )  
-  
+  )
+
   output$dwn.pca.ids.2 <- downloadHandler(
     filename = function() {
       paste("PCA - IDS -- view 2", input$device, sep = ".")
     },
     content = function(file) {
-      
       if (input$device == "png") {
         ggsave(
           file,
@@ -2450,19 +2595,18 @@ pca.ids.var.coord <- reactive({
       }
     }
   )
-  
+
   #### Parameter table----
-  
-  output$param.ids.table <- renderDT(server = FALSE,{
-    
+
+  output$param.ids.table <- renderDT(server = FALSE, {
     combined_list <- list(
       'Cations' = input$ref.seq.cation.0,
       'Topologies' = input$ref.seq.topo.0,
-      'GBA' =  input$ref.seq.gba.0,
+      'GBA' = input$ref.seq.gba.0,
       'Oligonucleotides' = input$ref.seq.oligo.0,
       'Tetrad #' = input$ref.seq.tetrad.0,
       'Tetrad combination' = input$ref.seq.tetrad.id.0,
-      'Loops' =  input$ref.seq.loop.0,
+      'Loops' = input$ref.seq.loop.0,
       '+/-' = input$ref.seq.plus.minus.0,
       'Grooves' = input$ref.seq.groove.0,
       'Max wavelength' = max(input$wl),
@@ -2475,15 +2619,14 @@ pca.ids.var.coord <- reactive({
       'k-means algorithm' = input$k.mean.algo,
       'k-means centers' = input$cluster.center
     )
-    
-    
+
     max.length <- max(sapply(combined_list, length))
-    
+
     for (i in 1:length(combined_list)) {
       length(combined_list[[i]]) <- max.length
     }
-    
-    do.call(cbind, combined_list) %>% 
+
+    do.call(cbind, combined_list) %>%
       datatable(
         style = "bootstrap",
         extensions = c('Buttons', 'Responsive', 'Scroller'),
@@ -2497,53 +2640,47 @@ pca.ids.var.coord <- reactive({
           scroller = F,
           pageLength = 25,
           autoWidth = F,
-          dom = 'Bfrtip', 
+          dom = 'Bfrtip',
           buttons = list(
             list(extend = 'copy'),
-            list(extend = 'csv',
-                 title = NULL,
-                 filename = "pca parameters"),
-            list(extend = 'excel',
-                 title = NULL,
-                 filename = "pca parameters"),
+            list(extend = 'csv', title = NULL, filename = "pca parameters"),
+            list(extend = 'excel', title = NULL, filename = "pca parameters"),
             list(extend = 'colvis')
           ),
           title = NULL,
           columnDefs = list(list(visible = FALSE, targets = c(0:8)))
         )
-      ) 
+      )
   })
-  
+
   ### CD+IDS----
-  
+
   #### PCA----
-  
+
   pca.cd.ids <- reactive({
-    
     FactoMineR::PCA(
-      X = training.cd.ids()[,-1],
+      X = training.cd.ids()[, -1],
       ncp = input$ncp,
       scale.unit = input$scale.unit,
       graph = FALSE
     )
-    
   })
-  
+
   #### Clusters----
   #Optimal number of clusters
   pca.cd.ids.twss <- reactive({
     data.frame(
       clusters = 1:10
     ) %>%
-      group_by(clusters) %>% 
+      group_by(clusters) %>%
       mutate(
         totwithin = kmeans(
-          pca.cd.ids()$ind$coord, 
+          pca.cd.ids()$ind$coord,
           algorithm = input$k.mean.algo,
-          centers = clusters, 
+          centers = clusters,
           nstart = 100
         )$tot.withinss
-      ) %>% 
+      ) %>%
       ggplot(
         aes(x = clusters, y = totwithin)
       ) +
@@ -2556,15 +2693,15 @@ pca.ids.var.coord <- reactive({
       ) +
       custom.theme
   })
-  
+
   output$pca.cd.ids.twss <- renderPlot({
     pca.cd.ids.twss()
   })
-  
+
   output$pca.cd.ids.twss.2 <- renderPlot({
     pca.cd.ids.twss()
   })
-  
+
   pca.cd.ids.gap <- reactive({
     clusGap(
       pca.cd.ids()$ind$coord,
@@ -2572,13 +2709,13 @@ pca.ids.var.coord <- reactive({
       nstart = 25,
       K.max = 10,
       B = 50
-    )$Tab %>% 
-      as_tibble() %>% 
-      rownames_to_column(var = "cluster") %>% 
-      mutate(cluster = as.numeric(cluster)) %>% 
+    )$Tab %>%
+      as_tibble() %>%
+      rownames_to_column(var = "cluster") %>%
+      mutate(cluster = as.numeric(cluster)) %>%
       ggplot(
         aes(x = cluster, y = gap)
-      ) +  
+      ) +
       geom_vline(
         data = . %>% filter(gap == max(gap)),
         aes(xintercept = cluster),
@@ -2587,7 +2724,7 @@ pca.ids.var.coord <- reactive({
         color = "tomato"
       ) +
       geom_errorbar(
-        aes(x = cluster, ymin = gap-SE.sim, ymax = gap+SE.sim),
+        aes(x = cluster, ymin = gap - SE.sim, ymax = gap + SE.sim),
         width = 0
       ) +
       geom_point(size = 5, color = "white") +
@@ -2599,37 +2736,35 @@ pca.ids.var.coord <- reactive({
       ) +
       custom.theme
   })
-  
+
   output$pca.cd.ids.gap <- renderPlot({
     pca.cd.ids.gap()
   })
-  
+
   output$pca.cd.ids.gap.2 <- renderPlot({
     pca.cd.ids.gap()
   })
-  
+
   #k-means clustering
   #done on all 5 kept dimensions
   pca.cd.ids.km <- reactive({
-    
     set.seed(42)
-    
+
     kmeans(
-      pca.cd.ids()$ind$coord, 
+      pca.cd.ids()$ind$coord,
       algorithm = input$k.mean.algo,
-      centers = input$cluster.center, 
+      centers = input$cluster.center,
       nstart = 100
     )
-    
-  }) 
-  
+  })
+
   #### Analytics----
-  
+
   ##### Scree----
-  
+
   pca.cd.ids.scree <- reactive({
-    data.frame(pca.cd.ids()$eig) %>% 
-      mutate(dim = 1:nrow(data.frame(pca.cd.ids()$eig))) %>% 
+    data.frame(pca.cd.ids()$eig) %>%
+      mutate(dim = 1:nrow(data.frame(pca.cd.ids()$eig))) %>%
       ggplot(aes(x = dim, y = percentage.of.variance)) +
       geom_bar(
         stat = 'identity',
@@ -2638,57 +2773,56 @@ pca.ids.var.coord <- reactive({
       ) +
       geom_point(
         aes(
-          x = dim, 
+          x = dim,
           y = cumsum(percentage.of.variance)
-        ), 
+        ),
         size = 5,
         color = "white"
       ) +
       geom_line(
         aes(
-          x = dim, 
+          x = dim,
           y = cumsum(percentage.of.variance)
         ),
         size = 1,
         color = "white"
       ) +
       custom.theme +
-        scale_x_continuous(expand = c(0,0), limits = c(0, 21)) +
-        scale_y_continuous(expand = c(0,NA), limits = c(0, 105)) +
+      scale_x_continuous(expand = c(0, 0), limits = c(0, 21)) +
+      scale_y_continuous(expand = c(0, NA), limits = c(0, 105)) +
       labs(
         y = 'Variance contribution (%)',
         x = 'Dimension'
       )
-  }) 
-  
+  })
+
   output$pca.cd.ids.scree <- renderPlot({
     pca.cd.ids.scree()
   })
-  
+
   output$pca.cd.ids.scree.2 <- renderPlot({
     pca.cd.ids.scree()
   })
-  
+
   ##### factor map----
   #solve issue with names of variables (different to remove "CD" or "IDS" from training set variable names (i.e. colnames))
-  
+
   ##### Correlation circle----
-  
+
   output$pca.cd.ids.var.cor <- renderPlot({
-    
-    data.frame(pca.cd.ids()$var$cor) %>% 
+    data.frame(pca.cd.ids()$var$cor) %>%
       select(input$dim.cd.ids[1], input$dim.cd.ids[2]) %>%
-      mutate(var = rownames(data.frame(pca.cd.ids()$var$cor))) %>% 
+      mutate(var = rownames(data.frame(pca.cd.ids()$var$cor))) %>%
       magrittr::set_colnames(c("Dim.1", "Dim.2", "var")) %>%
       left_join(
-        data.frame(pca.cd.ids()$var$cos2) %>% 
+        data.frame(pca.cd.ids()$var$cos2) %>%
           select(input$dim.cd.ids[1], input$dim.cd.ids[2]) %>%
-          magrittr::set_colnames(c("Dim.1", "Dim.2")) %>% 
-          mutate(sum.cos2 = Dim.1 + Dim.2) %>% 
-          select(sum.cos2) %>% 
+          magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
+          mutate(sum.cos2 = Dim.1 + Dim.2) %>%
+          select(sum.cos2) %>%
           mutate(var = rownames(data.frame(pca.cd.ids()$var$cos2))),
         by = 'var'
-      ) %>% 
+      ) %>%
       ggplot(
         aes(
           x = Dim.1,
@@ -2697,26 +2831,27 @@ pca.ids.var.coord <- reactive({
         )
       ) +
       geom_path(
-        data = circle, 
-        aes(x=cir.x, y=cir.y), 
+        data = circle,
+        aes(x = cir.x, y = cir.y),
         inherit.aes = FALSE,
         color = "white"
       ) +
       geom_segment(
         aes(
-          x = 0, y = 0,
-          xend = Dim.1, yend = Dim.2
+          x = 0,
+          y = 0,
+          xend = Dim.1,
+          yend = Dim.2
         ),
-        arrow = arrow(length = unit(0.1, "inches")
-        ),
+        arrow = arrow(length = unit(0.1, "inches")),
         show.legend = TRUE
       ) +
       geom_text_repel(
         aes(label = var),
         show.legend = FALSE
       ) +
-      scale_x_continuous(limits = c(-1,1)) +
-      scale_y_continuous(limits = c(-1,1)) +
+      scale_x_continuous(limits = c(-1, 1)) +
+      scale_y_continuous(limits = c(-1, 1)) +
       labs(
         y = input$dim.cd.ids[2],
         x = input$dim.cd.ids[1]
@@ -2724,26 +2859,25 @@ pca.ids.var.coord <- reactive({
       custom.theme +
       scale_color_continuous(
         type = 'viridis',
-        limits = c(0,1),
-        name = bquote(sum~cos^2)
+        limits = c(0, 1),
+        name = bquote(sum ~ cos^2)
       )
-  }) 
-  
+  })
+
   output$pca.cd.ids.var.cor.2 <- renderPlot({
-    
-    data.frame(pca.cd.ids()$var$cor) %>% 
+    data.frame(pca.cd.ids()$var$cor) %>%
       select(input$dim.cd.ids.2[1], input$dim.cd.ids.2[2]) %>%
-      mutate(var = rownames(data.frame(pca.cd.ids()$var$cor))) %>% 
+      mutate(var = rownames(data.frame(pca.cd.ids()$var$cor))) %>%
       magrittr::set_colnames(c("Dim.1", "Dim.2", "var")) %>%
       left_join(
-        data.frame(pca.cd.ids()$var$cos2) %>% 
+        data.frame(pca.cd.ids()$var$cos2) %>%
           select(input$dim.cd.ids.2[1], input$dim.cd.ids.2[2]) %>%
-          magrittr::set_colnames(c("Dim.1", "Dim.2")) %>% 
-          mutate(sum.cos2 = Dim.1 + Dim.2) %>% 
-          select(sum.cos2) %>% 
+          magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
+          mutate(sum.cos2 = Dim.1 + Dim.2) %>%
+          select(sum.cos2) %>%
           mutate(var = rownames(data.frame(pca.cd.ids()$var$cos2))),
         by = 'var'
-      ) %>% 
+      ) %>%
       ggplot(
         aes(
           x = Dim.1,
@@ -2752,26 +2886,27 @@ pca.ids.var.coord <- reactive({
         )
       ) +
       geom_path(
-        data = circle, 
-        aes(x=cir.x, y=cir.y), 
+        data = circle,
+        aes(x = cir.x, y = cir.y),
         inherit.aes = FALSE,
         color = "white"
       ) +
       geom_segment(
         aes(
-          x = 0, y = 0,
-          xend = Dim.1, yend = Dim.2
+          x = 0,
+          y = 0,
+          xend = Dim.1,
+          yend = Dim.2
         ),
-        arrow = arrow(length = unit(0.1, "inches")
-        ),
+        arrow = arrow(length = unit(0.1, "inches")),
         show.legend = TRUE
       ) +
       geom_text_repel(
         aes(label = var),
         show.legend = FALSE
       ) +
-      scale_x_continuous(limits = c(-1,1)) +
-      scale_y_continuous(limits = c(-1,1)) +
+      scale_x_continuous(limits = c(-1, 1)) +
+      scale_y_continuous(limits = c(-1, 1)) +
       labs(
         y = input$dim.cd.ids.2[2],
         x = input$dim.cd.ids.2[1]
@@ -2779,26 +2914,26 @@ pca.ids.var.coord <- reactive({
       custom.theme +
       scale_color_continuous(
         type = 'viridis',
-        limits = c(0,1),
-        name = bquote(sum~cos^2)
+        limits = c(0, 1),
+        name = bquote(sum ~ cos^2)
       )
-  }) 
-  
+  })
+
   ##### Variable coordinates----
   output$pca.cd.ids.var.coord <- renderPlot({
-    data.frame(pca.cd.ids()$var$coord) %>% 
+    data.frame(pca.cd.ids()$var$coord) %>%
       select(input$dim.cd.ids[1], input$dim.cd.ids[2]) %>%
-      magrittr::set_colnames(c("Dim.1", "Dim.2")) %>% 
-      mutate(var = rownames(data.frame(pca.cd.ids()$var$coord))) %>% 
+      magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
+      mutate(var = rownames(data.frame(pca.cd.ids()$var$coord))) %>%
       left_join(
         data.frame(pca.cd.ids()$var$cos2) %>%
           select(input$dim.cd.ids[1], input$dim.cd.ids[2]) %>%
           magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
-          mutate(sum.cos2 = Dim.1 + Dim.2) %>% 
-          select(sum.cos2) %>% 
+          mutate(sum.cos2 = Dim.1 + Dim.2) %>%
+          select(sum.cos2) %>%
           mutate(var = rownames(data.frame(pca.cd.ids()$var$cos2))),
         by = 'var'
-      ) %>% 
+      ) %>%
       ggplot(
         aes(
           x = Dim.1,
@@ -2809,11 +2944,12 @@ pca.ids.var.coord <- reactive({
       ) +
       geom_segment(
         aes(
-          x = 0, y = 0, 
-          xend = Dim.1, yend = Dim.2
+          x = 0,
+          y = 0,
+          xend = Dim.1,
+          yend = Dim.2
         ),
-        arrow = arrow(length = unit(0.1, "inches")
-        ),
+        arrow = arrow(length = unit(0.1, "inches")),
         show.legend = TRUE
       ) +
       geom_text_repel(
@@ -2825,22 +2961,22 @@ pca.ids.var.coord <- reactive({
         y = input$dim.cd.ids[2],
         x = input$dim.cd.ids[1]
       )
-  }) 
-  
+  })
+
   output$pca.cd.ids.var.coord.2 <- renderPlot({
-    data.frame(pca.cd.ids()$var$coord) %>% 
+    data.frame(pca.cd.ids()$var$coord) %>%
       select(input$dim.cd.ids.2[1], input$dim.cd.ids.2[2]) %>%
-      magrittr::set_colnames(c("Dim.1", "Dim.2")) %>% 
-      mutate(var = rownames(data.frame(pca.cd.ids()$var$coord))) %>% 
+      magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
+      mutate(var = rownames(data.frame(pca.cd.ids()$var$coord))) %>%
       left_join(
         data.frame(pca.cd.ids()$var$cos2) %>%
           select(input$dim.cd.ids.2[1], input$dim.cd.ids.2[2]) %>%
           magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
-          mutate(sum.cos2 = Dim.1 + Dim.2) %>% 
-          select(sum.cos2) %>% 
+          mutate(sum.cos2 = Dim.1 + Dim.2) %>%
+          select(sum.cos2) %>%
           mutate(var = rownames(data.frame(pca.cd.ids()$var$cos2))),
         by = 'var'
-      ) %>% 
+      ) %>%
       ggplot(
         aes(
           x = Dim.1,
@@ -2851,11 +2987,12 @@ pca.ids.var.coord <- reactive({
       ) +
       geom_segment(
         aes(
-          x = 0, y = 0, 
-          xend = Dim.1, yend = Dim.2
+          x = 0,
+          y = 0,
+          xend = Dim.1,
+          yend = Dim.2
         ),
-        arrow = arrow(length = unit(0.1, "inches")
-        ),
+        arrow = arrow(length = unit(0.1, "inches")),
         show.legend = TRUE
       ) +
       geom_text_repel(
@@ -2867,25 +3004,46 @@ pca.ids.var.coord <- reactive({
         y = input$dim.cd.ids.2[2],
         x = input$dim.cd.ids.2[1]
       )
-  }) 
-  
-  
+  })
+
   ##### Individuals coordinates----
-  
-  output$pca.cd.ids.table <- renderDT(server = FALSE,{
-    
-    if(file.toggle()=='no') {
+
+  output$pca.cd.ids.table <- renderDT(server = FALSE, {
+    if (file.toggle() == 'no') {
       return(NULL)
     } else {
       data.frame(pca.cd.ids()$ind$coord) %>%
         cbind(training.cd.ids() %>% select(oligo)) %>%
-        add_column(km = pca.cd.ids.km()$cluster) %>% 
+        add_column(km = pca.cd.ids.km()$cluster) %>%
         left_join(
-          ref.seq() %>% 
-            select(oligo, topo, feature, gba, tetrad, tetrad.id, loop, plus.minus, groove, salt),
+          ref.seq() %>%
+            select(
+              oligo,
+              topo,
+              feature,
+              gba,
+              tetrad,
+              tetrad.id,
+              loop,
+              plus.minus,
+              groove,
+              salt
+            ),
           by = 'oligo'
-        ) %>%  
-        setcolorder(c('oligo', 'topo', 'feature', 'gba', 'tetrad', 'tetrad.id', 'loop', 'plus.minus', 'groove', 'salt', 'km')) %>%
+        ) %>%
+        setcolorder(c(
+          'oligo',
+          'topo',
+          'feature',
+          'gba',
+          'tetrad',
+          'tetrad.id',
+          'loop',
+          'plus.minus',
+          'groove',
+          'salt',
+          'km'
+        )) %>%
         datatable(
           style = "bootstrap",
           extensions = c('Buttons', 'Responsive', 'Scroller'),
@@ -2912,86 +3070,92 @@ pca.ids.var.coord <- reactive({
             scroller = F,
             pageLength = 25,
             autoWidth = F,
-            dom = 'Bfrtip', 
+            dom = 'Bfrtip',
             buttons = list(
-              list(extend='copy'),
-              list(extend='csv',
-                   title=NULL,
-                   filename="pca cd-ids"),
-              list(extend='excel',
-                   title=NULL,
-                   filename="pca cd-ids"),
-              list(extend='colvis')
+              list(extend = 'copy'),
+              list(extend = 'csv', title = NULL, filename = "pca cd-ids"),
+              list(extend = 'excel', title = NULL, filename = "pca cd-ids"),
+              list(extend = 'colvis')
             ),
             title = NULL,
-            columnDefs = list(list(visible=FALSE, targets=c(2:9)))
+            columnDefs = list(list(visible = FALSE, targets = c(2:9)))
           )
-        ) %>% 
-        formatStyle(columns = 0:(11+input$ncp),  target = "cell",
-                    backgroundColor = "#272c30") %>% 
-        formatRound(columns = 11:(11+input$ncp), digits = 2)
+        ) %>%
+        # formatStyle(
+        #   columns = 0:(11 + input$ncp),
+        #   target = "cell",
+        #   backgroundColor = "#272c30"
+        # ) %>%
+        formatRound(columns = 11:(11 + input$ncp), digits = 2)
     }
   })
-  
-  
-  
+
   output$pca.cd.ids.coord <- renderPlot({
-    
     pca.cd.ids.coord <- data.frame(pca.cd.ids()$ind$coord) %>%
       select(input$dim.cd.ids[1], input$dim.cd.ids[2]) %>%
       magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
-      cbind(training.cd.ids()) %>% 
-      add_column(km = pca.cd.ids.km()$cluster) %>% 
+      cbind(training.cd.ids()) %>%
+      add_column(km = pca.cd.ids.km()$cluster) %>%
       left_join(
-        ref.seq() %>% 
-          select(oligo, topo, gba, tetrad, tetrad.id, loop, plus.minus, groove, salt),
+        ref.seq() %>%
+          select(
+            oligo,
+            topo,
+            gba,
+            tetrad,
+            tetrad.id,
+            loop,
+            plus.minus,
+            groove,
+            salt
+          ),
         by = 'oligo'
       ) %>%
       add_column(color = NA, shape = NA)
-    
+
     # coloring
-    if(input$pca.color.cd.ids=="k-means"){
+    if (input$pca.color.cd.ids == "k-means") {
       pca.cd.ids.coord$color <- factor(pca.cd.ids.coord$km)
-    } else if (input$pca.color.cd.ids=="Topology"){
+    } else if (input$pca.color.cd.ids == "Topology") {
       pca.cd.ids.coord$color <- pca.cd.ids.coord$topo
-    } else if(input$pca.color.cd.ids=="GBA"){
+    } else if (input$pca.color.cd.ids == "GBA") {
       pca.cd.ids.coord$color <- pca.cd.ids.coord$gba
-    } else if(input$pca.color.cd.ids=="Tetrads"){
+    } else if (input$pca.color.cd.ids == "Tetrads") {
       pca.cd.ids.coord$color <- factor(pca.cd.ids.coord$tetrad)
-    } else if(input$pca.color.cd.ids=="Tetrad combination"){
+    } else if (input$pca.color.cd.ids == "Tetrad combination") {
       pca.cd.ids.coord$color <- pca.cd.ids.coord$tetrad.id
-    } else if(input$pca.color.cd.ids=="Loop progression"){
+    } else if (input$pca.color.cd.ids == "Loop progression") {
       pca.cd.ids.coord$color <- pca.cd.ids.coord$loop
-    } else if(input$pca.color.cd.ids=="Tetrad handedness"){
+    } else if (input$pca.color.cd.ids == "Tetrad handedness") {
       pca.cd.ids.coord$color <- pca.cd.ids.coord$plus.minus
-    } else if(input$pca.color.cd.ids=="Grooves"){
+    } else if (input$pca.color.cd.ids == "Grooves") {
       pca.cd.ids.coord$color <- pca.cd.ids.coord$groove
     } else {
       pca.cd.ids.coord$color <- pca.cd.ids.coord$salt
     }
-    
+
     # shaping
-    if(input$pca.shape.cd.ids=="k-means"){
+    if (input$pca.shape.cd.ids == "k-means") {
       pca.cd.ids.coord$shape <- factor(pca.cd.ids.coord$km)
-    } else if (input$pca.shape.cd.ids=="Topology"){
+    } else if (input$pca.shape.cd.ids == "Topology") {
       pca.cd.ids.coord$shape <- pca.cd.ids.coord$topo
-    } else if(input$pca.shape.cd.ids=="GBA"){
+    } else if (input$pca.shape.cd.ids == "GBA") {
       pca.cd.ids.coord$shape <- pca.cd.ids.coord$gba
-    } else if(input$pca.shape.cd.ids=="Tetrads"){
+    } else if (input$pca.shape.cd.ids == "Tetrads") {
       pca.cd.ids.coord$shape <- factor(pca.cd.ids.coord$tetrad)
-    } else if(input$pca.shape.cd.ids=="Tetrad combination"){
+    } else if (input$pca.shape.cd.ids == "Tetrad combination") {
       pca.cd.ids.coord$shape <- pca.cd.ids.coord$tetrad.id
-    } else if(input$pca.shape.cd.ids=="Loop progression"){
+    } else if (input$pca.shape.cd.ids == "Loop progression") {
       pca.cd.ids.coord$shape <- pca.cd.ids.coord$loop
-    } else if(input$pca.shape.cd.ids=="Tetrad handedness"){
+    } else if (input$pca.shape.cd.ids == "Tetrad handedness") {
       pca.cd.ids.coord$shape <- pca.cd.ids.coord$plus.minus
-    } else if(input$pca.shape.cd.ids=="Grooves"){
+    } else if (input$pca.shape.cd.ids == "Grooves") {
       pca.cd.ids.coord$shape <- pca.cd.ids.coord$groove
     } else {
       pca.cd.ids.coord$shape <- pca.cd.ids.coord$salt
     }
-    
-    p.pca.cd.ids.coord <- pca.cd.ids.coord %>% 
+
+    p.pca.cd.ids.coord <- pca.cd.ids.coord %>%
       ggplot(
         aes(
           x = Dim.1,
@@ -3001,9 +3165,9 @@ pca.ids.var.coord <- reactive({
           shape = shape
         )
       ) +
-      scale_shape_manual(values=c(0:15))
-    
-    if(isTRUE(input$pca.shape.cd.ids==input$pca.color.cd.ids)){
+      scale_shape_manual(values = c(0:15))
+
+    if (isTRUE(input$pca.shape.cd.ids == input$pca.color.cd.ids)) {
       p.pca.cd.ids.coord <- p.pca.cd.ids.coord +
         geom_polygon(
           data = . %>%
@@ -3013,7 +3177,7 @@ pca.ids.var.coord <- reactive({
           show.legend = FALSE
         )
     }
-    
+
     p.pca.cd.ids.coord +
       geom_point(
         size = 6,
@@ -3041,67 +3205,76 @@ pca.ids.var.coord <- reactive({
         color = input$pca.color.cd.ids,
         fill = input$pca.color.cd.ids,
         shape = input$pca.shape.cd.ids
-      ) 
-  }) 
-  
+      )
+  })
+
   #individuals coordinates
   output$pca.cd.ids.coord.2 <- renderPlot({
-    
     pca.cd.ids.coord <- data.frame(pca.cd.ids()$ind$coord) %>%
       select(input$dim.cd.ids.2[1], input$dim.cd.ids.2[2]) %>%
       magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
-      cbind(training.cd.ids()) %>% 
-      add_column(km = pca.cd.ids.km()$cluster) %>% 
+      cbind(training.cd.ids()) %>%
+      add_column(km = pca.cd.ids.km()$cluster) %>%
       left_join(
-        ref.seq() %>% 
-          select(oligo, topo, gba, tetrad, tetrad.id, loop, plus.minus, groove, salt),
+        ref.seq() %>%
+          select(
+            oligo,
+            topo,
+            gba,
+            tetrad,
+            tetrad.id,
+            loop,
+            plus.minus,
+            groove,
+            salt
+          ),
         by = 'oligo'
       ) %>%
       add_column(color = NA, shape = NA)
-    
+
     # coloring
-    if(input$pca.color.cd.ids.2=="k-means"){
+    if (input$pca.color.cd.ids.2 == "k-means") {
       pca.cd.ids.coord$color <- factor(pca.cd.ids.coord$km)
-    } else if (input$pca.color.cd.ids.2=="Topology"){
+    } else if (input$pca.color.cd.ids.2 == "Topology") {
       pca.cd.ids.coord$color <- pca.cd.ids.coord$topo
-    } else if(input$pca.color.cd.ids.2=="GBA"){
+    } else if (input$pca.color.cd.ids.2 == "GBA") {
       pca.cd.ids.coord$color <- pca.cd.ids.coord$gba
-    } else if(input$pca.color.cd.ids.2=="Tetrads"){
+    } else if (input$pca.color.cd.ids.2 == "Tetrads") {
       pca.cd.ids.coord$color <- factor(pca.cd.ids.coord$tetrad)
-    } else if(input$pca.color.cd.ids.2=="Tetrad combination"){
+    } else if (input$pca.color.cd.ids.2 == "Tetrad combination") {
       pca.cd.ids.coord$color <- pca.cd.ids.coord$tetrad.id
-    } else if(input$pca.color.cd.ids.2=="Loop progression"){
+    } else if (input$pca.color.cd.ids.2 == "Loop progression") {
       pca.cd.ids.coord$color <- pca.cd.ids.coord$loop
-    } else if(input$pca.color.cd.ids.2=="Tetrad handedness"){
+    } else if (input$pca.color.cd.ids.2 == "Tetrad handedness") {
       pca.cd.ids.coord$color <- pca.cd.ids.coord$plus.minus
-    } else if(input$pca.color.cd.ids.2=="Grooves"){
+    } else if (input$pca.color.cd.ids.2 == "Grooves") {
       pca.cd.ids.coord$color <- pca.cd.ids.coord$groove
     } else {
       pca.cd.ids.coord$color <- pca.cd.ids.coord$salt
     }
-    
+
     # shaping
-    if(input$pca.shape.cd.ids.2=="k-means"){
+    if (input$pca.shape.cd.ids.2 == "k-means") {
       pca.cd.ids.coord$shape <- factor(pca.cd.ids.coord$km)
-    } else if (input$pca.shape.cd.ids.2=="Topology"){
+    } else if (input$pca.shape.cd.ids.2 == "Topology") {
       pca.cd.ids.coord$shape <- pca.cd.ids.coord$topo
-    } else if(input$pca.shape.cd.ids.2=="GBA"){
+    } else if (input$pca.shape.cd.ids.2 == "GBA") {
       pca.cd.ids.coord$shape <- pca.cd.ids.coord$gba
-    } else if(input$pca.shape.cd.ids.2=="Tetrads"){
+    } else if (input$pca.shape.cd.ids.2 == "Tetrads") {
       pca.cd.ids.coord$shape <- factor(pca.cd.ids.coord$tetrad)
-    } else if(input$pca.shape.cd.ids.2=="Tetrad combination"){
+    } else if (input$pca.shape.cd.ids.2 == "Tetrad combination") {
       pca.cd.ids.coord$shape <- pca.cd.ids.coord$tetrad.id
-    } else if(input$pca.shape.cd.ids.2=="Loop progression"){
+    } else if (input$pca.shape.cd.ids.2 == "Loop progression") {
       pca.cd.ids.coord$shape <- pca.cd.ids.coord$loop
-    } else if(input$pca.shape.cd.ids.2=="Tetrad handedness"){
+    } else if (input$pca.shape.cd.ids.2 == "Tetrad handedness") {
       pca.cd.ids.coord$shape <- pca.cd.ids.coord$plus.minus
-    } else if(input$pca.shape.cd.ids.2=="Grooves"){
+    } else if (input$pca.shape.cd.ids.2 == "Grooves") {
       pca.cd.ids.coord$shape <- pca.cd.ids.coord$groove
     } else {
       pca.cd.ids.coord$shape <- pca.cd.ids.coord$salt
     }
-    
-    p.pca.cd.ids.coord <- pca.cd.ids.coord %>% 
+
+    p.pca.cd.ids.coord <- pca.cd.ids.coord %>%
       ggplot(
         aes(
           x = Dim.1,
@@ -3111,9 +3284,9 @@ pca.ids.var.coord <- reactive({
           shape = shape
         )
       ) +
-      scale_shape_manual(values=c(0:15))
-    
-    if(isTRUE(input$pca.shape.cd.ids.2==input$pca.color.cd.ids.2)){
+      scale_shape_manual(values = c(0:15))
+
+    if (isTRUE(input$pca.shape.cd.ids.2 == input$pca.color.cd.ids.2)) {
       p.pca.cd.ids.coord <- p.pca.cd.ids.coord +
         geom_polygon(
           data = . %>%
@@ -3123,7 +3296,7 @@ pca.ids.var.coord <- reactive({
           show.legend = FALSE
         )
     }
-    
+
     p.pca.cd.ids.coord +
       geom_point(
         size = 6,
@@ -3151,84 +3324,84 @@ pca.ids.var.coord <- reactive({
         color = input$pca.color.cd.ids.2,
         fill = input$pca.color.cd.ids.2,
         shape = input$pca.shape.cd.ids.2
-      ) 
-  }) 
-  
+      )
+  })
+
   ### Investigations----
-  
+
   #### CD----
-  
-  pca.cd.invest <- observeEvent(input$button.cd.invest,{
-    
-    thematic::thematic_off()
-    
+
+  pca.cd.invest <- observeEvent(input$button.cd.invest, {
+    # thematic::thematic_off()
+
     withProgress(
       message = 'Investigating CD data',
-      detail = 'Please wait', value = 0, {
-        
-        incProgress(amount=1/2)
-        
+      detail = 'Please wait',
+      value = 0,
+      {
+        incProgress(amount = 1 / 2)
+
         FactoInvestigate::Investigate(pca.cd())
-        
-        incProgress(amount = 2/2)
-      })
-    
-    thematic::thematic_on()
-    
-  })  
-  
+
+        incProgress(amount = 2 / 2)
+      }
+    )
+
+    # thematic::thematic_on()
+  })
+
   #### IDS----
-  pca.ids.invest <- observeEvent(input$button.ids.invest,{
-    
-    thematic::thematic_off()
-    
+  pca.ids.invest <- observeEvent(input$button.ids.invest, {
+    # thematic::thematic_off()
+
     withProgress(
       message = 'Investigating IDS data',
-      detail = 'Please wait', value = 0, {
-        
-        incProgress(amount=1/2)
-        
+      detail = 'Please wait',
+      value = 0,
+      {
+        incProgress(amount = 1 / 2)
+
         FactoInvestigate::Investigate(pca.ids())
-        
-        incProgress(amount = 2/2)
-      })
-    
-    thematic::thematic_on()
-    
-  })  
-  
-  pca.cd.ids.invest <- observeEvent(input$button.cd.ids.invest,{
-    
-    thematic::thematic_off()
-    
+
+        incProgress(amount = 2 / 2)
+      }
+    )
+
+    # thematic::thematic_on()
+  })
+
+  pca.cd.ids.invest <- observeEvent(input$button.cd.ids.invest, {
+    # thematic::thematic_off()
+
     withProgress(
       message = 'Investigating CD+IDS data',
-      detail = 'Please wait', value = 0, {
-        
-        incProgress(amount=1/2)
-        
+      detail = 'Please wait',
+      value = 0,
+      {
+        incProgress(amount = 1 / 2)
+
         FactoInvestigate::Investigate(pca.cd.ids())
-        
-        incProgress(amount = 2/2)
-      })
-    
-    thematic::thematic_on()
-    
+
+        incProgress(amount = 2 / 2)
+      }
+    )
+
+    # thematic::thematic_on()
   })
-  
+
   # User prediction----
-  
+
   ## input----
-  
+
   ### data files----
   # input.file <- reactive({
   #   input$ref.data
   # })
-  
+
   input.file.user <- reactive({
     input$user.data
   })
-  
+
   #### file import toggle----
   # file.toggle <- reactive({
   #   if(is.null(input.file())){
@@ -3237,101 +3410,100 @@ pca.ids.var.coord <- reactive({
   #     return('yes')
   #   }
   # })
-  
+
   file.toggle.user <- reactive({
-    if(is.null(input.file.user())){
+    if (is.null(input.file.user())) {
       return('no')
     } else {
       return('yes')
     }
   })
-  
+
   ##### sequences----
-  
+
   user.seq <- reactive({
     read_excel(
       input.file.user()$datapath,
       sheet = 'Sample information'
-    ) 
+    )
   })
-  
+
   #####picker inputs----
   ###### source----
   output$user.seq.oligo.0 <- renderUI({
-    
-    if(file.toggle.user()=='no') {
-      pickerInput("user.seq.oligo.0",
-                  label = "User oligonucleotide",
-                  choices = "upload data first",
-                  multiple = T,
-                  options = pickerOptions(
-                    noneSelectedText = 'upload data first'
-                  )
+    if (file.toggle.user() == 'no') {
+      pickerInput(
+        "user.seq.oligo.0",
+        label = "User oligonucleotide",
+        choices = "upload data first",
+        multiple = T,
+        options = pickerOptions(
+          noneSelectedText = 'upload data first'
+        )
       )
     } else {
-      
       choices <- sort(unique(user.seq()$oligo))
-      
-      pickerInput("user.seq.oligo.0",
-                  label = "User oligonucleotide",
-                  choices = choices,
-                  selected = choices,
-                  multiple = T,
-                  options = pickerOptions(
-                    actionsBox = T,
-                    liveSearch = T
-                  )
+
+      pickerInput(
+        "user.seq.oligo.0",
+        label = "User oligonucleotide",
+        choices = choices,
+        selected = choices,
+        multiple = T,
+        options = pickerOptions(
+          actionsBox = T,
+          liveSearch = T
+        )
       )
     }
-    
   })
-  
+
   #######plot-----
   output$user.seq.oligo <- renderUI({
-    if(file.toggle.user()=='no') {
-      pickerInput("user.seq.oligo",
-                  label = "Oligonucleotide",
-                  choices = "upload data first",
-                  multiple = T,
-                  options = pickerOptions(
-                    noneSelectedText = 'upload data first'
-                  )
+    if (file.toggle.user() == 'no') {
+      pickerInput(
+        "user.seq.oligo",
+        label = "Oligonucleotide",
+        choices = "upload data first",
+        multiple = T,
+        options = pickerOptions(
+          noneSelectedText = 'upload data first'
+        )
       )
     } else {
-      pickerInput("user.seq.oligo",
-                  label = "Oligonucleotide",
-                  choices = unique(input$user.seq.oligo.0),
-                  selected = unique(input$user.seq.oligo.0),
-                  multiple = T,
-                  options = pickerOptions(
-                    actionsBox = T,
-                    liveSearch = T
-                  )
+      pickerInput(
+        "user.seq.oligo",
+        label = "Oligonucleotide",
+        choices = unique(input$user.seq.oligo.0),
+        selected = unique(input$user.seq.oligo.0),
+        multiple = T,
+        options = pickerOptions(
+          actionsBox = T,
+          liveSearch = T
+        )
       )
     }
-    
   })
-  
+
   ##### CD----
-  
+
   user.cd.input <- reactive({
     user_cd_input <- read_excel(
       input.file.user()$datapath,
       sheet = "CD"
-    ) %>% 
+    ) %>%
       pivot_longer(
         cols = 2:(ncol(.)),
         names_to = 'oligo',
         values_to = 'cd'
-      ) %>% 
+      ) %>%
       left_join(
         user.seq(),
         by = "oligo"
-      ) %>% 
-      filter(wl%%1 == 0) %>% #removing non integer wl to have the same number of data points than in IDS
-      group_by(oligo) 
+      ) %>%
+      filter(wl %% 1 == 0) %>% #removing non integer wl to have the same number of data points than in IDS
+      group_by(oligo)
 
-    
     writexl::write_xlsx(
       user_cd_input,
       path = "user_cd.xlsx"
@@ -3340,178 +3512,187 @@ pca.ids.var.coord <- reactive({
     user_cd_input %>%
       left_join(
         user.uv.input() %>%
-          filter(cation == "none") %>% 
-          select(wl, oligo, eps) %>% 
-          unique() %>% 
+          filter(cation == "none") %>%
+          select(wl, oligo, eps) %>%
+          unique() %>%
           set_colnames(c("wl", "oligo", "eps.uv")),
         by = c("oligo", "wl")
-      ) %>% 
+      ) %>%
       mutate(
         cd = cd - mean(cd[wl > 320]),
-        delta.eps = cd/(32980*l*Concentration/1E6)
-      ) %>% 
+        delta.eps = cd / (32980 * l * Concentration / 1E6)
+      ) %>%
       mutate(
         norm.cd = case_when(
-          input$cd.norm=="Δε/ε" ~ delta.eps/eps.uv,
-          input$cd.norm=="-1/+1" ~ 2*(delta.eps-min(delta.eps))/(max(delta.eps)-min(delta.eps))-1,
+          input$cd.norm == "Δε/ε" ~ delta.eps / eps.uv,
+          input$cd.norm == "-1/+1" ~
+            2 *
+              (delta.eps - min(delta.eps)) /
+              (max(delta.eps) - min(delta.eps)) -
+              1,
           TRUE ~ delta.eps
-        ) 
-      ) %>% 
-      ungroup() %>% 
+        )
+      ) %>%
+      ungroup() %>%
       filter(
         wl <= max(input$wl),
         wl >= min(input$wl),
-        wl%%1 == 0,
+        wl %% 1 == 0,
         oligo %in% input$user.seq.oligo.0
-      ) %>% 
+      ) %>%
       arrange(wl)
   })
-  
-  
+
   ##### UV----
-  
+
   #data with cation
   user.uv.input.cation <- reactive({
     read_excel(
       input.file.user()$datapath,
       sheet = "UV"
-    ) %>% 
-      add_column(cation = 'cation') %>% 
+    ) %>%
+      add_column(cation = 'cation') %>%
       arrange(wl)
   })
-  
+
   #data without cation
   user.uv.input.no.cation <- reactive({
     read_excel(
       input.file.user()$datapath,
       sheet = "UV - no cation"
-    ) %>% 
+    ) %>%
       add_column(cation = 'no cation')
   })
-  
-  
+
   #merge data
   user.uv.input <- reactive({
-    
     #data rbinding
-    user.uv.input.cation() %>% 
+    user.uv.input.cation() %>%
       pivot_longer(
-        cols = 2:(ncol(.)-1),
+        cols = 2:(ncol(.) - 1),
         values_to = 'abs',
         names_to = 'oligo'
-      ) %>% 
+      ) %>%
       rbind(
-        user.uv.input.no.cation() %>% 
+        user.uv.input.no.cation() %>%
           pivot_longer(
-            cols = 2:(ncol(.)-1),
+            cols = 2:(ncol(.) - 1),
             values_to = 'abs',
             names_to = 'oligo'
           )
-      ) %>% 
+      ) %>%
       left_join(
         user.seq(),
         by = "oligo"
-      ) %>% 
-      group_by(oligo, cation) %>% 
+      ) %>%
+      group_by(oligo, cation) %>%
       mutate(
         abs = abs - mean(abs[wl > 320]),
-        eps = abs/(1*Concentration/1E6)
-      ) %>% 
-      ungroup() %>% 
+        eps = abs / (1 * Concentration / 1E6)
+      ) %>%
+      ungroup() %>%
       filter(
         wl <= max(input$wl),
         wl >= min(input$wl),
-        wl%%1 == 0,
+        wl %% 1 == 0,
         oligo %in% input$user.seq.oligo.0
       )
   })
-  
+
   # user.uv.th <- reactive({
   #   read_excel(
   #     input.file.user()$datapath,
   #     sheet = "th.spectra"
   #   )
   # })
-  
-  
+
   # user.uv.th <- reactive({
   #   user.uv.input() %>%
-  #     filter(cation == 'no cation') %>% 
-  #     group_by(oligo) %>% 
-  #     select(oligo, wl) %>% 
-  #     unique() %>% 
+  #     filter(cation == 'no cation') %>%
+  #     group_by(oligo) %>%
+  #     select(oligo, wl) %>%
+  #     unique() %>%
   #     left_join(
-  #       user.seq() %>% 
+  #       user.seq() %>%
   #         select(oligo, seq)
   #     )
   # })
-  # 
-  
-  
+  #
+
   ##### IDS----
-  
+
   user.ids.input <- reactive({
-    
     if (isFALSE(input$ids.ref.select)) {
-      
       user.ids.input <- user.uv.input()
-      
     } else {
-      
       withProgress(
         message = 'Calculating theoretical spectra',
-        detail = 'Please wait', value = 0, {
-          
-          incProgress(amount = 1/3)
-          
+        detail = 'Please wait',
+        value = 0,
+        {
+          incProgress(amount = 1 / 3)
+
           user.ids.input <- user.uv.input() %>%
-            filter(cation == 'no cation') %>% 
+            filter(cation == 'no cation') %>%
             group_by(oligo, wl) %>%
             mutate(
-              eps = dt.spec.calcR(input.contrib = dt.contributR(input.seq = seq), input.wl = wl)
-            ) %>% 
+              eps = dt.spec.calcR(
+                input.contrib = dt.contributR(input.seq = seq),
+                input.wl = wl
+              )
+            ) %>%
             rbind(
-              user.uv.input() %>% 
+              user.uv.input() %>%
                 filter(cation == 'cation')
             )
-          
-          incProgress(amount = 3/3)
+
+          incProgress(amount = 3 / 3)
         }
       )
     }
-    
-    user.ids.input %>% 
-      group_by(oligo, wl) %>% 
-      mutate(delta.eps = eps[cation == 'no cation'] - eps[cation == 'cation']) %>% 
-      filter(cation == 'cation') %>% 
-      group_by(oligo) %>% 
+
+    user.ids.input %>%
+      group_by(oligo, wl) %>%
+      mutate(
+        delta.eps = eps[cation == 'no cation'] - eps[cation == 'cation']
+      ) %>%
+      filter(cation == 'cation') %>%
+      group_by(oligo) %>%
       mutate(
         norm.ids = case_when(
-          input$ids.norm=="-1/+1" ~ 2*(delta.eps-min(delta.eps))/(max(delta.eps)-min(delta.eps))-1,
+          input$ids.norm == "-1/+1" ~
+            2 *
+              (delta.eps - min(delta.eps)) /
+              (max(delta.eps) - min(delta.eps)) -
+              1,
           TRUE ~ delta.eps
         )
       )
   })
-  
-  
-  
+
   #### outputs of inputs----
-  
+
   ##### CD-----
-  
-  output$user.cd.input <- renderDT(server = FALSE,{
-    
-    if(file.toggle.user()=='no') {
+
+  output$user.cd.input <- renderDT(server = FALSE, {
+    if (file.toggle.user() == 'no') {
       return(NULL)
     } else {
       user.cd.input() %>%
         mutate(
           Concentration = round(Concentration, 2),
-          cd = round(cd, 2),          
+          cd = round(cd, 2),
           delta.eps = round(delta.eps, 2),
           norm.cd = round(norm.cd, 2)
         ) %>%
-        setcolorder(c("oligo", "Concentration", "wl", "cd", "delta.eps", "norm.cd")) %>%
+        setcolorder(c(
+          "oligo",
+          "Concentration",
+          "wl",
+          "cd",
+          "delta.eps",
+          "norm.cd"
+        )) %>%
         datatable(
           style = "bootstrap",
           extensions = c('Buttons', 'Responsive', 'Scroller'),
@@ -3533,49 +3714,43 @@ pca.ids.var.coord <- reactive({
             scroller = F,
             pageLength = 25,
             autoWidth = F,
-            dom = 'Bfrtip', 
+            dom = 'Bfrtip',
             buttons = list(
-              list(extend='copy'),
-              list(extend='csv',
-                   title=NULL,
-                   filename="user cd"),
-              list(extend='excel',
-                   title=NULL,
-                   filename="user cd"),
-              list(extend='colvis')
+              list(extend = 'copy'),
+              list(extend = 'csv', title = NULL, filename = "user cd"),
+              list(extend = 'excel', title = NULL, filename = "user cd"),
+              list(extend = 'colvis')
             ),
             title = NULL
             # columnDefs = list(list(visible=FALSE, targets=c(0,2:6,9,12)))
           )
-        ) %>% 
-        formatStyle(columns = 0:6, target = "cell", 
-                    backgroundColor = "#272c30")
+        )
+      # formatStyle(columns = 0:6, target = "cell", backgroundColor = "#272c30")
     }
-    
   })
-  
+
   output$p.user.cd <- renderPlot({
-    
-    user.cd <- user.cd.input() %>% 
+    user.cd <- user.cd.input() %>%
       filter(oligo %in% input$user.seq.oligo)
-    
-    if(input$cd.norm=="Δε"){
+
+    if (input$cd.norm == "Δε") {
       user.cd$y <- user.cd$delta.eps
-      axis.label <- bquote(Delta*epsilon~(M^-1*cm^-1))
+      axis.label <- bquote(Delta * epsilon ~ (M^-1 * cm^-1))
     } else {
       user.cd$y <- user.cd$norm.cd
       axis.label <- "Normalized CD"
     }
-    
-    if(file.toggle.user()=='no') {
+
+    if (file.toggle.user() == 'no') {
       ggplot() +
         dark_mode(theme_pander(base_size = 18)) +
         custom.theme
     } else {
-      p.user.cd <- user.cd %>% 
+      p.user.cd <- user.cd %>%
         ggplot(
           aes(
-            x = wl, y = y,
+            x = wl,
+            y = y,
             color = oligo
           )
         ) +
@@ -3589,41 +3764,45 @@ pca.ids.var.coord <- reactive({
           show.legend = T
         ) +
         labs(
-          x = bquote(lambda~(nm)),
+          x = bquote(lambda ~ (nm)),
           y = axis.label
           # color = input$user.color,
           # fill = input$user.color
         ) +
         custom.theme +
         scale_y_continuous(n.breaks = 4) +
-        scale_x_continuous(expand = c(0,0))
+        scale_x_continuous(expand = c(0, 0))
     }
-    
-    if(input$user.panel=="Panels"){
+
+    if (input$user.panel == "Panels") {
       p.user.cd <- p.user.cd +
         facet_wrap(~oligo, ncol = 4)
-      
+
       return(p.user.cd)
     } else {
       return(p.user.cd)
     }
-    
   })
-  
-  
+
   ##### UV----
-  
-  output$user.uv.input <- renderDT(server = FALSE,{
-    
-    if(file.toggle.user()=='no') {
+
+  output$user.uv.input <- renderDT(server = FALSE, {
+    if (file.toggle.user() == 'no') {
       return(NULL)
     } else {
       user.uv.input() %>%
         mutate(
           Concentration = round(Concentration, 2),
           abs = round(abs, 2)
-        ) %>% 
-        setcolorder(c("oligo", "cation", "Concentration", "wl", "abs", "eps")) %>%
+        ) %>%
+        setcolorder(c(
+          "oligo",
+          "cation",
+          "Concentration",
+          "wl",
+          "abs",
+          "eps"
+        )) %>%
         datatable(
           style = "bootstrap",
           extensions = c('Buttons', 'Responsive', 'Scroller'),
@@ -3645,40 +3824,33 @@ pca.ids.var.coord <- reactive({
             scroller = F,
             pageLength = 25,
             autoWidth = F,
-            dom = 'Bfrtip', 
+            dom = 'Bfrtip',
             buttons = list(
-              list(extend='copy'),
-              list(extend='csv',
-                   title=NULL,
-                   filename="user uv"),
-              list(extend='excel',
-                   title=NULL,
-                   filename="user uv"),
-              list(extend='colvis')
+              list(extend = 'copy'),
+              list(extend = 'csv', title = NULL, filename = "user uv"),
+              list(extend = 'excel', title = NULL, filename = "user uv"),
+              list(extend = 'colvis')
             ),
             title = NULL
             # columnDefs = list(list(visible=FALSE, targets=c(0,2:6,9,12)))
           )
-        ) %>% 
-        formatStyle(columns = 0:5, target = "cell", 
-                    backgroundColor = "#272c30")
+        )
+      # formatStyle(columns = 0:5, target = "cell", backgroundColor = "#272c30")
     }
-    
   })
-  
-  
+
   output$p.user.uv <- renderPlot({
-    
-    if(file.toggle.user()=='no') {
+    if (file.toggle.user() == 'no') {
       ggplot() +
         dark_mode(theme_pander(base_size = 18)) +
         custom.theme
     } else {
-      user.uv.input() %>% 
+      user.uv.input() %>%
         filter(oligo %in% input$user.seq.oligo) %>%
         ggplot(
           aes(
-            x = wl, y = eps,
+            x = wl,
+            y = eps,
             color = cation,
             group = cation
           )
@@ -3692,21 +3864,20 @@ pca.ids.var.coord <- reactive({
           ncol = 4
         ) +
         labs(
-          x = bquote(lambda~(nm)),
-          y = bquote(epsilon~(M^-1*cm^-1)),
+          x = bquote(lambda ~ (nm)),
+          y = bquote(epsilon ~ (M^-1 * cm^-1)),
           color = "Cation"
         ) +
         custom.theme +
         scale_y_continuous(n.breaks = 3) +
-        scale_x_continuous(expand = c(0,0)) 
+        scale_x_continuous(expand = c(0, 0))
     }
   })
-  
+
   ##### IDS----
-  
-  output$user.ids.input <- renderDT(server = FALSE,{
-    
-    if(file.toggle.user()=='no') {
+
+  output$user.ids.input <- renderDT(server = FALSE, {
+    if (file.toggle.user() == 'no') {
       return(NULL)
     } else {
       user.ids.input() %>%
@@ -3716,7 +3887,13 @@ pca.ids.var.coord <- reactive({
           delta.eps = round(delta.eps, 0),
           norm.ids = round(norm.ids, 2)
         ) %>%
-        setcolorder(c("oligo", "Concentration", "wl", "delta.eps", "norm.ids")) %>%
+        setcolorder(c(
+          "oligo",
+          "Concentration",
+          "wl",
+          "delta.eps",
+          "norm.ids"
+        )) %>%
         datatable(
           style = "bootstrap",
           extensions = c('Buttons', 'Responsive', 'Scroller'),
@@ -3739,54 +3916,50 @@ pca.ids.var.coord <- reactive({
             scroller = F,
             pageLength = 25,
             autoWidth = F,
-            dom = 'Bfrtip', 
+            dom = 'Bfrtip',
             buttons = list(
-              list(extend='copy'),
-              list(extend='csv',
-                   title=NULL,
-                   filename="user ids"),
-              list(extend='excel',
-                   title=NULL,
-                   filename="user ids"),
-              list(extend='colvis')
+              list(extend = 'copy'),
+              list(extend = 'csv', title = NULL, filename = "user ids"),
+              list(extend = 'excel', title = NULL, filename = "user ids"),
+              list(extend = 'colvis')
             ),
             title = NULL
             # columnDefs = list(list(visible=FALSE, targets=c(0,2:6,9,12)))
           )
-        ) %>% 
-        formatStyle(columns = 0:15, target = "cell", 
-                    backgroundColor = "#272c30")
+        )
+      # formatStyle(
+      #   columns = 0:15,
+      #   target = "cell",
+      #   backgroundColor = "#272c30"
+      # )
     }
-    
   })
-  
-  
+
   output$p.user.ids <- renderPlot({
-    
-    user.ids <- user.ids.input() %>% 
+    user.ids <- user.ids.input() %>%
       filter(oligo %in% input$user.seq.oligo) %>%
       add_column(
-        y=NA
+        y = NA
       )
-    
-    if(input$ids.norm=="Δε"){
+
+    if (input$ids.norm == "Δε") {
       user.ids$y <- user.ids$delta.eps
-      axis.label <- bquote(Delta*epsilon~(M^-1*cm^-1))
+      axis.label <- bquote(Delta * epsilon ~ (M^-1 * cm^-1))
     } else {
       user.ids$y <- user.ids$norm.ids
       axis.label <- "Normalized IDS"
     }
-    
-    
-    if(file.toggle.user()=='no') {
+
+    if (file.toggle.user() == 'no') {
       ggplot() +
         dark_mode(theme_pander(base_size = 18)) +
         custom.theme
     } else {
-      p.user.ids <- user.ids %>% 
+      p.user.ids <- user.ids %>%
         ggplot(
           aes(
-            x = wl, y = y,
+            x = wl,
+            y = y,
             color = oligo
           )
         ) +
@@ -3820,63 +3993,65 @@ pca.ids.var.coord <- reactive({
           show.legend = TRUE
         ) +
         labs(
-          x = bquote(lambda~(nm)),
+          x = bquote(lambda ~ (nm)),
           y = axis.label
           # color = input$user.color,
           # fill = input$user.color
         ) +
         custom.theme +
         scale_y_continuous(n.breaks = 3) +
-        scale_x_continuous(expand = c(0,0)) 
+        scale_x_continuous(expand = c(0, 0))
     }
-    
-    if(input$user.panel=="Panels"){
+
+    if (input$user.panel == "Panels") {
       p.user.ids <- p.user.ids +
         facet_wrap(~oligo, ncol = 4)
-      
+
       return(p.user.ids)
     } else {
       return(p.user.ids)
     }
-    
   })
-  
+
   ## PCA prediction----
-  
+
   ### distance function----
   closest.cluster <- function(user.data, km.centers) {
-    cluster.dist <- apply(km.centers, 1, function(y) sqrt(sum((user.data-y)^2)))
+    cluster.dist <- apply(
+      km.centers,
+      1,
+      function(y) sqrt(sum((user.data - y)^2))
+    )
     return(which.min(cluster.dist)[1])
   }
-  
+
   ### CD----
-  
+
   #### Prediction set prep----
-  
+
   user.cd <- reactive({
     user.cd.input() %>%
       mutate(
         delta.eps = case_when(
-          input$cd.norm=="Δε" ~ delta.eps,
-          input$cd.norm=="Δε/ε" ~ norm.cd,
-          input$cd.norm=="-1/+1" ~ norm.cd
+          input$cd.norm == "Δε" ~ delta.eps,
+          input$cd.norm == "Δε/ε" ~ norm.cd,
+          input$cd.norm == "-1/+1" ~ norm.cd
         )
       ) %>%
-      select(oligo, wl, delta.eps) %>% 
-      filter(wl%%1 == 0) %>% 
-      mutate(wl = paste0("cd-", wl)) %>% 
+      select(oligo, wl, delta.eps) %>%
+      filter(wl %% 1 == 0) %>%
+      mutate(wl = paste0("cd-", wl)) %>%
       pivot_wider(
         names_from = wl,
         values_from = delta.eps
       )
   })
-  
-  output$user.cd <- renderDT(server = FALSE,{
-    
-    if(file.toggle.user()=='no') {
+
+  output$user.cd <- renderDT(server = FALSE, {
+    if (file.toggle.user() == 'no') {
       return(NULL)
     } else {
-      user.cd() %>% 
+      user.cd() %>%
         datatable(
           style = "bootstrap",
           extensions = c('Buttons', 'Responsive', 'Scroller'),
@@ -3892,98 +4067,102 @@ pca.ids.var.coord <- reactive({
             autoWidth = F,
             dom = 'Bfrtip',
             buttons = list(
-              list(extend='copy'),
-              list(extend='csv',
-                   title=NULL,
-                   filename="user cd"),
-              list(extend='excel',
-                   title=NULL,
-                   filename="user cd"),
-              list(extend='colvis')
+              list(extend = 'copy'),
+              list(extend = 'csv', title = NULL, filename = "user cd"),
+              list(extend = 'excel', title = NULL, filename = "user cd"),
+              list(extend = 'colvis')
             ),
             title = NULL
           )
-        ) %>%
-        formatStyle(columns = 0:50, target = "cell",
-                    backgroundColor = "#272c30")
-    } 
+        )
+      # formatStyle(
+      #   columns = 0:50,
+      #   target = "cell",
+      #   backgroundColor = "#272c30"
+      # )
+    }
   })
-  
+
   #### PCA predict----
-  
+
   cd.predict <- reactive({
-    
     #prediction
     cd.predict.0 <- FactoMineR::predict.PCA(
       pca.cd(),
       user.cd(),
       scale.unit = input$scale.unit
     )$coord
-    
+
     #cluster assignment
-    km.predict <- apply(cd.predict.0, 1, closest.cluster, km.centers = pca.cd.km()$centers)
-    
+    km.predict <- apply(
+      cd.predict.0,
+      1,
+      closest.cluster,
+      km.centers = pca.cd.km()$centers
+    )
+
     #merging
-    cd.predict <- cd.predict.0 %>% 
-      as.data.frame() %>% 
+    cd.predict <- cd.predict.0 %>%
+      as.data.frame() %>%
       select(input$dim.cd[1], input$dim.cd[2]) %>%
-      magrittr::set_colnames(c("Dim.1", "Dim.2")) %>% 
-      cbind(user.cd()) %>% 
-      cbind(km = km.predict) %>% 
+      magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
+      cbind(user.cd()) %>%
+      cbind(km = km.predict) %>%
       mutate(topo = "user", gba = "user", salt = "user")
-    
+
     return(cd.predict)
   })
-  
+
   cd.predict.2 <- reactive({
-    
     #prediction
     cd.predict.0 <- FactoMineR::predict.PCA(
       pca.cd(),
       user.cd(),
       scale.unit = input$scale.unit
     )$coord
-    
+
     #cluster assignment
-    km.predict <- apply(cd.predict.0, 1, closest.cluster, km.centers = pca.cd.km()$centers)
-    
+    km.predict <- apply(
+      cd.predict.0,
+      1,
+      closest.cluster,
+      km.centers = pca.cd.km()$centers
+    )
+
     #merging
-    cd.predict <- cd.predict.0 %>% 
-      as.data.frame() %>% 
+    cd.predict <- cd.predict.0 %>%
+      as.data.frame() %>%
       select(input$dim.cd.2[1], input$dim.cd.2[2]) %>%
-      magrittr::set_colnames(c("Dim.1", "Dim.2")) %>% 
-      cbind(user.cd()) %>% 
-      cbind(km = km.predict) %>% 
+      magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
+      cbind(user.cd()) %>%
+      cbind(km = km.predict) %>%
       mutate(topo = "user", gba = "user", salt = "user")
-    
+
     return(cd.predict)
-    
   })
-  
-  
+
   ##### plots----
-  
-  output$predict.cd.table <- renderDT(server = FALSE,{
-    
-    if(file.toggle.user() == 'no') {
+
+  output$predict.cd.table <- renderDT(server = FALSE, {
+    if (file.toggle.user() == 'no') {
       return(NULL)
     } else {
-      cd.predict() %>% 
+      cd.predict() %>%
         rbind(
           data.frame(pca.cd()$ind$coord) %>%
             select(input$dim.cd[1], input$dim.cd[2]) %>%
             magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
-            cbind(training.cd()) %>% 
-            add_column(km = pca.cd.km()$cluster) %>% 
+            cbind(training.cd()) %>%
+            add_column(km = pca.cd.km()$cluster) %>%
             left_join(
-              ref.seq() %>% 
+              ref.seq() %>%
                 select(oligo, topo, gba, salt),
               by = 'oligo'
             )
-        )  %>% 
-        add_column(color = NA, shape = NA) %>% 
+        ) %>%
+        add_column(color = NA, shape = NA) %>%
         left_join(
-          ref.seq() %>% 
+          ref.seq() %>%
             select(oligo, tetrad, tetrad.id, loop, plus.minus, groove),
           by = "oligo"
         ) %>%
@@ -3994,7 +4173,7 @@ pca.ids.var.coord <- reactive({
           loop = if_else(is.na(loop), "user", loop),
           plus.minus = if_else(is.na(plus.minus), "user", plus.minus),
           groove = if_else(is.na(groove), "user", groove)
-        ) %>%  
+        ) %>%
         datatable(
           style = "bootstrap",
           extensions = c('Buttons', 'Responsive', 'Scroller'),
@@ -4020,47 +4199,50 @@ pca.ids.var.coord <- reactive({
             scroller = F,
             pageLength = 25,
             autoWidth = F,
-            dom = 'Bfrtip', 
+            dom = 'Bfrtip',
             buttons = list(
-              list(extend='copy'),
-              list(extend='csv',
-                   title=NULL,
-                   filename="pca cd"),
-              list(extend='excel',
-                   title=NULL,
-                   filename="pca cd"),
-              list(extend='colvis')
+              list(extend = 'copy'),
+              list(extend = 'csv', title = NULL, filename = "pca cd"),
+              list(extend = 'excel', title = NULL, filename = "pca cd"),
+              list(extend = 'colvis')
             ),
             title = NULL
             # columnDefs = list(list(visible=FALSE, targets=c(2:9)))
           )
-        ) 
+        )
       # formatStyle(columns = 0:(11+input$ncp),  target = "cell",
-      #             backgroundColor = "#272c30") %>% 
+      #             backgroundColor = "#272c30") %>%
       # formatSignif(columns = 11:(11+input$ncp), digits = 5)
     }
   })
-  
-  
+
+  output$conditional_predict_cd_table <- renderUI({
+    if (file.toggle.user() == 'no') {
+      #text output if no file is uploaded
+      h4("No user file uploaded. Please upload file in the Data tab")
+    } else {
+      DTOutput("predict.cd.table")
+    }
+  })
+
   predict.cd.coord <- reactive({
-    
-    pca.cd.coord <- cd.predict() %>% 
+    pca.cd.coord <- cd.predict() %>%
       rbind(
         data.frame(pca.cd()$ind$coord) %>%
-          ungroup() %>% 
+          ungroup() %>%
           select(input$dim.cd[1], input$dim.cd[2]) %>%
           magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
-          cbind(training.cd()) %>% 
-          add_column(km = pca.cd.km()$cluster) %>% 
+          cbind(training.cd()) %>%
+          add_column(km = pca.cd.km()$cluster) %>%
           left_join(
-            ref.seq() %>% 
+            ref.seq() %>%
               select(oligo, topo, gba, salt),
             by = 'oligo'
           )
-      )  %>% 
+      ) %>%
       left_join(
-        ref.seq() %>% 
-          ungroup() %>% 
+        ref.seq() %>%
+          ungroup() %>%
           select(oligo, tetrad, tetrad.id, loop, plus.minus, groove),
         by = "oligo"
       ) %>%
@@ -4073,33 +4255,50 @@ pca.ids.var.coord <- reactive({
         groove = if_else(is.na(groove), "user", groove),
         salt = if_else(is.na(salt), 'user', groove) # added
       )
-    
-    pca.cd.coord %>% 
-      pca.plotR(., dim.1 = input$dim.cd[1], dim.2 = input$dim.cd[2], 
-                color = input$pca.color.cd, shape = input$pca.shape.cd)
-    
-  }) 
-  
-  output$predict.cd.coord <- renderPlot({predict.cd.coord()})
-  
-  output$predict.cd.coord.2 <- renderPlot({
-    
-    pca.cd.coord <- cd.predict.2() %>% 
+
+    pca.cd.coord %>%
+      pca.plotR(
+        .,
+        dim.1 = input$dim.cd[1],
+        dim.2 = input$dim.cd[2],
+        color = input$pca.color.cd,
+        shape = input$pca.shape.cd
+      )
+  })
+
+  output$predict.cd.coord <- renderPlot({
+    predict.cd.coord()
+  })
+
+  output$conditional_pca_plot_cd <- renderUI({
+    plotOutput(
+      if (is.null(input$user.data)) {
+        "pca.cd.coord"
+      } else {
+        "predict.cd.coord"
+      },
+      height = "800px"
+    )
+  })
+
+  predict.cd.coord.2 <- reactive({
+    pca.cd.coord <- cd.predict.2() %>%
       rbind(
         data.frame(pca.cd()$ind$coord) %>%
+          ungroup() %>%
           select(input$dim.cd.2[1], input$dim.cd.2[2]) %>%
           magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
-          cbind(training.cd()) %>% 
-          add_column(km = pca.cd.km()$cluster) %>% 
+          cbind(training.cd()) %>%
+          add_column(km = pca.cd.km()$cluster) %>%
           left_join(
-            ref.seq() %>% 
+            ref.seq() %>%
               select(oligo, topo, gba, salt),
             by = 'oligo'
           )
       ) %>%
-      add_column(color = NA, shape = NA) %>% 
       left_join(
-        ref.seq() %>% 
+        ref.seq() %>%
+          ungroup() %>%
           select(oligo, tetrad, tetrad.id, loop, plus.minus, groove),
         by = "oligo"
       ) %>%
@@ -4109,130 +4308,58 @@ pca.ids.var.coord <- reactive({
         tetrad.id = if_else(is.na(tetrad.id), "user", tetrad.id),
         loop = if_else(is.na(loop), "user", loop),
         plus.minus = if_else(is.na(plus.minus), "user", plus.minus),
-        groove = if_else(is.na(groove), "user", groove)
+        groove = if_else(is.na(groove), "user", groove),
+        salt = if_else(is.na(salt), 'user', groove) # added
       )
-    
-    # coloring
-    if(input$pca.color.cd.2=="k-means"){
-      pca.cd.coord$color <- factor(pca.cd.coord$km)
-    } else if (input$pca.color.cd.2=="Topology"){
-      pca.cd.coord$color <- pca.cd.coord$topo
-    } else if(input$pca.color.cd.2=="GBA"){
-      pca.cd.coord$color <- pca.cd.coord$gba
-    } else if(input$pca.color.cd.2=="Tetrads"){
-      pca.cd.coord$color <- factor(pca.cd.coord$tetrad)
-    } else if(input$pca.color.cd.2=="Tetrad combination"){
-      pca.cd.coord$color <- pca.cd.coord$tetrad.id
-    } else if(input$pca.color.cd.2=="Loop progression"){
-      pca.cd.coord$color <- pca.cd.coord$loop
-    } else if(input$pca.color.cd.2=="Tetrad handedness"){
-      pca.cd.coord$color <- pca.cd.coord$plus.minus
-    } else if(input$pca.color.cd.2=="Grooves"){
-      pca.cd.coord$color <- pca.cd.coord$groove
-    } else {
-      pca.cd.coord$color <- pca.cd.coord$salt
-    }
-    
-    # shaping
-    if(input$pca.shape.cd.2=="k-means"){
-      pca.cd.coord$shape <- factor(pca.cd.coord$km)
-    } else if (input$pca.shape.cd.2=="Topology"){
-      pca.cd.coord$shape <- pca.cd.coord$topo
-    } else if(input$pca.shape.cd.2=="GBA"){
-      pca.cd.coord$shape <- pca.cd.coord$gba
-    } else if(input$pca.shape.cd.2=="Tetrads"){
-      pca.cd.coord$shape <- factor(pca.cd.coord$tetrad)
-    } else if(input$pca.shape.cd.2=="Tetrad combination"){
-      pca.cd.coord$shape <- pca.cd.coord$tetrad.id
-    } else if(input$pca.shape.cd.2=="Loop progression"){
-      pca.cd.coord$shape <- pca.cd.coord$loop
-    } else if(input$pca.shape.cd.2=="Tetrad handedness"){
-      pca.cd.coord$shape <- pca.cd.coord$plus.minus
-    } else if(input$pca.shape.cd.2=="Grooves"){
-      pca.cd.coord$shape <- pca.cd.coord$groove
-    } else {
-      pca.cd.coord$shape <- pca.cd.coord$salt
-    }
-    
-    p.pca.cd.coord <- pca.cd.coord %>% 
-      ggplot(
-        aes(
-          x = Dim.1,
-          y = Dim.2,
-          color = color,
-          fill = color,
-          shape = shape
-        )
-      ) +
-      scale_shape_manual(values=c(0:15))
-    
-    if(isTRUE(input$pca.shape.cd.2==input$pca.color.cd.2)){
-      p.pca.cd.coord <- p.pca.cd.coord +
-        geom_polygon(
-          data = . %>%
-            group_by(color) %>%
-            filter(color != 'user') %>% 
-            slice(chull(Dim.1, Dim.2)),
-          alpha = 0.25,
-          show.legend = FALSE
-        )
-    }
-    
-    p.pca.cd.coord +
-      geom_point(
-        size = 6,
-        stroke = 1.25,
-        show.legend = TRUE
-      ) +
-      geom_point(
-        inherit.aes = FALSE,
-        data = data.frame(pca.cd.km()$centers),
-        aes(x = Dim.1, y = Dim.2),
-        show.legend = FALSE,
-        color = "white"
-      ) +
-      geom_text_repel(
-        aes(label = oligo),
-        force = 20,
-        size = 8,
-        point.padding = 10,
-        show.legend = FALSE
-      ) +
-      custom.theme +
-      labs(
-        y = input$dim.cd.2[2],
-        x = input$dim.cd.2[1],
+
+    pca.cd.coord %>%
+      pca.plotR(
+        .,
+        dim.1 = input$dim.cd.2[1],
+        dim.2 = input$dim.cd.2[2],
         color = input$pca.color.cd.2,
-        fill = input$pca.color.cd.2,
         shape = input$pca.shape.cd.2
-      ) 
-  }) 
-  
-  
+      )
+  })
+
+  output$predict.cd.coord.2 <- renderPlot({
+    predict.cd.coord.2()
+  })
+
+  output$conditional_pca_plot_cd_2 <- renderUI({
+    plotOutput(
+      if (is.null(input$user.data)) {
+        "pca.cd.coord.2"
+      } else {
+        "predict.cd.coord.2"
+      },
+      height = "800px"
+    )
+  })
+
   #### IDS----
-  
+
   ##### prep----
-  
+
   user.ids <- reactive({
-    
     user.ids.input() %>%
-      mutate(delta.eps = case_when(
-        input$ids.norm=="Δε" ~ delta.eps,
-        input$ids.norm=="295 nm" ~ norm.ids,
-        input$ids.norm=="-1/+1" ~ norm.ids
-      )) %>%
+      mutate(
+        delta.eps = case_when(
+          input$ids.norm == "Δε" ~ delta.eps,
+          input$ids.norm == "295 nm" ~ norm.ids,
+          input$ids.norm == "-1/+1" ~ norm.ids
+        )
+      ) %>%
       select(oligo, wl, delta.eps) %>%
       mutate(wl = paste0("ids-", wl)) %>%
       pivot_wider(
         names_from = wl,
         values_from = delta.eps
       )
-    
   })
-  
-  output$user.ids <- renderDT(server = FALSE,{
-    
-    if(file.toggle.user()=='no') {
+
+  output$user.ids <- renderDT(server = FALSE, {
+    if (file.toggle.user() == 'no') {
       return(NULL)
     } else {
       user.ids() %>%
@@ -4251,96 +4378,101 @@ pca.ids.var.coord <- reactive({
             autoWidth = F,
             dom = 'Bfrtip',
             buttons = list(
-              list(extend='copy'),
-              list(extend='csv',
-                   title=NULL,
-                   filename="user ids"),
-              list(extend='excel',
-                   title=NULL,
-                   filename="user ids"),
-              list(extend='colvis')
+              list(extend = 'copy'),
+              list(extend = 'csv', title = NULL, filename = "user ids"),
+              list(extend = 'excel', title = NULL, filename = "user ids"),
+              list(extend = 'colvis')
             ),
             title = NULL
             # columnDefs = list(list(visible=FALSE, targets=c(0,2:6,9,12)))
           )
-        ) %>%
-        formatStyle(columns = 0:17, target = "cell",
-                    backgroundColor = "#272c30")
+        )
+      # formatStyle(
+      #   columns = 0:17,
+      #   target = "cell",
+      #   backgroundColor = "#272c30"
+      # )
     }
-    
   })
-  
+
   #####predict----
-  
+
   ids.predict <- reactive({
-    
     #prediction
     ids.predict.0 <- FactoMineR::predict.PCA(
       pca.ids(),
       user.ids(),
       scale.unit = input$scale.unit
     )$coord
-    
+
     #cluster assignment
-    km.predict <- apply(ids.predict.0, 1, closest.cluster, km.centers = pca.ids.km()$centers)
-    
+    km.predict <- apply(
+      ids.predict.0,
+      1,
+      closest.cluster,
+      km.centers = pca.ids.km()$centers
+    )
+
     #merging
-    ids.predict <- ids.predict.0 %>% 
-      as.data.frame() %>% 
+    ids.predict <- ids.predict.0 %>%
+      as.data.frame() %>%
       select(input$dim.ids[1], input$dim.ids[2]) %>%
-      magrittr::set_colnames(c("Dim.1", "Dim.2")) %>% 
-      cbind(user.ids()) %>% 
-      cbind(km = km.predict) %>% 
+      magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
+      cbind(user.ids()) %>%
+      cbind(km = km.predict) %>%
       mutate(topo = "user", gba = "user", salt = "user")
-    
+
     return(ids.predict)
-    
   })
-  
+
   ids.predict.2 <- reactive({
-    
     #prediction
     ids.predict.0 <- FactoMineR::predict.PCA(
       pca.ids(),
       user.ids(),
       scale.unit = input$scale.unit
     )$coord
-    
+
     #cluster assignment
-    km.predict <- apply(ids.predict.0, 1, closest.cluster, km.centers = pca.ids.km()$centers)
-    
+    km.predict <- apply(
+      ids.predict.0,
+      1,
+      closest.cluster,
+      km.centers = pca.ids.km()$centers
+    )
+
     #merging
-    ids.predict <- ids.predict.0 %>% 
-      as.data.frame() %>% 
+    ids.predict <- ids.predict.0 %>%
+      as.data.frame() %>%
       select(input$dim.ids.2[1], input$dim.ids.2[2]) %>%
-      magrittr::set_colnames(c("Dim.1", "Dim.2")) %>% 
-      cbind(user.ids()) %>% 
-      cbind(km = km.predict) %>% 
+      magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
+      cbind(user.ids()) %>%
+      cbind(km = km.predict) %>%
       mutate(topo = "user", gba = "user", salt = "user")
-    
+
     return(ids.predict)
-    
   })
-  
+
   #####plots----
-  output$predict.ids.coord <- renderPlot({
-    
-    pca.ids.coord <- ids.predict() %>% 
+
+  predict.ids.coord <- reactive({
+    pca.ids.coord <- ids.predict() %>%
       rbind(
         data.frame(pca.ids()$ind$coord) %>%
+          ungroup() %>%
           select(input$dim.ids[1], input$dim.ids[2]) %>%
           magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
-          cbind(training.ids()) %>% 
-          add_column(km = pca.ids.km()$cluster) %>% 
+          cbind(training.ids()) %>%
+          add_column(km = pca.ids.km()$cluster) %>%
           left_join(
-            ref.seq() %>% 
+            ref.seq() %>%
               select(oligo, topo, gba, salt),
             by = 'oligo'
           )
       ) %>%
-      add_column(color = NA, shape = NA) %>% 
       left_join(
-        ref.seq() %>% 
+        ref.seq() %>%
+          ungroup() %>%
           select(oligo, tetrad, tetrad.id, loop, plus.minus, groove),
         by = "oligo"
       ) %>%
@@ -4350,123 +4482,53 @@ pca.ids.var.coord <- reactive({
         tetrad.id = if_else(is.na(tetrad.id), "user", tetrad.id),
         loop = if_else(is.na(loop), "user", loop),
         plus.minus = if_else(is.na(plus.minus), "user", plus.minus),
-        groove = if_else(is.na(groove), "user", groove)
+        groove = if_else(is.na(groove), "user", groove),
+        salt = if_else(is.na(salt), 'user', groove) # added
       )
-    
-    # coloring
-    if(input$pca.color.ids=="k-means"){
-      pca.ids.coord$color <- factor(pca.ids.coord$km)
-    } else if (input$pca.color.ids=="Topology"){
-      pca.ids.coord$color <- pca.ids.coord$topo
-    } else if(input$pca.color.ids=="GBA"){
-      pca.ids.coord$color <- pca.ids.coord$gba
-    } else if(input$pca.color.ids=="Tetrads"){
-      pca.ids.coord$color <- factor(pca.ids.coord$tetrad)
-    } else if(input$pca.color.ids=="Tetrad combination"){
-      pca.ids.coord$color <- pca.ids.coord$tetrad.id
-    } else if(input$pca.color.ids=="Loop progression"){
-      pca.ids.coord$color <- pca.ids.coord$loop
-    } else if(input$pca.color.ids=="Tetrad handedness"){
-      pca.ids.coord$color <- pca.ids.coord$plus.minus
-    } else if(input$pca.color.ids=="Grooves"){
-      pca.ids.coord$color <- pca.ids.coord$groove
-    } else {
-      pca.ids.coord$color <- pca.ids.coord$salt
-    }
-    
-    # shaping
-    if(input$pca.shape.ids=="k-means"){
-      pca.ids.coord$shape <- factor(pca.ids.coord$km)
-    } else if (input$pca.shape.ids=="Topology"){
-      pca.ids.coord$shape <- pca.ids.coord$topo
-    } else if(input$pca.shape.ids=="GBA"){
-      pca.ids.coord$shape <- pca.ids.coord$gba
-    } else if(input$pca.shape.ids=="Tetrads"){
-      pca.ids.coord$shape <- factor(pca.ids.coord$tetrad)
-    } else if(input$pca.shape.ids=="Tetrad combination"){
-      pca.ids.coord$shape <- pca.ids.coord$tetrad.id
-    } else if(input$pca.shape.ids=="Loop progression"){
-      pca.ids.coord$shape <- pca.ids.coord$loop
-    } else if(input$pca.shape.ids=="Tetrad handedness"){
-      pca.ids.coord$shape <- pca.ids.coord$plus.minus
-    } else if(input$pca.shape.ids=="Grooves"){
-      pca.ids.coord$shape <- pca.ids.coord$groove
-    } else {
-      pca.ids.coord$shape <- pca.ids.coord$salt
-    }
-    
-    p.pca.ids.coord <- pca.ids.coord %>% 
-      ggplot(
-        aes(
-          x = Dim.1,
-          y = Dim.2,
-          color = color,
-          fill = color,
-          shape = shape
-        )
-      ) +
-      scale_shape_manual(values=c(0:15))
-    
-    if(isTRUE(input$pca.shape.ids==input$pca.color.ids)){
-      p.pca.ids.coord <- p.pca.ids.coord +
-        geom_polygon(
-          data = . %>%
-            group_by(color) %>%
-            filter(color != 'user') %>% 
-            slice(chull(Dim.1, Dim.2)),
-          alpha = 0.25,
-          show.legend = FALSE
-        )
-    }
-    
-    p.pca.ids.coord +
-      geom_point(
-        size = 6,
-        stroke = 1.25,
-        show.legend = TRUE
-      ) +
-      geom_point(
-        inherit.aes = FALSE,
-        data = data.frame(pca.ids.km()$centers),
-        aes(x = Dim.1, y = Dim.2),
-        show.legend = FALSE,
-        color = "white"
-      ) +
-      geom_text_repel(
-        aes(label = oligo),
-        force = 20,
-        size = 8,
-        point.padding = 10,
-        show.legend = FALSE
-      ) +
-      custom.theme +
-      labs(
-        y = input$dim.ids[2],
-        x = input$dim.ids[1],
+
+    pca.ids.coord %>%
+      pca.plotR(
+        .,
+        dim.1 = input$dim.ids[1],
+        dim.2 = input$dim.ids[2],
         color = input$pca.color.ids,
-        fill = input$pca.color.ids,
         shape = input$pca.shape.ids
-      ) 
-  }) 
-  
-  output$predict.ids.coord.2 <- renderPlot({
-    
-    pca.ids.coord <- ids.predict.2() %>% 
+      )
+  })
+
+  output$predict.ids.coord <- renderPlot({
+    predict.ids.coord()
+  })
+
+  output$conditional_pca_plot_ids <- renderUI({
+    plotOutput(
+      if (is.null(input$user.data)) {
+        "pca.ids.coord"
+      } else {
+        "predict.ids.coord"
+      },
+      height = "800px"
+    )
+  })
+
+  predict.ids.coord.2 <- reactive({
+    pca.ids.coord <- ids.predict.2() %>%
       rbind(
         data.frame(pca.ids()$ind$coord) %>%
+          ungroup() %>%
           select(input$dim.ids.2[1], input$dim.ids.2[2]) %>%
           magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
-          cbind(training.ids()) %>% 
-          add_column(km = pca.ids.km()$cluster) %>% 
+          cbind(training.ids()) %>%
+          add_column(km = pca.ids.km()$cluster) %>%
           left_join(
-            ref.seq() %>% 
+            ref.seq() %>%
               select(oligo, topo, gba, salt),
             by = 'oligo'
           )
       ) %>%
-      add_column(color = NA, shape = NA) %>% 
       left_join(
-        ref.seq() %>% 
+        ref.seq() %>%
+          ungroup() %>%
           select(oligo, tetrad, tetrad.id, loop, plus.minus, groove),
         by = "oligo"
       ) %>%
@@ -4476,120 +4538,49 @@ pca.ids.var.coord <- reactive({
         tetrad.id = if_else(is.na(tetrad.id), "user", tetrad.id),
         loop = if_else(is.na(loop), "user", loop),
         plus.minus = if_else(is.na(plus.minus), "user", plus.minus),
-        groove = if_else(is.na(groove), "user", groove)
+        groove = if_else(is.na(groove), "user", groove),
+        salt = if_else(is.na(salt), 'user', groove) # added
       )
-    
-    # coloring
-    if(input$pca.color.ids.2=="k-means"){
-      pca.ids.coord$color <- factor(pca.ids.coord$km)
-    } else if (input$pca.color.ids.2=="Topology"){
-      pca.ids.coord$color <- pca.ids.coord$topo
-    } else if(input$pca.color.ids.2=="GBA"){
-      pca.ids.coord$color <- pca.ids.coord$gba
-    } else if(input$pca.color.ids.2=="Tetrads"){
-      pca.ids.coord$color <- factor(pca.ids.coord$tetrad)
-    } else if(input$pca.color.ids.2=="Tetrad combination"){
-      pca.ids.coord$color <- pca.ids.coord$tetrad.id
-    } else if(input$pca.color.ids.2=="Loop progression"){
-      pca.ids.coord$color <- pca.ids.coord$loop
-    } else if(input$pca.color.ids.2=="Tetrad handedness"){
-      pca.ids.coord$color <- pca.ids.coord$plus.minus
-    } else if(input$pca.color.ids.2=="Grooves"){
-      pca.ids.coord$color <- pca.ids.coord$groove
-    } else {
-      pca.ids.coord$color <- pca.ids.coord$salt
-    }
-    
-    # shaping
-    if(input$pca.shape.ids.2=="k-means"){
-      pca.ids.coord$shape <- factor(pca.ids.coord$km)
-    } else if (input$pca.shape.ids.2=="Topology"){
-      pca.ids.coord$shape <- pca.ids.coord$topo
-    } else if(input$pca.shape.ids.2=="GBA"){
-      pca.ids.coord$shape <- pca.ids.coord$gba
-    } else if(input$pca.shape.ids.2=="Tetrads"){
-      pca.ids.coord$shape <- factor(pca.ids.coord$tetrad)
-    } else if(input$pca.shape.ids.2=="Tetrad combination"){
-      pca.ids.coord$shape <- pca.ids.coord$tetrad.id
-    } else if(input$pca.shape.ids.2=="Loop progression"){
-      pca.ids.coord$shape <- pca.ids.coord$loop
-    } else if(input$pca.shape.ids.2=="Tetrad handedness"){
-      pca.ids.coord$shape <- pca.ids.coord$plus.minus
-    } else if(input$pca.shape.ids.2=="Grooves"){
-      pca.ids.coord$shape <- pca.ids.coord$groove
-    } else {
-      pca.ids.coord$shape <- pca.ids.coord$salt
-    }
-    
-    p.pca.ids.coord <- pca.ids.coord %>% 
-      ggplot(
-        aes(
-          x = Dim.1,
-          y = Dim.2,
-          color = color,
-          fill = color,
-          shape = shape
-        )
-      ) +
-      scale_shape_manual(values=c(0:15))
-    
-    if(isTRUE(input$pca.shape.ids.2==input$pca.color.ids.2)){
-      p.pca.ids.coord <- p.pca.ids.coord +
-        geom_polygon(
-          data = . %>%
-            group_by(color) %>%
-            filter(color != 'user') %>% 
-            slice(chull(Dim.1, Dim.2)),
-          alpha = 0.25,
-          show.legend = FALSE
-        )
-    }
-    
-    p.pca.ids.coord +
-      geom_point(
-        size = 6,
-        stroke = 1.25,
-        show.legend = TRUE
-      ) +
-      geom_point(
-        inherit.aes = FALSE,
-        data = data.frame(pca.ids.km()$centers),
-        aes(x = Dim.1, y = Dim.2),
-        show.legend = FALSE,
-        color = "white"
-      ) +
-      geom_text_repel(
-        aes(label = oligo),
-        force = 20,
-        size = 8,
-        point.padding = 10,
-        show.legend = FALSE
-      ) +
-      custom.theme +
-      labs(
-        y = input$dim.ids.2[2],
-        x = input$dim.ids.2[1],
+
+    pca.ids.coord %>%
+      pca.plotR(
+        .,
+        dim.1 = input$dim.ids.2[1],
+        dim.2 = input$dim.ids.2[2],
         color = input$pca.color.ids.2,
-        fill = input$pca.color.ids.2,
         shape = input$pca.shape.ids.2
-      ) 
-  }) 
-  
-  #### CD+IDS----
-  
-  ##### prep----
-  
-  user.cd.ids <- reactive({
-    
-    user.cd() %>% 
-      left_join(
-        user.ids(), 
-        by = "oligo") 
+      )
   })
-  
-  output$user.cd.ids <- renderDT(server = FALSE,{
-    
-    if(file.toggle.user()=='no') {
+
+  output$predict.ids.coord.2 <- renderPlot({
+    predict.ids.coord.2()
+  })
+
+  output$conditional_pca_plot_ids_2 <- renderUI({
+    plotOutput(
+      if (is.null(input$user.data)) {
+        "pca.ids.coord.2"
+      } else {
+        "predict.ids.coord.2"
+      },
+      height = "800px"
+    )
+  })
+
+  #### CD+IDS----
+
+  ##### prep----
+
+  user.cd.ids <- reactive({
+    user.cd() %>%
+      left_join(
+        user.ids(),
+        by = "oligo"
+      )
+  })
+
+  output$user.cd.ids <- renderDT(server = FALSE, {
+    if (file.toggle.user() == 'no') {
       return(NULL)
     } else {
       user.cd.ids() %>%
@@ -4608,96 +4599,99 @@ pca.ids.var.coord <- reactive({
             autoWidth = F,
             dom = 'Bfrtip',
             buttons = list(
-              list(extend='copy'),
-              list(extend='csv',
-                   title=NULL,
-                   filename="user cd-ids"),
-              list(extend='excel',
-                   title=NULL,
-                   filename="user cd-ids"),
-              list(extend='colvis')
+              list(extend = 'copy'),
+              list(extend = 'csv', title = NULL, filename = "user cd-ids"),
+              list(extend = 'excel', title = NULL, filename = "user cd-ids"),
+              list(extend = 'colvis')
             ),
             title = NULL
             # columnDefs = list(list(visible=FALSE, targets=c(0,2:6,9,12)))
           )
-        ) %>%
-        formatStyle(columns = 0:17, target = "cell",
-                    backgroundColor = "#272c30")
+        )
+      # formatStyle(
+      #   columns = 0:17,
+      #   target = "cell",
+      #   backgroundColor = "#272c30"
+      # )
     }
-    
   })
-  
+
   #####predict----
-  
+
   cd.ids.predict <- reactive({
-    
     #prediction
     cd.ids.predict.0 <- FactoMineR::predict.PCA(
       pca.cd.ids(),
       user.cd.ids(),
       scale.unit = input$scale.unit
     )$coord
-    
+
     #cluster assignment
-    km.predict <- apply(cd.ids.predict.0, 1, closest.cluster, km.centers = pca.cd.ids.km()$centers)
-    
+    km.predict <- apply(
+      cd.ids.predict.0,
+      1,
+      closest.cluster,
+      km.centers = pca.cd.ids.km()$centers
+    )
+
     #merging
-    cd.ids.predict <- cd.ids.predict.0 %>% 
-      as.data.frame() %>% 
+    cd.ids.predict <- cd.ids.predict.0 %>%
+      as.data.frame() %>%
       select(input$dim.cd.ids[1], input$dim.cd.ids[2]) %>%
-      magrittr::set_colnames(c("Dim.1", "Dim.2")) %>% 
-      cbind(user.cd.ids()) %>% 
-      cbind(km = km.predict) %>% 
+      magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
+      cbind(user.cd.ids()) %>%
+      cbind(km = km.predict) %>%
       mutate(topo = "user", gba = "user", salt = "user")
-    
+
     return(cd.ids.predict)
-    
-  })  
-  
+  })
+
   cd.ids.predict.2 <- reactive({
-    
     #prediction
     cd.ids.predict.0 <- FactoMineR::predict.PCA(
       pca.cd.ids(),
       user.cd.ids(),
       scale.unit = input$scale.unit
     )$coord
-    
+
     #cluster assignment
-    km.predict <- apply(cd.ids.predict.0, 1, closest.cluster, km.centers = pca.cd.ids.km()$centers)
-    
+    km.predict <- apply(
+      cd.ids.predict.0,
+      1,
+      closest.cluster,
+      km.centers = pca.cd.ids.km()$centers
+    )
+
     #merging
-    cd.ids.predict <- cd.ids.predict.0 %>% 
-      as.data.frame() %>% 
+    cd.ids.predict <- cd.ids.predict.0 %>%
+      as.data.frame() %>%
       select(input$dim.cd.ids.2[1], input$dim.cd.ids.2[2]) %>%
-      magrittr::set_colnames(c("Dim.1", "Dim.2")) %>% 
-      cbind(user.cd.ids()) %>% 
-      cbind(km = km.predict) %>% 
+      magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
+      cbind(user.cd.ids()) %>%
+      cbind(km = km.predict) %>%
       mutate(topo = "user", gba = "user", salt = "user")
-    
+
     return(cd.ids.predict)
-    
   })
-  
+
   #####plots----
   output$predict.cd.ids.coord <- renderPlot({
-    
-    pca.cd.ids.coord <- cd.ids.predict() %>% 
+    pca.cd.ids.coord <- cd.ids.predict() %>%
       rbind(
         data.frame(pca.cd.ids()$ind$coord) %>%
           select(input$dim.cd.ids[1], input$dim.cd.ids[2]) %>%
           magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
-          cbind(training.cd.ids()) %>% 
-          add_column(km = pca.cd.ids.km()$cluster) %>% 
+          cbind(training.cd.ids()) %>%
+          add_column(km = pca.cd.ids.km()$cluster) %>%
           left_join(
-            ref.seq() %>% 
+            ref.seq() %>%
               select(oligo, topo, gba, salt),
             by = 'oligo'
-          ) 
+          )
       ) %>%
-      add_column(color = NA, shape = NA) %>% 
+      add_column(color = NA, shape = NA) %>%
       left_join(
-        ref.seq() %>% 
+        ref.seq() %>%
           select(oligo, tetrad, tetrad.id, loop, plus.minus, groove),
         by = "oligo"
       ) %>%
@@ -4709,50 +4703,50 @@ pca.ids.var.coord <- reactive({
         plus.minus = if_else(is.na(plus.minus), "user", plus.minus),
         groove = if_else(is.na(groove), "user", groove)
       )
-    
+
     # coloring
-    if(input$pca.color.cd.ids=="k-means"){
+    if (input$pca.color.cd.ids == "k-means") {
       pca.cd.ids.coord$color <- factor(pca.cd.ids.coord$km)
-    } else if (input$pca.color.cd.ids=="Topology"){
+    } else if (input$pca.color.cd.ids == "Topology") {
       pca.cd.ids.coord$color <- pca.cd.ids.coord$topo
-    } else if(input$pca.color.cd.ids=="GBA"){
+    } else if (input$pca.color.cd.ids == "GBA") {
       pca.cd.ids.coord$color <- pca.cd.ids.coord$gba
-    } else if(input$pca.color.cd.ids=="Tetrads"){
+    } else if (input$pca.color.cd.ids == "Tetrads") {
       pca.cd.ids.coord$color <- factor(pca.cd.ids.coord$tetrad)
-    } else if(input$pca.color.cd.ids=="Tetrad combination"){
+    } else if (input$pca.color.cd.ids == "Tetrad combination") {
       pca.cd.ids.coord$color <- pca.cd.ids.coord$tetrad.id
-    } else if(input$pca.color.cd.ids=="Loop progression"){
+    } else if (input$pca.color.cd.ids == "Loop progression") {
       pca.cd.ids.coord$color <- pca.cd.ids.coord$loop
-    } else if(input$pca.color.cd.ids=="Tetrad handedness"){
+    } else if (input$pca.color.cd.ids == "Tetrad handedness") {
       pca.cd.ids.coord$color <- pca.cd.ids.coord$plus.minus
-    } else if(input$pca.color.cd.ids=="Grooves"){
+    } else if (input$pca.color.cd.ids == "Grooves") {
       pca.cd.ids.coord$color <- pca.cd.ids.coord$groove
     } else {
       pca.cd.ids.coord$color <- pca.cd.ids.coord$salt
     }
-    
+
     # shaping
-    if(input$pca.shape.cd.ids=="k-means"){
+    if (input$pca.shape.cd.ids == "k-means") {
       pca.cd.ids.coord$shape <- factor(pca.cd.ids.coord$km)
-    } else if (input$pca.shape.cd.ids=="Topology"){
+    } else if (input$pca.shape.cd.ids == "Topology") {
       pca.cd.ids.coord$shape <- pca.cd.ids.coord$topo
-    } else if(input$pca.shape.cd.ids=="GBA"){
+    } else if (input$pca.shape.cd.ids == "GBA") {
       pca.cd.ids.coord$shape <- pca.cd.ids.coord$gba
-    } else if(input$pca.shape.cd.ids=="Tetrads"){
+    } else if (input$pca.shape.cd.ids == "Tetrads") {
       pca.cd.ids.coord$shape <- factor(pca.cd.ids.coord$tetrad)
-    } else if(input$pca.shape.cd.ids=="Tetrad combination"){
+    } else if (input$pca.shape.cd.ids == "Tetrad combination") {
       pca.cd.ids.coord$shape <- pca.cd.ids.coord$tetrad.id
-    } else if(input$pca.shape.cd.ids=="Loop progression"){
+    } else if (input$pca.shape.cd.ids == "Loop progression") {
       pca.cd.ids.coord$shape <- pca.cd.ids.coord$loop
-    } else if(input$pca.shape.cd.ids=="Tetrad handedness"){
+    } else if (input$pca.shape.cd.ids == "Tetrad handedness") {
       pca.cd.ids.coord$shape <- pca.cd.ids.coord$plus.minus
-    } else if(input$pca.shape.cd.ids=="Grooves"){
+    } else if (input$pca.shape.cd.ids == "Grooves") {
       pca.cd.ids.coord$shape <- pca.cd.ids.coord$groove
     } else {
       pca.cd.ids.coord$shape <- pca.cd.ids.coord$salt
     }
-    
-    p.pca.cd.ids.coord <- pca.cd.ids.coord %>% 
+
+    p.pca.cd.ids.coord <- pca.cd.ids.coord %>%
       ggplot(
         aes(
           x = Dim.1,
@@ -4762,20 +4756,20 @@ pca.ids.var.coord <- reactive({
           shape = shape
         )
       ) +
-      scale_shape_manual(values=c(0:15))
-    
-    if(isTRUE(input$pca.shape.cd.ids==input$pca.color.cd.ids)){
+      scale_shape_manual(values = c(0:15))
+
+    if (isTRUE(input$pca.shape.cd.ids == input$pca.color.cd.ids)) {
       p.pca.cd.ids.coord <- p.pca.cd.ids.coord +
         geom_polygon(
           data = . %>%
             group_by(color) %>%
-            filter(color != 'user') %>% 
+            filter(color != 'user') %>%
             slice(chull(Dim.1, Dim.2)),
           alpha = 0.25,
           show.legend = FALSE
         )
     }
-    
+
     p.pca.cd.ids.coord +
       geom_point(
         size = 6,
@@ -4803,27 +4797,26 @@ pca.ids.var.coord <- reactive({
         color = input$pca.color.cd.ids,
         fill = input$pca.color.cd.ids,
         shape = input$pca.shape.cd.ids
-      ) 
-  }) 
-  
+      )
+  })
+
   output$predict.cd.ids.coord.2 <- renderPlot({
-    
-    pca.cd.ids.coord <- cd.ids.predict.2() %>% 
+    pca.cd.ids.coord <- cd.ids.predict.2() %>%
       rbind(
         data.frame(pca.cd.ids()$ind$coord) %>%
           select(input$dim.cd.ids.2[1], input$dim.cd.ids.2[2]) %>%
           magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
-          cbind(training.cd.ids()) %>% 
-          add_column(km = pca.cd.ids.km()$cluster) %>% 
+          cbind(training.cd.ids()) %>%
+          add_column(km = pca.cd.ids.km()$cluster) %>%
           left_join(
-            ref.seq() %>% 
+            ref.seq() %>%
               select(oligo, topo, gba, salt),
             by = 'oligo'
-          ) 
+          )
       ) %>%
-      add_column(color = NA, shape = NA) %>% 
+      add_column(color = NA, shape = NA) %>%
       left_join(
-        ref.seq() %>% 
+        ref.seq() %>%
           select(oligo, tetrad, tetrad.id, loop, plus.minus, groove),
         by = "oligo"
       ) %>%
@@ -4835,50 +4828,50 @@ pca.ids.var.coord <- reactive({
         plus.minus = if_else(is.na(plus.minus), "user", plus.minus),
         groove = if_else(is.na(groove), "user", groove)
       )
-    
+
     # coloring
-    if(input$pca.color.cd.ids.2=="k-means"){
+    if (input$pca.color.cd.ids.2 == "k-means") {
       pca.cd.ids.coord$color <- factor(pca.cd.ids.coord$km)
-    } else if (input$pca.color.cd.ids.2=="Topology"){
+    } else if (input$pca.color.cd.ids.2 == "Topology") {
       pca.cd.ids.coord$color <- pca.cd.ids.coord$topo
-    } else if(input$pca.color.cd.ids.2=="GBA"){
+    } else if (input$pca.color.cd.ids.2 == "GBA") {
       pca.cd.ids.coord$color <- pca.cd.ids.coord$gba
-    } else if(input$pca.color.cd.ids.2=="Tetrads"){
+    } else if (input$pca.color.cd.ids.2 == "Tetrads") {
       pca.cd.ids.coord$color <- factor(pca.cd.ids.coord$tetrad)
-    } else if(input$pca.color.cd.ids.2=="Tetrad combination"){
+    } else if (input$pca.color.cd.ids.2 == "Tetrad combination") {
       pca.cd.ids.coord$color <- pca.cd.ids.coord$tetrad.id
-    } else if(input$pca.color.cd.ids.2=="Loop progression"){
+    } else if (input$pca.color.cd.ids.2 == "Loop progression") {
       pca.cd.ids.coord$color <- pca.cd.ids.coord$loop
-    } else if(input$pca.color.cd.ids.2=="Tetrad handedness"){
+    } else if (input$pca.color.cd.ids.2 == "Tetrad handedness") {
       pca.cd.ids.coord$color <- pca.cd.ids.coord$plus.minus
-    } else if(input$pca.color.cd.ids.2=="Grooves"){
+    } else if (input$pca.color.cd.ids.2 == "Grooves") {
       pca.cd.ids.coord$color <- pca.cd.ids.coord$groove
     } else {
       pca.cd.ids.coord$color <- pca.cd.ids.coord$salt
     }
-    
+
     # shaping
-    if(input$pca.shape.cd.ids.2=="k-means"){
+    if (input$pca.shape.cd.ids.2 == "k-means") {
       pca.cd.ids.coord$shape <- factor(pca.cd.ids.coord$km)
-    } else if (input$pca.shape.cd.ids.2=="Topology"){
+    } else if (input$pca.shape.cd.ids.2 == "Topology") {
       pca.cd.ids.coord$shape <- pca.cd.ids.coord$topo
-    } else if(input$pca.shape.cd.ids.2=="GBA"){
+    } else if (input$pca.shape.cd.ids.2 == "GBA") {
       pca.cd.ids.coord$shape <- pca.cd.ids.coord$gba
-    } else if(input$pca.shape.cd.ids.2=="Tetrads"){
+    } else if (input$pca.shape.cd.ids.2 == "Tetrads") {
       pca.cd.ids.coord$shape <- factor(pca.cd.ids.coord$tetrad)
-    } else if(input$pca.shape.cd.ids.2=="Tetrad combination"){
+    } else if (input$pca.shape.cd.ids.2 == "Tetrad combination") {
       pca.cd.ids.coord$shape <- pca.cd.ids.coord$tetrad.id
-    } else if(input$pca.shape.cd.ids.2=="Loop progression"){
+    } else if (input$pca.shape.cd.ids.2 == "Loop progression") {
       pca.cd.ids.coord$shape <- pca.cd.ids.coord$loop
-    } else if(input$pca.shape.cd.ids.2=="Tetrad handedness"){
+    } else if (input$pca.shape.cd.ids.2 == "Tetrad handedness") {
       pca.cd.ids.coord$shape <- pca.cd.ids.coord$plus.minus
-    } else if(input$pca.shape.cd.ids.2=="Grooves"){
+    } else if (input$pca.shape.cd.ids.2 == "Grooves") {
       pca.cd.ids.coord$shape <- pca.cd.ids.coord$groove
     } else {
       pca.cd.ids.coord$shape <- pca.cd.ids.coord$salt
     }
-    
-    p.pca.cd.ids.coord <- pca.cd.ids.coord %>% 
+
+    p.pca.cd.ids.coord <- pca.cd.ids.coord %>%
       ggplot(
         aes(
           x = Dim.1,
@@ -4888,20 +4881,20 @@ pca.ids.var.coord <- reactive({
           shape = shape
         )
       ) +
-      scale_shape_manual(values=c(0:15))
-    
-    if(isTRUE(input$pca.shape.cd.ids.2==input$pca.color.cd.ids.2)){
+      scale_shape_manual(values = c(0:15))
+
+    if (isTRUE(input$pca.shape.cd.ids.2 == input$pca.color.cd.ids.2)) {
       p.pca.cd.ids.coord <- p.pca.cd.ids.coord +
         geom_polygon(
           data = . %>%
             group_by(color) %>%
-            filter(color != 'user') %>% 
+            filter(color != 'user') %>%
             slice(chull(Dim.1, Dim.2)),
           alpha = 0.25,
           show.legend = FALSE
         )
     }
-    
+
     p.pca.cd.ids.coord +
       geom_point(
         size = 6,
@@ -4929,15 +4922,103 @@ pca.ids.var.coord <- reactive({
         color = input$pca.color.cd.ids.2,
         fill = input$pca.color.cd.ids.2,
         shape = input$pca.shape.cd.ids.2
-      ) 
-  }) 
-  
-  apply.theme <- observe({
-    if (isTRUE(input$apply.thematic)) {
-      thematic_on()
-    } else {
-      thematic_off()
-    }
+      )
   })
-  
+
+  user_oligos <- reactiveVal(
+    data.frame(
+      oligo = "Oligo 1",
+      seq = sample(
+        c("TTAGGG", "TTAGGC", "TTTAGGG", "TTGGG", "TTACAGG", "TGGG", "TATGGG"),
+        1
+      ),
+      stringsAsFactors = FALSE
+    ) %>%
+      mutate(
+        eps_260 = dt.spec.calcR(
+          input.contrib = dt.contributR(input.seq = seq),
+          input.wl = 260
+        )
+      )
+  )
+
+  # Render editable DataTable
+  output$spectra_user_input <- renderDT({
+    datatable(
+      user_oligos(),
+      colnames = c(
+        "Oligonucleotide",
+        "Sequence",
+        "&epsilon;<sub>260nm</sub> (M<sup>-1</sup>cm<sup>-1</sup>)"
+      ),
+      editable = TRUE,
+      escape = FALSE #HTML rendering
+    )
+  })
+
+  # Track user edits and update reactiveVal
+  observeEvent(input$spectra_user_input_cell_edit, {
+    info <- input$spectra_user_input_cell_edit
+    new_data <- user_oligos()
+    new_data[info$row, info$col] <- info$value # Use correct column index
+    user_oligos(new_data) # Update reactiveVal
+  })
+
+  # Add a new row when button is clicked
+  observeEvent(input$add_row, {
+    new_data <- user_oligos()
+    row_number <- nrow(new_data) + 1
+    new_row <- data.frame(
+      oligo = paste0("Oligo ", row_number),
+      seq = sample(
+        c("TTAGGG", "TTAGGC", "TTTAGGG", "TTGGG", "TTACAGG", "TGGG", "TATGGG"),
+        1
+      ),
+      stringsAsFactors = FALSE
+    ) %>%
+      mutate(
+        eps_260 = dt.spec.calcR(
+          input.contrib = dt.contributR(input.seq = seq),
+          input.wl = 260
+        )
+      )
+    user_oligos(rbind(new_data, new_row)) # Append new row
+  })
+
+  # Perform calculations based on updated data
+  user_oligos_calc <- reactive({
+    as.data.table(user_oligos()) %>%
+      group_by(oligo, seq) %>%
+      expand(wl = 220:310) %>%
+      mutate(
+        contrib = map(seq, dt.contributR),
+        eps = map2_dbl(wl, contrib, dt.spec.calcR)
+      )
+  })
+
+  # Render updated plot
+  output$p_user_oligos_calc <- renderPlot({
+    user_oligos_calc() %>%
+      ggplot(aes(x = wl, y = eps, color = oligo)) +
+      geom_vline(
+        xintercept = input$calc_wavelength,
+        color = 'pink',
+        linewidth = 0.75,
+        linetype = 'dashed',
+        inherit.aes = FALSE
+      ) +
+      geom_label_repel(
+        data = . %>% filter(wl == input$calc_wavelength),
+        aes(label = round(eps, 0), color = oligo),
+        size = 6,
+        fontface = "bold",
+        show.legend = FALSE
+      ) +
+      geom_line(linewidth = 0.8) +
+      labs(
+        x = bquote(lambda ~ (nm)),
+        y = bquote(epsilon ~ (M^-1 * cm^-1)),
+        color = "Oligonucleotide"
+      )
+  })
 })

@@ -12,6 +12,12 @@ library('shinydashboard')
 library('shinydashboardPlus')
 library('shinyWidgets')
 
+## Theming----
+library('thematic')
+library('fresh')
+library('bsicons')
+library('bslib')
+
 ## data display----
 library('ggrepel')
 library('ggdark')
@@ -25,14 +31,10 @@ library('FactoMineR')
 library('cluster')
 library('FactoInvestigate')
 
-## Theming----
-library('thematic')
-library('fresh')
-
 # sources----
 source('R/functions.R')
 source('R/theoretical spectra.R')
-source('ui.R')
+source('bsui.R')
 source('server.R')
 
 

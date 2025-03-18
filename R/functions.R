@@ -61,13 +61,13 @@ pca.plotR <- function(pca.data, dim.1 = input$dim.cd[1], dim.2 = input$dim.cd[1]
       legend.background = element_blank(),
       legend.box.background = element_blank(),
       legend.key = element_blank(),
-      legend.text = element_text(size = 18, color = 'white'),
-      legend.title = element_text(size = 22, color = 'white'),
-      axis.text = element_text(size = 18, color = 'white'),
-      axis.title = element_text(size = 22, color = 'white'),
-      strip.text = element_text(size = 20, color = 'white'),
-      axis.line = element_line(size = 0.75, color = 'white'),
-      axis.ticks = element_line(size = 0.75, color = 'white')
+      legend.text = element_text(size = 18),
+      legend.title = element_text(size = 22),
+      axis.text = element_text(size = 18),
+      axis.title = element_text(size = 22),
+      strip.text = element_text(size = 20),
+      axis.line = element_line(size = 0.75),
+      axis.ticks = element_line(size = 0.75)
     )  +
     labs(
       y = dim.2.cap,

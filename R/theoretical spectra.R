@@ -67,16 +67,16 @@ dt.spec.calcR <- function(input.wl, input.contrib){
 }
 
 
-# #Example----
-# 
+# # #Example----
+# # 
 # ##Example data----
 # oligo.table <- data.frame(
 #   oligo = rep(c("22AG", "24TTG"), 310-220+1),
 #   seq = rep(c("AGGGTTAGGGTTAGGGTTAGGG", "TTGGGTTAGGGTTAGGGTTAGGGA"), 310-220+1),
 #   wl = 220:310
 # )
-# 
-# 
+
+
 # ##Example calculation----
 # tic()
 # oligo.spec <- oligo.table %>%
@@ -85,10 +85,8 @@ dt.spec.calcR <- function(input.wl, input.contrib){
 #     eps = dt.spec.calcR(input.contrib = dt.contributR(input.seq = seq), input.wl = wl)
 #   )
 # toc()
-# 
-# 
+
+
 # ##Example plot----
 # ggplot(oligo.spec, aes(x = wl, y = eps, color = oligo)) +
 #   geom_line()
-
-
