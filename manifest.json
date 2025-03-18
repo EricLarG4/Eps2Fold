@@ -3780,7 +3780,7 @@
       "description": {
         "Package": "shinyWidgets",
         "Title": "Custom Inputs Widgets for Shiny",
-        "Version": "0.9.0.9000",
+        "Version": "0.9.0",
         "Authors@R": "c(\n  person(\"Victor\", \"Perrier\", email = \"victor.perrier@dreamrs.fr\", role = c(\"aut\", \"cre\", \"cph\")),\n  person(\"Fanny\", \"Meyer\", role = \"aut\"),\n  person(\"David\", \"Granjon\", role = \"aut\"),\n  person(\"Ian\", \"Fellows\", role = \"ctb\", comment = \"Methods for mutating vertical tabs & updateMultiInput\"),\n  person(\"Wil\", \"Davis\", role = \"ctb\", comment = \"numericRangeInput function\"),\n  person(\"Spencer\", \"Matthews\", role = \"ctb\", comment = \"autoNumeric methods\"),\n  person(family = \"JavaScript and CSS libraries authors\", role = c(\"ctb\", \"cph\"), comment = \"All authors are listed in LICENSE.md\")\n  )",
         "Description": "Collection of custom input controls and user interface components for 'Shiny' applications. \n  Give your applications a unique and colorful style !",
         "URL": "https://github.com/dreamRs/shinyWidgets,\nhttps://dreamrs.github.io/shinyWidgets/",
@@ -3799,6 +3799,37 @@
         "Repository": "CRAN",
         "Date/Publication": "2025-02-21 12:30:02 UTC",
         "Built": "R 4.4.3; ; 2025-03-17 03:59:31 UTC; windows"
+      }
+    },
+    "shinydashboard": {
+      "Source": "CRAN",
+      "Repository": "https://cran.rstudio.com",
+      "description": {
+        "Package": "shinydashboard",
+        "Title": "Create Dashboards with 'Shiny'",
+        "Version": "0.7.2",
+        "Authors@R": "c(\n    person(\"Winston\", \"Chang\", role = c(\"aut\", \"cre\"), email = \"winston@rstudio.com\"),\n    person(\"Barbara\", \"Borges Ribeiro\", role = \"aut\", email = \"barbara@rstudio.com\"),\n    person(family = \"RStudio\", role = \"cph\"),\n    person(family = \"Almasaeed Studio\", role = c(\"ctb\", \"cph\"), comment = \"AdminLTE theme for Bootstrap\"),\n    person(family = \"Adobe Systems Incorporated\", role = c(\"ctb\", \"cph\"), comment = \"Source Sans Pro font\")\n    )",
+        "Description": "Create dashboards with 'Shiny'. This package provides\n    a theme on top of 'Shiny', making it easy to create attractive dashboards.",
+        "URL": "http://rstudio.github.io/shinydashboard/",
+        "Depends": "R (>= 3.0)",
+        "License": "GPL (>= 2) | file LICENSE",
+        "Imports": "utils, shiny (>= 1.0.0), htmltools (>= 0.2.6), promises",
+        "BugReports": "https://github.com/rstudio/shinydashboard",
+        "RoxygenNote": "6.0.1.9000",
+        "NeedsCompilation": "no",
+        "Packaged": "2021-09-29 17:40:23 UTC; winston",
+        "Author": "Winston Chang [aut, cre],\n  Barbara Borges Ribeiro [aut],\n  RStudio [cph],\n  Almasaeed Studio [ctb, cph] (AdminLTE theme for Bootstrap),\n  Adobe Systems Incorporated [ctb, cph] (Source Sans Pro font)",
+        "Maintainer": "Winston Chang <winston@rstudio.com>",
+        "Repository": "CRAN",
+        "Date/Publication": "2021-09-30 12:10:06 UTC",
+        "Built": "R 4.4.3; ; 2025-03-17 03:59:43 UTC; windows",
+        "RemoteType": "standard",
+        "RemotePkgRef": "shinydashboard",
+        "RemoteRef": "shinydashboard",
+        "RemoteRepos": "https://cran.rstudio.com",
+        "RemoteReposName": "CRAN",
+        "RemotePkgPlatform": "x86_64-w64-mingw32",
+        "RemoteSha": "0.7.2"
       }
     },
     "sourcetools": {
@@ -4538,7 +4569,7 @@
       "checksum": "b0b7d43a9b96f712d77b1152ec2b1060"
     },
     "app.R": {
-      "checksum": "e96bc3c69dfb3db9ae9e22d93fe4b350"
+      "checksum": "fd98597ef6a817a840ea938732fbd7ea"
     },
     "app/scree.rdata": {
       "checksum": "e232e14d9d108cd9c37b397b5bb61b0b"

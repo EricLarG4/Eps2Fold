@@ -8,7 +8,7 @@ library('magrittr')
 
 ## shiny----
 library('shiny')
-# library('shinydashboard')
+library('shinydashboard')
 # library('shinydashboardPlus')
 library('shinyWidgets')
 
