@@ -3832,6 +3832,41 @@
         "RemoteSha": "0.7.2"
       }
     },
+    "shinydashboardPlus": {
+      "Source": "CRAN",
+      "Repository": "https://cran.rstudio.com",
+      "description": {
+        "Package": "shinydashboardPlus",
+        "Type": "Package",
+        "Title": "Add More 'AdminLTE2' Components to 'shinydashboard'",
+        "Version": "2.0.5",
+        "Authors@R": "c(\n  person(\"David\", \"Granjon\", email = \"dgranjon@ymail.com\", role = c(\"aut\", \"cre\")),\n  person(family = \"RinteRface\", role = \"cph\"),\n  person(family = \"Almasaeed Studio\", role = c(\"ctb\", \"cph\"), comment = \"AdminLTE2 theme for Bootstrap 3\"),\n  person(\"Guang\", \"Yang\", role = c(\"ctb\", \"cph\"), comment = \"ygdashboard original template\"),\n  person(\"Winston\", \"Chang\", role = c(\"ctb\", \"cph\"), comment = \"Functions from shinydashboard\"),\n  person(\"Victor\", \"Perrier\", email = \"victor.perrier@dreamrs.fr\", role = \"ctb\",\n          comment = \"improved the shinydashboardPlusGallery\"))",
+        "Maintainer": "David Granjon <dgranjon@ymail.com>",
+        "Description": "Extend 'shinydashboard' with 'AdminLTE2' components. \n             'AdminLTE2' is a free 'Bootstrap 3' dashboard template available\n             at <https://adminlte.io>. Customize boxes, add timelines and a lot more. ",
+        "License": "GPL (>= 2) | file LICENSE",
+        "Imports": "shiny, htmltools, shinydashboard, fresh, waiter (>= 0.2.3),\nlifecycle",
+        "Suggests": "styler (>= 1.2.0), shinyAce, shinyWidgets, shinyEffects,\nshinyjqui, knitr, rmarkdown, jsonlite, bslib",
+        "URL": "https://github.com/RinteRface/shinydashboardPlus,\nhttps://shinydashboardPlus.rinterface.com/",
+        "BugReports": "https://github.com/RinteRface/shinydashboardPlus/issues",
+        "Encoding": "UTF-8",
+        "RoxygenNote": "7.3.2",
+        "VignetteBuilder": "knitr",
+        "RdMacros": "lifecycle",
+        "NeedsCompilation": "no",
+        "Packaged": "2024-08-18 12:49:06 UTC; davidgranjon",
+        "Author": "David Granjon [aut, cre],\n  RinteRface [cph],\n  Almasaeed Studio [ctb, cph] (AdminLTE2 theme for Bootstrap 3),\n  Guang Yang [ctb, cph] (ygdashboard original template),\n  Winston Chang [ctb, cph] (Functions from shinydashboard),\n  Victor Perrier [ctb] (improved the shinydashboardPlusGallery)",
+        "Repository": "CRAN",
+        "Date/Publication": "2024-08-18 13:20:02 UTC",
+        "Built": "R 4.4.3; ; 2025-03-17 04:01:04 UTC; windows",
+        "RemoteType": "standard",
+        "RemotePkgRef": "shinydashboardPlus",
+        "RemoteRef": "shinydashboardPlus",
+        "RemoteRepos": "https://cran.rstudio.com",
+        "RemoteReposName": "CRAN",
+        "RemotePkgPlatform": "x86_64-w64-mingw32",
+        "RemoteSha": "2.0.5"
+      }
+    },
     "sourcetools": {
       "Source": "CRAN",
       "Repository": "https://cran.rstudio.com",
@@ -4420,6 +4455,40 @@
         "Archs": "x64"
       }
     },
+    "waiter": {
+      "Source": "CRAN",
+      "Repository": "https://cran.rstudio.com",
+      "description": {
+        "Package": "waiter",
+        "Title": "Loading Screen for 'Shiny'",
+        "Version": "0.2.5",
+        "Date": "2022-01-02",
+        "Authors@R": "c(\n    person(given = \"John\",\n           family = \"Coene\",\n           role = c(\"aut\", \"cre\"),\n           email = \"jcoenep@gmail.com\"),\n    person(given = \"Jinhwan\",\n           family = \"Kim\",\n           role = \"ctb\",\n           email = 'hwanistic@gmail.com'),\n    person(given = \"Victor\",\n           family = \"Granda\",\n           role = c(\"ctb\"),\n           email = \"victorgrandagarcia@gmail.com\",\n           comment = c(ORCID = \"0000-0002-0469-1991\")))",
+        "Description": "Full screen and partial loading screens for 'Shiny' with spinners, progress bars, and notifications.",
+        "License": "MIT + file LICENSE",
+        "URL": "https://waiter.john-coene.com/,\nhttps://github.com/JohnCoene/waiter",
+        "BugReports": "https://github.com/JohnCoene/waiter/issues",
+        "Encoding": "UTF-8",
+        "Imports": "R6, shiny, htmltools",
+        "RoxygenNote": "7.1.2",
+        "Suggests": "httr, knitr, packer, rmarkdown",
+        "VignetteBuilder": "knitr",
+        "NeedsCompilation": "no",
+        "Packaged": "2022-01-03 13:33:14 UTC; john",
+        "Author": "John Coene [aut, cre],\n  Jinhwan Kim [ctb],\n  Victor Granda [ctb] (<https://orcid.org/0000-0002-0469-1991>)",
+        "Maintainer": "John Coene <jcoenep@gmail.com>",
+        "Repository": "CRAN",
+        "Date/Publication": "2022-01-03 14:30:02 UTC",
+        "Built": "R 4.4.3; ; 2025-03-17 03:50:35 UTC; windows",
+        "RemoteType": "standard",
+        "RemotePkgRef": "waiter",
+        "RemoteRef": "waiter",
+        "RemoteRepos": "https://cran.rstudio.com",
+        "RemoteReposName": "CRAN",
+        "RemotePkgPlatform": "x86_64-w64-mingw32",
+        "RemoteSha": "0.2.5"
+      }
+    },
     "withr": {
       "Source": "CRAN",
       "Repository": "https://cran.rstudio.com",
@@ -4569,7 +4638,7 @@
       "checksum": "b0b7d43a9b96f712d77b1152ec2b1060"
     },
     "app.R": {
-      "checksum": "fd98597ef6a817a840ea938732fbd7ea"
+      "checksum": "cccde22bfdf338a5b5a5a2ea7008aedf"
     },
     "app/scree.rdata": {
       "checksum": "e232e14d9d108cd9c37b397b5bb61b0b"

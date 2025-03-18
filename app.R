@@ -9,7 +9,7 @@ library('magrittr')
 ## shiny----
 library('shiny')
 library('shinydashboard')
-# library('shinydashboardPlus')
+library('shinydashboardPlus')
 library('shinyWidgets')
 
 ## Theming----
