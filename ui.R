@@ -2,6 +2,7 @@ source('server.R')
 
 library(bslib)
 library(bsicons)
+library(DT)
 
 # thematic::thematic_shiny(font = "auto")
 
