@@ -1,5 +1,6 @@
 source('server.R')
 
+library(shiny)
 library(bslib)
 library(bsicons)
 library(DT)
@@ -45,7 +46,7 @@ link_template_user <- tags$a(
   download = NA # Optional, allows browsers to download instead of opening
 )
 
-bootstrapLib()  # Ensure Bootstrap resources are included
+shiny::bootstrapLib() # Ensure Bootstrap resources are included
 
 ui <- bslib::page_navbar(
   title = 'Eps2Fold',

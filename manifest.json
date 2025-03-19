@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "locale": "en_US",
+  "locale": "en_GB",
   "platform": "4.4.3",
   "metadata": {
     "appmode": "shiny",
@@ -39,7 +39,7 @@
         "Maintainer": "Kirill Müller <kirill@cynkra.com>",
         "Repository": "CRAN",
         "Date/Publication": "2024-06-02 21:50:02 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 02:23:38 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-16 01:52:34 UTC; windows"
       }
     },
     "DT": {
@@ -66,7 +66,7 @@
         "Maintainer": "Joe Cheng <joe@posit.co>",
         "Repository": "CRAN",
         "Date/Publication": "2024-04-04 05:03:17 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 03:59:28 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-02-25 03:40:48 UTC; windows"
       }
     },
     "Deriv": {
@@ -91,7 +91,7 @@
         "Maintainer": "Serguei Sokol <sokol@insa-toulouse.fr>",
         "Repository": "CRAN",
         "Date/Publication": "2024-09-13 10:30:02 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 02:22:44 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-30 01:42:44 UTC; windows"
       }
     },
     "FactoInvestigate": {
@@ -115,7 +115,14 @@
         "Packaged": "2023-11-27 14:36:00 UTC; husson",
         "Repository": "CRAN",
         "Date/Publication": "2023-11-27 19:20:25 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 05:17:16 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-02-25 04:54:35 UTC; windows",
+        "RemoteType": "standard",
+        "RemotePkgRef": "FactoInvestigate",
+        "RemoteRef": "FactoInvestigate",
+        "RemoteRepos": "https://cran.rstudio.com",
+        "RemoteReposName": "CRAN",
+        "RemotePkgPlatform": "x86_64-w64-mingw32",
+        "RemoteSha": "1.9"
       }
     },
     "FactoMineR": {
@@ -140,8 +147,15 @@
         "Packaged": "2024-04-19 14:46:13 UTC; husson",
         "Repository": "CRAN",
         "Date/Publication": "2024-04-20 08:42:41 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 05:15:46 UTC; windows",
-        "Archs": "x64"
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-02-25 04:53:55 UTC; windows",
+        "Archs": "x64",
+        "RemoteType": "standard",
+        "RemotePkgRef": "FactoMineR",
+        "RemoteRef": "FactoMineR",
+        "RemoteRepos": "https://cran.rstudio.com",
+        "RemoteReposName": "CRAN",
+        "RemotePkgPlatform": "x86_64-w64-mingw32",
+        "RemoteSha": "2.11"
       }
     },
     "Formula": {
@@ -253,7 +267,7 @@
         "Packaged": "2023-11-06 13:43:15 UTC; maechler",
         "Repository": "CRAN",
         "Date/Publication": "2023-11-06 14:30:02 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 03:22:45 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-30 02:42:25 UTC; windows"
       }
     },
     "R6": {
@@ -280,7 +294,7 @@
         "Maintainer": "Winston Chang <winston@posit.co>",
         "Repository": "CRAN",
         "Date/Publication": "2025-02-15 00:50:02 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 02:22:44 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-02-25 02:14:49 UTC; windows"
       }
     },
     "RColorBrewer": {
@@ -328,7 +342,7 @@
         "Maintainer": "Dirk Eddelbuettel <edd@debian.org>",
         "Repository": "CRAN",
         "Date/Publication": "2025-01-12 16:10:02 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 02:22:45 UTC; windows",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-16 00:51:34 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -358,7 +372,7 @@
         "Maintainer": "Dirk Eddelbuettel <edd@debian.org>",
         "Repository": "CRAN",
         "Date/Publication": "2024-08-24 06:30:02 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 03:10:36 UTC; windows",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-30 02:25:21 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -369,8 +383,8 @@
         "Package": "Rdpack",
         "Type": "Package",
         "Title": "Update and Manipulate Rd Documentation Objects",
-        "Version": "2.6.3",
-        "Authors@R": "c( person(given = c(\"Georgi\", \"N.\"),\n                     family = \"Boshnakov\", \n                     role = c(\"aut\", \"cre\"), \n                     email = \"georgi.boshnakov@manchester.ac.uk\",\n\t\t     comment = c(ORCID = \"0000-0003-2839-346X\")),\n\t      person(given = \"Duncan\", \n\t             family = \"Murdoch\", \n\t             role = \"ctb\", email = \"murdoch.duncan@gmail.com\") )",
+        "Version": "2.6.2",
+        "Authors@R": "c( person(given = c(\"Georgi\", \"N.\"),\n                     family = \"Boshnakov\", \n                     role = c(\"aut\", \"cre\"), \n                     email = \"georgi.boshnakov@manchester.ac.uk\"), \n\t      person(given = \"Duncan\", \n\t             family = \"Murdoch\", \n\t             role = \"ctb\", email = \"murdoch.duncan@gmail.com\") )",
         "Description": "Functions for manipulation of R documentation objects,\n    including functions reprompt() and ereprompt() for updating 'Rd'\n    documentation for functions, methods and classes; 'Rd' macros for\n    citations and import of references from 'bibtex' files for use in\n    'Rd' files and 'roxygen2' comments; 'Rd' macros for evaluating and\n    inserting snippets of 'R' code and the results of its evaluation or\n    creating graphics on the fly; and many functions for manipulation of\n    references and Rd files.",
         "URL": "https://geobosh.github.io/Rdpack/ (doc),\nhttps://github.com/GeoBosh/Rdpack (devel)",
         "BugReports": "https://github.com/GeoBosh/Rdpack/issues",
@@ -381,12 +395,12 @@
         "LazyLoad": "yes",
         "RoxygenNote": "7.1.1",
         "NeedsCompilation": "no",
-        "Packaged": "2025-03-15 09:50:53 UTC; georgi",
-        "Author": "Georgi N. Boshnakov [aut, cre]\n    (<https://orcid.org/0000-0003-2839-346X>),\n  Duncan Murdoch [ctb]",
+        "Packaged": "2024-11-15 10:40:54 UTC; georgi",
+        "Author": "Georgi N. Boshnakov [aut, cre],\n  Duncan Murdoch [ctb]",
         "Maintainer": "Georgi N. Boshnakov <georgi.boshnakov@manchester.ac.uk>",
         "Repository": "CRAN",
-        "Date/Publication": "2025-03-16 09:10:02 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 00:51:14 UTC; windows"
+        "Date/Publication": "2024-11-15 13:00:11 UTC",
+        "Built": "R 4.4.2; ; 2025-01-30 02:25:20 UTC; windows"
       }
     },
     "SparseM": {
@@ -410,7 +424,7 @@
         "Author": "Roger Koenker [cre, aut],\n  Pin Tian Ng [ctb] (Contributions to Sparse QR code),\n  Yousef Saad [ctb] (author of sparskit2),\n  Ben Shaby [ctb] (author of chol2csr),\n  Martin Maechler [ctb] (chol() tweaks; S4,\n    <https://orcid.org/0000-0002-8685-9910>)",
         "Repository": "CRAN",
         "Date/Publication": "2024-07-17 16:10:06 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 02:22:45 UTC; windows",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-30 01:42:44 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -460,7 +474,7 @@
         "Maintainer": "Jeroen Ooms <jeroenooms@gmail.com>",
         "Repository": "CRAN",
         "Date/Publication": "2024-10-04 07:20:03 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 03:10:37 UTC; windows",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-16 02:47:26 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -518,27 +532,28 @@
       "Repository": "https://cran.rstudio.com",
       "description": {
         "Package": "bit",
+        "Type": "Package",
         "Title": "Classes and Methods for Fast Memory-Efficient Boolean Selections",
-        "Version": "4.6.0",
-        "Authors@R": "c(\n    person(\"Michael\", \"Chirico\", email = \"MichaelChirico4@gmail.com\", role = c(\"aut\", \"cre\")),\n    person(\"Jens\", \"Oehlschlägel\", role = \"aut\"),\n    person(\"Brian\", \"Ripley\", role = \"ctb\")\n  )",
+        "Version": "4.5.0.1",
+        "Date": "2024-09-17",
+        "Authors@R": "c(person(given = \"Jens\",\n                      family = \"Oehlschlägel\",\n                      role = c(\"aut\", \"cre\"),\n                      email = \"Jens.Oehlschlaegel@truecluster.com\"),\n               person(given = \"Brian\",\n                      family = \"Ripley\",\n                      role = \"ctb\"))",
+        "Author": "Jens Oehlschlägel [aut, cre],\n  Brian Ripley [ctb]",
+        "Maintainer": "Jens Oehlschlägel <Jens.Oehlschlaegel@truecluster.com>",
         "Depends": "R (>= 3.4.0)",
-        "Suggests": "testthat (>= 3.0.0), roxygen2, knitr, markdown, rmarkdown,\nmicrobenchmark, bit64 (>= 4.0.0), ff (>= 4.0.0)",
+        "Suggests": "testthat (>= 0.11.0), roxygen2, knitr, markdown, rmarkdown,\nmicrobenchmark, bit64 (>= 4.0.0), ff (>= 4.0.0)",
         "Description": "Provided are classes for boolean and skewed boolean vectors,\n    fast boolean methods, fast unique and non-unique integer sorting,\n    fast set operations on sorted and unsorted sets of integers, and\n    foundations for ff (range index, compression, chunked processing).",
         "License": "GPL-2 | GPL-3",
         "LazyLoad": "yes",
         "ByteCompile": "yes",
         "Encoding": "UTF-8",
-        "URL": "https://github.com/r-lib/bit",
+        "URL": "https://github.com/truecluster/bit",
         "VignetteBuilder": "knitr, rmarkdown",
         "RoxygenNote": "7.3.2",
-        "Config/testthat/edition": "3",
         "NeedsCompilation": "yes",
-        "Packaged": "2025-03-05 07:18:45 UTC; michael",
-        "Author": "Michael Chirico [aut, cre],\n  Jens Oehlschlägel [aut],\n  Brian Ripley [ctb]",
-        "Maintainer": "Michael Chirico <MichaelChirico4@gmail.com>",
+        "Packaged": "2024-11-27 08:15:13 UTC; ripley",
         "Repository": "CRAN",
-        "Date/Publication": "2025-03-06 10:50:01 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 02:23:25 UTC; windows",
+        "Date/Publication": "2024-12-03 13:45:44 UTC",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-16 01:52:53 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -547,28 +562,28 @@
       "Repository": "https://cran.rstudio.com",
       "description": {
         "Package": "bit64",
+        "Type": "Package",
         "Title": "A S3 Class for Vectors of 64bit Integers",
-        "Version": "4.6.0-1",
-        "Authors@R": "c(\n    person(\"Michael\", \"Chirico\", email = \"michaelchirico4@gmail.com\", role = c(\"aut\", \"cre\")),\n    person(\"Jens\", \"Oehlschlägel\", role = \"aut\"),\n    person(\"Leonardo\", \"Silvestri\", role = \"ctb\"),\n    person(\"Ofek\", \"Shilon\", role = \"ctb\")\n  )",
-        "Depends": "R (>= 3.4.0), bit (>= 4.0.0)",
-        "Description": "\n  Package 'bit64' provides serializable S3 atomic 64bit (signed) integers.\n  These are useful for handling database keys and exact counting in +-2^63.\n  WARNING: do not use them as replacement for 32bit integers, integer64 are not\n  supported for subscripting by R-core and they have different semantics when\n  combined with double, e.g. integer64 + double => integer64.\n  Class integer64 can be used in vectors, matrices, arrays and data.frames.\n  Methods are available for coercion from and to logicals, integers, doubles,\n  characters and factors as well as many elementwise and summary functions.\n  Many fast algorithmic operations such as 'match' and 'order' support inter-\n  active data exploration and manipulation and optionally leverage caching.",
+        "Version": "4.5.2",
+        "Date": "2024-09-22",
+        "Authors@R": "c(person(given = \"Jens\",\n                      family = \"Oehlschlägel\",\n                      role = c(\"aut\", \"cre\"),\n                      email = \"Jens.Oehlschlaegel@truecluster.com\"),\n               person(given = \"Leonardo\",\n                      family = \"Silvestri\",\n                      role = \"ctb\"),\n               person(given = \"Ofek\",\n                      family = \"Shilon\",\n                      role = \"ctb\")\n                      )",
+        "Author": "Jens Oehlschlägel [aut, cre],\n  Leonardo Silvestri [ctb],\n  Ofek Shilon [ctb]",
+        "Maintainer": "Jens Oehlschlägel <Jens.Oehlschlaegel@truecluster.com>",
+        "Depends": "R (>= 3.0.1), bit (>= 4.0.0), utils, methods, stats",
+        "Description": "\n Package 'bit64' provides serializable S3 atomic 64bit (signed) integers. \n These are useful for handling database keys and exact counting in +-2^63.\n WARNING: do not use them as replacement for 32bit integers, integer64 are not\n supported for subscripting by R-core and they have different semantics when \n combined with double, e.g. integer64 + double => integer64. \n Class integer64 can be used in vectors, matrices, arrays and data.frames. \n Methods are available for coercion from and to logicals, integers, doubles, \n characters and factors as well as many elementwise and summary functions. \n Many fast algorithmic operations such as 'match' and 'order' support inter-\n active data exploration and manipulation and optionally leverage caching.",
         "License": "GPL-2 | GPL-3",
         "LazyLoad": "yes",
         "ByteCompile": "yes",
-        "URL": "https://github.com/r-lib/bit64",
+        "URL": "https://github.com/truecluster/bit64",
         "Encoding": "UTF-8",
-        "Imports": "graphics, methods, stats, utils",
-        "Suggests": "testthat (>= 3.0.3), withr",
-        "Config/testthat/edition": "3",
-        "Config/needs/development": "testthat",
-        "RoxygenNote": "7.3.2",
-        "NeedsCompilation": "yes",
-        "Packaged": "2025-01-16 14:04:20 UTC; michael",
-        "Author": "Michael Chirico [aut, cre],\n  Jens Oehlschlägel [aut],\n  Leonardo Silvestri [ctb],\n  Ofek Shilon [ctb]",
-        "Maintainer": "Michael Chirico <michaelchirico4@gmail.com>",
         "Repository": "CRAN",
-        "Date/Publication": "2025-01-16 16:00:07 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 03:10:37 UTC; windows",
+        "Repository/R-Forge/Project": "ff",
+        "Repository/R-Forge/Revision": "177",
+        "Repository/R-Forge/DateTimeStamp": "2018-08-17 17:45:18",
+        "Date/Publication": "2024-09-22 13:50:02 UTC",
+        "NeedsCompilation": "yes",
+        "Packaged": "2024-09-21 22:05:07 UTC; jo",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-16 02:47:27 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -597,7 +612,7 @@
         "Maintainer": "Kirill Müller <kirill@cynkra.com>",
         "Repository": "CRAN",
         "Date/Publication": "2023-03-17 12:00:06 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 03:39:33 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-16 03:12:19 UTC; windows"
       }
     },
     "boot": {
@@ -654,7 +669,7 @@
         "Maintainer": "Simon Couch <simon.couch@posit.co>",
         "Repository": "CRAN",
         "Date/Publication": "2024-09-26 21:00:13 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 04:38:30 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-16 04:20:18 UTC; windows"
       }
     },
     "bsicons": {
@@ -681,7 +696,7 @@
         "Maintainer": "Carson Sievert <carson@posit.co>",
         "Repository": "CRAN",
         "Date/Publication": "2023-11-04 00:30:05 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 03:11:34 UTC; windows"
+        "Built": "R 4.4.3; ; 2025-03-13 02:19:46 UTC; windows"
       }
     },
     "bslib": {
@@ -714,7 +729,7 @@
         "Maintainer": "Carson Sievert <carson@posit.co>",
         "Repository": "CRAN",
         "Date/Publication": "2025-01-30 23:20:02 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 03:39:26 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-02-25 03:20:03 UTC; windows"
       }
     },
     "cachem": {
@@ -741,7 +756,7 @@
         "Maintainer": "Winston Chang <winston@posit.co>",
         "Repository": "CRAN",
         "Date/Publication": "2024-05-16 09:50:11 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 03:10:33 UTC; windows",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-16 02:47:26 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -771,7 +786,7 @@
         "Maintainer": "Gábor Csárdi <csardi.gabor@gmail.com>",
         "Repository": "CRAN",
         "Date/Publication": "2024-03-25 13:30:06 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 03:22:52 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-16 02:54:39 UTC; windows"
       }
     },
     "car": {
@@ -798,7 +813,7 @@
         "Maintainer": "John Fox <jfox@mcmaster.ca>",
         "Repository": "CRAN",
         "Date/Publication": "2024-09-27 05:10:03 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 05:14:34 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-30 04:41:12 UTC; windows"
       }
     },
     "carData": {
@@ -826,7 +841,7 @@
         "Date/Publication": "2022-01-06 00:20:07 UTC",
         "NeedsCompilation": "no",
         "Packaged": "2022-01-05 19:48:10 UTC; rforge",
-        "Built": "R 4.4.3; ; 2025-03-17 02:22:45 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-30 01:42:45 UTC; windows"
       }
     },
     "cellranger": {
@@ -853,7 +868,7 @@
         "Maintainer": "Jennifer Bryan <jenny@stat.ubc.ca>",
         "Repository": "CRAN",
         "Date/Publication": "2016-07-27 03:17:48",
-        "Built": "R 4.4.3; ; 2025-03-17 03:59:18 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-16 03:35:04 UTC; windows"
       }
     },
     "cli": {
@@ -862,26 +877,26 @@
       "description": {
         "Package": "cli",
         "Title": "Helpers for Developing Command Line Interfaces",
-        "Version": "3.6.4",
-        "Authors@R": "c(\n    person(\"Gábor\", \"Csárdi\", , \"gabor@posit.co\", role = c(\"aut\", \"cre\")),\n    person(\"Hadley\", \"Wickham\", role = \"ctb\"),\n    person(\"Kirill\", \"Müller\", role = \"ctb\"),\n    person(\"Salim\", \"Brüggemann\", , \"salim-b@pm.me\", role = \"ctb\",\n           comment = c(ORCID = \"0000-0002-5329-5987\")),\n    person(\"Posit Software, PBC\", role = c(\"cph\", \"fnd\"))\n  )",
+        "Version": "3.6.3",
+        "Authors@R": "c(\n    person(\"Gábor\", \"Csárdi\", , \"csardi.gabor@gmail.com\", role = c(\"aut\", \"cre\")),\n    person(\"Hadley\", \"Wickham\", role = \"ctb\"),\n    person(\"Kirill\", \"Müller\", role = \"ctb\"),\n    person(\"Salim\", \"Brüggemann\", , \"salim-b@pm.me\", role = \"ctb\",\n           comment = c(ORCID = \"0000-0002-5329-5987\")),\n    person(\"Posit Software, PBC\", role = c(\"cph\", \"fnd\"))\n  )",
         "Description": "A suite of tools to build attractive command line interfaces\n    ('CLIs'), from semantic elements: headings, lists, alerts, paragraphs,\n    etc. Supports custom themes via a 'CSS'-like language. It also\n    contains a number of lower level 'CLI' elements: rules, boxes, trees,\n    and 'Unicode' symbols with 'ASCII' alternatives. It support ANSI\n    colors and text styles as well.",
         "License": "MIT + file LICENSE",
         "URL": "https://cli.r-lib.org, https://github.com/r-lib/cli",
         "BugReports": "https://github.com/r-lib/cli/issues",
         "Depends": "R (>= 3.4)",
         "Imports": "utils",
-        "Suggests": "callr, covr, crayon, digest, glue (>= 1.6.0), grDevices,\nhtmltools, htmlwidgets, knitr, methods, processx, ps (>=\n1.3.4.9000), rlang (>= 1.0.2.9003), rmarkdown, rprojroot,\nrstudioapi, testthat (>= 3.2.0), tibble, whoami, withr",
+        "Suggests": "callr, covr, crayon, digest, glue (>= 1.6.0), grDevices,\nhtmltools, htmlwidgets, knitr, methods, mockery, processx, ps\n(>= 1.3.4.9000), rlang (>= 1.0.2.9003), rmarkdown, rprojroot,\nrstudioapi, testthat, tibble, whoami, withr",
         "Config/Needs/website": "r-lib/asciicast, bench, brio, cpp11, decor, desc,\nfansi, prettyunits, sessioninfo, tidyverse/tidytemplate,\nusethis, vctrs",
         "Config/testthat/edition": "3",
         "Encoding": "UTF-8",
-        "RoxygenNote": "7.3.2",
+        "RoxygenNote": "7.2.3",
         "NeedsCompilation": "yes",
-        "Packaged": "2025-02-11 21:14:07 UTC; gaborcsardi",
+        "Packaged": "2024-06-21 17:24:00 UTC; gaborcsardi",
         "Author": "Gábor Csárdi [aut, cre],\n  Hadley Wickham [ctb],\n  Kirill Müller [ctb],\n  Salim Brüggemann [ctb] (<https://orcid.org/0000-0002-5329-5987>),\n  Posit Software, PBC [cph, fnd]",
-        "Maintainer": "Gábor Csárdi <gabor@posit.co>",
+        "Maintainer": "Gábor Csárdi <csardi.gabor@gmail.com>",
         "Repository": "CRAN",
-        "Date/Publication": "2025-02-13 05:20:02 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 02:22:42 UTC; windows",
+        "Date/Publication": "2024-06-21 21:00:07 UTC",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-16 01:52:16 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -911,7 +926,7 @@
         "Maintainer": "Matthew Lincoln <matthew.d.lincoln@gmail.com>",
         "Repository": "CRAN",
         "Date/Publication": "2022-02-22 00:58:45 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 02:22:58 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-16 01:52:51 UTC; windows"
       }
     },
     "cluster": {
@@ -974,7 +989,7 @@
         "Maintainer": "Achim Zeileis <Achim.Zeileis@R-project.org>",
         "Repository": "CRAN",
         "Date/Publication": "2024-07-26 17:10:02 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 02:22:45 UTC; windows",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-16 01:52:16 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -1001,7 +1016,7 @@
         "Maintainer": "Jeroen Ooms <jeroenooms@gmail.com>",
         "Repository": "CRAN",
         "Date/Publication": "2024-10-04 12:40:06 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 02:22:45 UTC; windows",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-16 01:52:58 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -1030,7 +1045,7 @@
         "Maintainer": "Hadley Wickham <hadley@rstudio.com>",
         "Repository": "CRAN",
         "Date/Publication": "2023-02-01 08:20:06 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 03:23:06 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-16 02:54:52 UTC; windows"
       }
     },
     "cowplot": {
@@ -1058,7 +1073,7 @@
         "Maintainer": "Claus O. Wilke <wilke@austin.utexas.edu>",
         "Repository": "CRAN",
         "Date/Publication": "2024-01-22 23:22:51 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 04:20:22 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-30 03:44:29 UTC; windows"
       }
     },
     "cpp11": {
@@ -1067,7 +1082,7 @@
       "description": {
         "Package": "cpp11",
         "Title": "A C++11 Interface for R's C Interface",
-        "Version": "0.5.2",
+        "Version": "0.5.1",
         "Authors@R": "\n    c(\n      person(\"Davis\", \"Vaughan\", email = \"davis@posit.co\", role = c(\"aut\", \"cre\"), comment = c(ORCID = \"0000-0003-4777-038X\")),\n      person(\"Jim\",\"Hester\", role = \"aut\", comment = c(ORCID = \"0000-0002-2739-7082\")),\n      person(\"Romain\", \"François\", role = \"aut\", comment = c(ORCID = \"0000-0002-2444-4226\")),\n      person(\"Benjamin\", \"Kietzman\", role = \"ctb\"),\n      person(\"Posit Software, PBC\", role = c(\"cph\", \"fnd\"))\n    )",
         "Description": "Provides a header only, C++11 interface to R's C\n    interface.  Compared to other approaches 'cpp11' strives to be safe\n    against long jumps from the C API as well as C++ exceptions, conform\n    to normal R function semantics and supports interaction with 'ALTREP'\n    vectors.",
         "License": "MIT + file LICENSE",
@@ -1082,12 +1097,12 @@
         "Encoding": "UTF-8",
         "RoxygenNote": "7.3.2",
         "NeedsCompilation": "no",
-        "Packaged": "2025-03-03 22:24:28 UTC; davis",
+        "Packaged": "2024-12-04 14:25:58 UTC; davis",
         "Author": "Davis Vaughan [aut, cre] (<https://orcid.org/0000-0003-4777-038X>),\n  Jim Hester [aut] (<https://orcid.org/0000-0002-2739-7082>),\n  Romain François [aut] (<https://orcid.org/0000-0002-2444-4226>),\n  Benjamin Kietzman [ctb],\n  Posit Software, PBC [cph, fnd]",
         "Maintainer": "Davis Vaughan <davis@posit.co>",
         "Repository": "CRAN",
-        "Date/Publication": "2025-03-03 23:20:02 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 02:22:43 UTC; windows"
+        "Date/Publication": "2024-12-04 15:40:02 UTC",
+        "Built": "R 4.4.2; ; 2025-01-16 01:52:14 UTC; windows"
       }
     },
     "crayon": {
@@ -1114,7 +1129,7 @@
         "Maintainer": "Gábor Csárdi <csardi.gabor@gmail.com>",
         "Repository": "CRAN",
         "Date/Publication": "2024-06-20 13:00:02 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 02:22:45 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-16 01:52:15 UTC; windows"
       }
     },
     "crosstalk": {
@@ -1140,7 +1155,7 @@
         "Maintainer": "Carson Sievert <carson@posit.co>",
         "Repository": "CRAN",
         "Date/Publication": "2023-11-23 08:50:07 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 03:23:01 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-25 03:09:42 UTC; windows"
       }
     },
     "curl": {
@@ -1150,7 +1165,7 @@
         "Package": "curl",
         "Type": "Package",
         "Title": "A Modern and Flexible Web Client for R",
-        "Version": "6.2.1",
+        "Version": "6.1.0",
         "Authors@R": "c(\n    person(\"Jeroen\", \"Ooms\", role = c(\"aut\", \"cre\"), email = \"jeroenooms@gmail.com\",\n      comment = c(ORCID = \"0000-0002-4035-0289\")),\n    person(\"Hadley\", \"Wickham\", role = \"ctb\"),\n    person(\"Posit Software, PBC\", role = \"cph\"))",
         "Description": "Bindings to 'libcurl' <https://curl.se/libcurl/> for performing fully\n    configurable HTTP/FTP requests where responses can be processed in memory, on\n    disk, or streaming via the callback or connection interfaces. Some knowledge\n    of 'libcurl' is recommended; for a more-user-friendly web client see the \n    'httr2' package which builds on this package with http specific tools and logic.",
         "License": "MIT + file LICENSE",
@@ -1164,12 +1179,12 @@
         "Encoding": "UTF-8",
         "Language": "en-US",
         "NeedsCompilation": "yes",
-        "Packaged": "2025-02-18 18:23:19 UTC; jeroen",
+        "Packaged": "2024-12-22 11:16:23 UTC; jeroen",
         "Author": "Jeroen Ooms [aut, cre] (<https://orcid.org/0000-0002-4035-0289>),\n  Hadley Wickham [ctb],\n  Posit Software, PBC [cph]",
         "Maintainer": "Jeroen Ooms <jeroenooms@gmail.com>",
         "Repository": "CRAN",
-        "Date/Publication": "2025-02-19 06:00:02 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 02:22:54 UTC; windows",
+        "Date/Publication": "2025-01-06 15:30:02 UTC",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-16 01:52:27 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -1178,7 +1193,7 @@
       "Repository": "https://cran.rstudio.com",
       "description": {
         "Package": "data.table",
-        "Version": "1.17.0",
+        "Version": "1.16.4",
         "Title": "Extension of `data.frame`",
         "Depends": "R (>= 3.3.0)",
         "Imports": "methods",
@@ -1190,14 +1205,14 @@
         "VignetteBuilder": "knitr",
         "Encoding": "UTF-8",
         "ByteCompile": "TRUE",
-        "Authors@R": "c(\n  person(\"Tyson\",\"Barrett\",        role=c(\"aut\",\"cre\"), email=\"t.barrett88@gmail.com\", comment = c(ORCID=\"0000-0002-2137-1391\")),\n  person(\"Matt\",\"Dowle\",           role=\"aut\",          email=\"mattjdowle@gmail.com\"),\n  person(\"Arun\",\"Srinivasan\",      role=\"aut\",          email=\"asrini@pm.me\"),\n  person(\"Jan\",\"Gorecki\",          role=\"aut\"),\n  person(\"Michael\",\"Chirico\",      role=\"aut\", comment = c(ORCID=\"0000-0003-0787-087X\")),\n  person(\"Toby\",\"Hocking\",         role=\"aut\", comment = c(ORCID=\"0000-0002-3146-0865\")),\n  person(\"Benjamin\",\"Schwendinger\",role=\"aut\", comment = c(ORCID=\"0000-0003-3315-8114\")),\n  person(\"Ivan\", \"Krylov\",         role=\"aut\",          email=\"ikrylov@disroot.org\",   comment = c(ORCID=\"0000-0002-0172-3812\")),\n  person(\"Pasha\",\"Stetsenko\",      role=\"ctb\"),\n  person(\"Tom\",\"Short\",            role=\"ctb\"),\n  person(\"Steve\",\"Lianoglou\",      role=\"ctb\"),\n  person(\"Eduard\",\"Antonyan\",      role=\"ctb\"),\n  person(\"Markus\",\"Bonsch\",        role=\"ctb\"),\n  person(\"Hugh\",\"Parsonage\",       role=\"ctb\"),\n  person(\"Scott\",\"Ritchie\",        role=\"ctb\"),\n  person(\"Kun\",\"Ren\",              role=\"ctb\"),\n  person(\"Xianying\",\"Tan\",         role=\"ctb\"),\n  person(\"Rick\",\"Saporta\",         role=\"ctb\"),\n  person(\"Otto\",\"Seiskari\",        role=\"ctb\"),\n  person(\"Xianghui\",\"Dong\",        role=\"ctb\"),\n  person(\"Michel\",\"Lang\",          role=\"ctb\"),\n  person(\"Watal\",\"Iwasaki\",        role=\"ctb\"),\n  person(\"Seth\",\"Wenchel\",         role=\"ctb\"),\n  person(\"Karl\",\"Broman\",          role=\"ctb\"),\n  person(\"Tobias\",\"Schmidt\",       role=\"ctb\"),\n  person(\"David\",\"Arenburg\",       role=\"ctb\"),\n  person(\"Ethan\",\"Smith\",          role=\"ctb\"),\n  person(\"Francois\",\"Cocquemas\",   role=\"ctb\"),\n  person(\"Matthieu\",\"Gomez\",       role=\"ctb\"),\n  person(\"Philippe\",\"Chataignon\",  role=\"ctb\"),\n  person(\"Nello\",\"Blaser\",         role=\"ctb\"),\n  person(\"Dmitry\",\"Selivanov\",     role=\"ctb\"),\n  person(\"Andrey\",\"Riabushenko\",   role=\"ctb\"),\n  person(\"Cheng\",\"Lee\",            role=\"ctb\"),\n  person(\"Declan\",\"Groves\",        role=\"ctb\"),\n  person(\"Daniel\",\"Possenriede\",   role=\"ctb\"),\n  person(\"Felipe\",\"Parages\",       role=\"ctb\"),\n  person(\"Denes\",\"Toth\",           role=\"ctb\"),\n  person(\"Mus\",\"Yaramaz-David\",    role=\"ctb\"),\n  person(\"Ayappan\",\"Perumal\",      role=\"ctb\"),\n  person(\"James\",\"Sams\",           role=\"ctb\"),\n  person(\"Martin\",\"Morgan\",        role=\"ctb\"),\n  person(\"Michael\",\"Quinn\",        role=\"ctb\"),\n  person(\"@javrucebo\",\"\",          role=\"ctb\"),\n  person(\"@marc-outins\",\"\",        role=\"ctb\"),\n  person(\"Roy\",\"Storey\",           role=\"ctb\"),\n  person(\"Manish\",\"Saraswat\",      role=\"ctb\"),\n  person(\"Morgan\",\"Jacob\",         role=\"ctb\"),\n  person(\"Michael\",\"Schubmehl\",    role=\"ctb\"),\n  person(\"Davis\",\"Vaughan\",        role=\"ctb\"),\n  person(\"Leonardo\",\"Silvestri\",   role=\"ctb\"),\n  person(\"Jim\",\"Hester\",           role=\"ctb\"),\n  person(\"Anthony\",\"Damico\",       role=\"ctb\"),\n  person(\"Sebastian\",\"Freundt\",    role=\"ctb\"),\n  person(\"David\",\"Simons\",         role=\"ctb\"),\n  person(\"Elliott\",\"Sales de Andrade\", role=\"ctb\"),\n  person(\"Cole\",\"Miller\",          role=\"ctb\"),\n  person(\"Jens Peder\",\"Meldgaard\", role=\"ctb\"),\n  person(\"Vaclav\",\"Tlapak\",        role=\"ctb\"),\n  person(\"Kevin\",\"Ushey\",          role=\"ctb\"),\n  person(\"Dirk\",\"Eddelbuettel\",    role=\"ctb\"),\n  person(\"Tony\",\"Fischetti\",       role=\"ctb\"),\n  person(\"Ofek\",\"Shilon\",          role=\"ctb\"),\n  person(\"Vadim\",\"Khotilovich\",    role=\"ctb\"),\n  person(\"Hadley\",\"Wickham\",       role=\"ctb\"),\n  person(\"Bennet\",\"Becker\",        role=\"ctb\"),\n  person(\"Kyle\",\"Haynes\",          role=\"ctb\"),\n  person(\"Boniface Christian\",\"Kamgang\", role=\"ctb\"),\n  person(\"Olivier\",\"Delmarcell\",   role=\"ctb\"),\n  person(\"Josh\",\"O'Brien\",         role=\"ctb\"),\n  person(\"Dereck\",\"de Mezquita\",   role=\"ctb\"),\n  person(\"Michael\",\"Czekanski\",    role=\"ctb\"),\n  person(\"Dmitry\", \"Shemetov\",     role=\"ctb\"),\n  person(\"Nitish\", \"Jha\",          role=\"ctb\"),\n  person(\"Joshua\", \"Wu\",           role=\"ctb\"),\n  person(\"Iago\", \"Giné-Vázquez\",   role=\"ctb\"),\n  person(\"Anirban\", \"Chetia\",      role=\"ctb\"),\n  person(\"Doris\", \"Amoakohene\",    role=\"ctb\"),\n  person(\"Angel\", \"Feliz\",         role=\"ctb\"),\n  person(\"Michael\",\"Young\",        role=\"ctb\"),\n  person(\"Mark\", \"Seeto\",          role=\"ctb\"),\n  person(\"Philippe\", \"Grosjean\",   role=\"ctb\"),\n  person(\"Vincent\", \"Runge\",       role=\"ctb\"),\n  person(\"Christian\", \"Wia\",       role=\"ctb\"),\n  person(\"Elise\", \"Maigné\",        role=\"ctb\"),\n  person(\"Vincent\", \"Rocher\",      role=\"ctb\"),\n  person(\"Vijay\", \"Lulla\",         role=\"ctb\"),\n  person(\"Aljaž\", \"Sluga\",         role=\"ctb\"),\n  person(\"Bill\", \"Evans\",          role=\"ctb\")\n  )",
+        "Authors@R": "c(\n  person(\"Tyson\",\"Barrett\",        role=c(\"aut\",\"cre\"), email=\"t.barrett88@gmail.com\", comment = c(ORCID=\"0000-0002-2137-1391\")),\n  person(\"Matt\",\"Dowle\",           role=\"aut\",          email=\"mattjdowle@gmail.com\"),\n  person(\"Arun\",\"Srinivasan\",      role=\"aut\",          email=\"asrini@pm.me\"),\n  person(\"Jan\",\"Gorecki\",          role=\"aut\"),\n  person(\"Michael\",\"Chirico\",      role=\"aut\", comment = c(ORCID=\"0000-0003-0787-087X\")),\n  person(\"Toby\",\"Hocking\",         role=\"aut\", comment = c(ORCID=\"0000-0002-3146-0865\")),\n  person(\"Benjamin\",\"Schwendinger\",role=\"aut\", comment = c(ORCID=\"0000-0003-3315-8114\")),\n  person(\"Pasha\",\"Stetsenko\",      role=\"ctb\"),\n  person(\"Tom\",\"Short\",            role=\"ctb\"),\n  person(\"Steve\",\"Lianoglou\",      role=\"ctb\"),\n  person(\"Eduard\",\"Antonyan\",      role=\"ctb\"),\n  person(\"Markus\",\"Bonsch\",        role=\"ctb\"),\n  person(\"Hugh\",\"Parsonage\",       role=\"ctb\"),\n  person(\"Scott\",\"Ritchie\",        role=\"ctb\"),\n  person(\"Kun\",\"Ren\",              role=\"ctb\"),\n  person(\"Xianying\",\"Tan\",         role=\"ctb\"),\n  person(\"Rick\",\"Saporta\",         role=\"ctb\"),\n  person(\"Otto\",\"Seiskari\",        role=\"ctb\"),\n  person(\"Xianghui\",\"Dong\",        role=\"ctb\"),\n  person(\"Michel\",\"Lang\",          role=\"ctb\"),\n  person(\"Watal\",\"Iwasaki\",        role=\"ctb\"),\n  person(\"Seth\",\"Wenchel\",         role=\"ctb\"),\n  person(\"Karl\",\"Broman\",          role=\"ctb\"),\n  person(\"Tobias\",\"Schmidt\",       role=\"ctb\"),\n  person(\"David\",\"Arenburg\",       role=\"ctb\"),\n  person(\"Ethan\",\"Smith\",          role=\"ctb\"),\n  person(\"Francois\",\"Cocquemas\",   role=\"ctb\"),\n  person(\"Matthieu\",\"Gomez\",       role=\"ctb\"),\n  person(\"Philippe\",\"Chataignon\",  role=\"ctb\"),\n  person(\"Nello\",\"Blaser\",         role=\"ctb\"),\n  person(\"Dmitry\",\"Selivanov\",     role=\"ctb\"),\n  person(\"Andrey\",\"Riabushenko\",   role=\"ctb\"),\n  person(\"Cheng\",\"Lee\",            role=\"ctb\"),\n  person(\"Declan\",\"Groves\",        role=\"ctb\"),\n  person(\"Daniel\",\"Possenriede\",   role=\"ctb\"),\n  person(\"Felipe\",\"Parages\",       role=\"ctb\"),\n  person(\"Denes\",\"Toth\",           role=\"ctb\"),\n  person(\"Mus\",\"Yaramaz-David\",    role=\"ctb\"),\n  person(\"Ayappan\",\"Perumal\",      role=\"ctb\"),\n  person(\"James\",\"Sams\",           role=\"ctb\"),\n  person(\"Martin\",\"Morgan\",        role=\"ctb\"),\n  person(\"Michael\",\"Quinn\",        role=\"ctb\"),\n  person(\"@javrucebo\",\"\",          role=\"ctb\"),\n  person(\"@marc-outins\",\"\",        role=\"ctb\"),\n  person(\"Roy\",\"Storey\",           role=\"ctb\"),\n  person(\"Manish\",\"Saraswat\",      role=\"ctb\"),\n  person(\"Morgan\",\"Jacob\",         role=\"ctb\"),\n  person(\"Michael\",\"Schubmehl\",    role=\"ctb\"),\n  person(\"Davis\",\"Vaughan\",        role=\"ctb\"),\n  person(\"Leonardo\",\"Silvestri\",   role=\"ctb\"),\n  person(\"Jim\",\"Hester\",           role=\"ctb\"),\n  person(\"Anthony\",\"Damico\",       role=\"ctb\"),\n  person(\"Sebastian\",\"Freundt\",    role=\"ctb\"),\n  person(\"David\",\"Simons\",         role=\"ctb\"),\n  person(\"Elliott\",\"Sales de Andrade\", role=\"ctb\"),\n  person(\"Cole\",\"Miller\",          role=\"ctb\"),\n  person(\"Jens Peder\",\"Meldgaard\", role=\"ctb\"),\n  person(\"Vaclav\",\"Tlapak\",        role=\"ctb\"),\n  person(\"Kevin\",\"Ushey\",          role=\"ctb\"),\n  person(\"Dirk\",\"Eddelbuettel\",    role=\"ctb\"),\n  person(\"Tony\",\"Fischetti\",       role=\"ctb\"),\n  person(\"Ofek\",\"Shilon\",          role=\"ctb\"),\n  person(\"Vadim\",\"Khotilovich\",    role=\"ctb\"),\n  person(\"Hadley\",\"Wickham\",       role=\"ctb\"),\n  person(\"Bennet\",\"Becker\",        role=\"ctb\"),\n  person(\"Kyle\",\"Haynes\",          role=\"ctb\"),\n  person(\"Boniface Christian\",\"Kamgang\", role=\"ctb\"),\n  person(\"Olivier\",\"Delmarcell\",   role=\"ctb\"),\n  person(\"Josh\",\"O'Brien\",         role=\"ctb\"),\n  person(\"Dereck\",\"de Mezquita\",   role=\"ctb\"),\n  person(\"Michael\",\"Czekanski\",    role=\"ctb\"),\n  person(\"Dmitry\", \"Shemetov\",     role=\"ctb\"),\n  person(\"Nitish\", \"Jha\",          role=\"ctb\"),\n  person(\"Joshua\", \"Wu\",           role=\"ctb\"),\n  person(\"Iago\", \"Giné-Vázquez\",   role=\"ctb\"),\n  person(\"Anirban\", \"Chetia\",      role=\"ctb\"),\n  person(\"Doris\", \"Amoakohene\",    role=\"ctb\"),\n  person(\"Ivan\", \"Krylov\",         role=\"ctb\")\n  )",
         "NeedsCompilation": "yes",
-        "Packaged": "2025-02-21 01:19:45 UTC; tysonbarrett",
-        "Author": "Tyson Barrett [aut, cre] (<https://orcid.org/0000-0002-2137-1391>),\n  Matt Dowle [aut],\n  Arun Srinivasan [aut],\n  Jan Gorecki [aut],\n  Michael Chirico [aut] (<https://orcid.org/0000-0003-0787-087X>),\n  Toby Hocking [aut] (<https://orcid.org/0000-0002-3146-0865>),\n  Benjamin Schwendinger [aut] (<https://orcid.org/0000-0003-3315-8114>),\n  Ivan Krylov [aut] (<https://orcid.org/0000-0002-0172-3812>),\n  Pasha Stetsenko [ctb],\n  Tom Short [ctb],\n  Steve Lianoglou [ctb],\n  Eduard Antonyan [ctb],\n  Markus Bonsch [ctb],\n  Hugh Parsonage [ctb],\n  Scott Ritchie [ctb],\n  Kun Ren [ctb],\n  Xianying Tan [ctb],\n  Rick Saporta [ctb],\n  Otto Seiskari [ctb],\n  Xianghui Dong [ctb],\n  Michel Lang [ctb],\n  Watal Iwasaki [ctb],\n  Seth Wenchel [ctb],\n  Karl Broman [ctb],\n  Tobias Schmidt [ctb],\n  David Arenburg [ctb],\n  Ethan Smith [ctb],\n  Francois Cocquemas [ctb],\n  Matthieu Gomez [ctb],\n  Philippe Chataignon [ctb],\n  Nello Blaser [ctb],\n  Dmitry Selivanov [ctb],\n  Andrey Riabushenko [ctb],\n  Cheng Lee [ctb],\n  Declan Groves [ctb],\n  Daniel Possenriede [ctb],\n  Felipe Parages [ctb],\n  Denes Toth [ctb],\n  Mus Yaramaz-David [ctb],\n  Ayappan Perumal [ctb],\n  James Sams [ctb],\n  Martin Morgan [ctb],\n  Michael Quinn [ctb],\n  @javrucebo [ctb],\n  @marc-outins [ctb],\n  Roy Storey [ctb],\n  Manish Saraswat [ctb],\n  Morgan Jacob [ctb],\n  Michael Schubmehl [ctb],\n  Davis Vaughan [ctb],\n  Leonardo Silvestri [ctb],\n  Jim Hester [ctb],\n  Anthony Damico [ctb],\n  Sebastian Freundt [ctb],\n  David Simons [ctb],\n  Elliott Sales de Andrade [ctb],\n  Cole Miller [ctb],\n  Jens Peder Meldgaard [ctb],\n  Vaclav Tlapak [ctb],\n  Kevin Ushey [ctb],\n  Dirk Eddelbuettel [ctb],\n  Tony Fischetti [ctb],\n  Ofek Shilon [ctb],\n  Vadim Khotilovich [ctb],\n  Hadley Wickham [ctb],\n  Bennet Becker [ctb],\n  Kyle Haynes [ctb],\n  Boniface Christian Kamgang [ctb],\n  Olivier Delmarcell [ctb],\n  Josh O'Brien [ctb],\n  Dereck de Mezquita [ctb],\n  Michael Czekanski [ctb],\n  Dmitry Shemetov [ctb],\n  Nitish Jha [ctb],\n  Joshua Wu [ctb],\n  Iago Giné-Vázquez [ctb],\n  Anirban Chetia [ctb],\n  Doris Amoakohene [ctb],\n  Angel Feliz [ctb],\n  Michael Young [ctb],\n  Mark Seeto [ctb],\n  Philippe Grosjean [ctb],\n  Vincent Runge [ctb],\n  Christian Wia [ctb],\n  Elise Maigné [ctb],\n  Vincent Rocher [ctb],\n  Vijay Lulla [ctb],\n  Aljaž Sluga [ctb],\n  Bill Evans [ctb]",
+        "Packaged": "2024-12-04 23:18:02 UTC; tysonbarrett",
+        "Author": "Tyson Barrett [aut, cre] (<https://orcid.org/0000-0002-2137-1391>),\n  Matt Dowle [aut],\n  Arun Srinivasan [aut],\n  Jan Gorecki [aut],\n  Michael Chirico [aut] (<https://orcid.org/0000-0003-0787-087X>),\n  Toby Hocking [aut] (<https://orcid.org/0000-0002-3146-0865>),\n  Benjamin Schwendinger [aut] (<https://orcid.org/0000-0003-3315-8114>),\n  Pasha Stetsenko [ctb],\n  Tom Short [ctb],\n  Steve Lianoglou [ctb],\n  Eduard Antonyan [ctb],\n  Markus Bonsch [ctb],\n  Hugh Parsonage [ctb],\n  Scott Ritchie [ctb],\n  Kun Ren [ctb],\n  Xianying Tan [ctb],\n  Rick Saporta [ctb],\n  Otto Seiskari [ctb],\n  Xianghui Dong [ctb],\n  Michel Lang [ctb],\n  Watal Iwasaki [ctb],\n  Seth Wenchel [ctb],\n  Karl Broman [ctb],\n  Tobias Schmidt [ctb],\n  David Arenburg [ctb],\n  Ethan Smith [ctb],\n  Francois Cocquemas [ctb],\n  Matthieu Gomez [ctb],\n  Philippe Chataignon [ctb],\n  Nello Blaser [ctb],\n  Dmitry Selivanov [ctb],\n  Andrey Riabushenko [ctb],\n  Cheng Lee [ctb],\n  Declan Groves [ctb],\n  Daniel Possenriede [ctb],\n  Felipe Parages [ctb],\n  Denes Toth [ctb],\n  Mus Yaramaz-David [ctb],\n  Ayappan Perumal [ctb],\n  James Sams [ctb],\n  Martin Morgan [ctb],\n  Michael Quinn [ctb],\n  @javrucebo [ctb],\n  @marc-outins [ctb],\n  Roy Storey [ctb],\n  Manish Saraswat [ctb],\n  Morgan Jacob [ctb],\n  Michael Schubmehl [ctb],\n  Davis Vaughan [ctb],\n  Leonardo Silvestri [ctb],\n  Jim Hester [ctb],\n  Anthony Damico [ctb],\n  Sebastian Freundt [ctb],\n  David Simons [ctb],\n  Elliott Sales de Andrade [ctb],\n  Cole Miller [ctb],\n  Jens Peder Meldgaard [ctb],\n  Vaclav Tlapak [ctb],\n  Kevin Ushey [ctb],\n  Dirk Eddelbuettel [ctb],\n  Tony Fischetti [ctb],\n  Ofek Shilon [ctb],\n  Vadim Khotilovich [ctb],\n  Hadley Wickham [ctb],\n  Bennet Becker [ctb],\n  Kyle Haynes [ctb],\n  Boniface Christian Kamgang [ctb],\n  Olivier Delmarcell [ctb],\n  Josh O'Brien [ctb],\n  Dereck de Mezquita [ctb],\n  Michael Czekanski [ctb],\n  Dmitry Shemetov [ctb],\n  Nitish Jha [ctb],\n  Joshua Wu [ctb],\n  Iago Giné-Vázquez [ctb],\n  Anirban Chetia [ctb],\n  Doris Amoakohene [ctb],\n  Ivan Krylov [ctb]",
         "Maintainer": "Tyson Barrett <t.barrett88@gmail.com>",
         "Repository": "CRAN",
-        "Date/Publication": "2025-02-22 06:10:02 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 02:23:21 UTC; windows",
+        "Date/Publication": "2024-12-06 15:10:10 UTC",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-16 01:52:43 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -1231,7 +1246,7 @@
         "Maintainer": "Hadley Wickham <hadley@posit.co>",
         "Repository": "CRAN",
         "Date/Publication": "2024-03-19 17:00:05 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 04:38:34 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-16 04:20:17 UTC; windows"
       }
     },
     "digest": {
@@ -1258,7 +1273,7 @@
         "Maintainer": "Dirk Eddelbuettel <edd@debian.org>",
         "Repository": "CRAN",
         "Date/Publication": "2024-08-19 14:10:07 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 02:22:45 UTC; windows",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-16 01:52:16 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -1287,7 +1302,7 @@
         "Author": "Ulrich Halekoh [aut, cph],\n  Søren Højsgaard [aut, cre, cph]",
         "Repository": "CRAN",
         "Date/Publication": "2025-01-30 13:00:02 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 05:08:59 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-31 08:03:38 UTC; windows"
       }
     },
     "dplyr": {
@@ -1318,7 +1333,7 @@
         "Maintainer": "Hadley Wickham <hadley@posit.co>",
         "Repository": "CRAN",
         "Date/Publication": "2023-11-17 16:50:02 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 03:59:14 UTC; windows",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-16 03:35:04 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -1348,7 +1363,7 @@
         "Maintainer": "Hadley Wickham <hadley@posit.co>",
         "Repository": "CRAN",
         "Date/Publication": "2023-03-22 13:10:05 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 04:20:30 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-16 04:00:40 UTC; windows"
       }
     },
     "ellipse": {
@@ -1371,7 +1386,14 @@
         "Packaged": "2023-07-20 18:27:17 UTC; murdoch",
         "Repository": "CRAN",
         "Date/Publication": "2023-07-20 19:10:02 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 02:23:55 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-02-25 02:15:26 UTC; windows",
+        "RemoteType": "standard",
+        "RemotePkgRef": "ellipse",
+        "RemoteRef": "ellipse",
+        "RemoteRepos": "https://cran.rstudio.com",
+        "RemoteReposName": "CRAN",
+        "RemotePkgPlatform": "x86_64-w64-mingw32",
+        "RemoteSha": "0.5.0"
       }
     },
     "emmeans": {
@@ -1403,7 +1425,14 @@
         "Maintainer": "Russell V. Lenth <russell-lenth@uiowa.edu>",
         "Repository": "CRAN",
         "Date/Publication": "2025-01-31 05:50:02 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 03:10:41 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-02-25 02:50:35 UTC; windows",
+        "RemoteType": "standard",
+        "RemotePkgRef": "emmeans",
+        "RemoteRef": "emmeans",
+        "RemoteRepos": "https://cran.rstudio.com",
+        "RemoteReposName": "CRAN",
+        "RemotePkgPlatform": "x86_64-w64-mingw32",
+        "RemoteSha": "1.10.7"
       }
     },
     "estimability": {
@@ -1430,7 +1459,14 @@
         "Maintainer": "Russell Lenth <russell-lenth@uiowa.edu>",
         "Repository": "CRAN",
         "Date/Publication": "2024-05-12 13:33:11 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 02:23:55 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-02-25 02:15:27 UTC; windows",
+        "RemoteType": "standard",
+        "RemotePkgRef": "estimability",
+        "RemoteRef": "estimability",
+        "RemoteRepos": "https://cran.rstudio.com",
+        "RemoteReposName": "CRAN",
+        "RemotePkgPlatform": "x86_64-w64-mingw32",
+        "RemoteSha": "1.5.1"
       }
     },
     "evaluate": {
@@ -1458,7 +1494,7 @@
         "Maintainer": "Hadley Wickham <hadley@posit.co>",
         "Repository": "CRAN",
         "Date/Publication": "2025-01-10 23:00:02 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 02:22:45 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-16 01:52:14 UTC; windows"
       }
     },
     "fansi": {
@@ -1486,7 +1522,7 @@
         "Maintainer": "Brodie Gaslam <brodie.gaslam@yahoo.com>",
         "Repository": "CRAN",
         "Date/Publication": "2023-12-08 03:30:02 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 02:22:44 UTC; windows",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-16 01:52:15 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -1513,7 +1549,7 @@
         "Maintainer": "Thomas Lin Pedersen <thomas.pedersen@posit.co>",
         "Repository": "CRAN",
         "Date/Publication": "2024-05-13 09:33:09 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 02:22:43 UTC; windows",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-16 01:52:14 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -1538,7 +1574,7 @@
         "Maintainer": "Winston Chang <winston@posit.co>",
         "Repository": "CRAN",
         "Date/Publication": "2024-05-15 09:00:07 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 02:22:43 UTC; windows",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-16 01:52:14 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -1560,7 +1596,14 @@
         "Repository": "CRAN",
         "Date/Publication": "2012-08-21 18:23:43",
         "Built": "R 4.4.0; x86_64-w64-mingw32; 2024-04-23 00:25:49 UTC; windows",
-        "Archs": "x64"
+        "Archs": "x64",
+        "RemoteType": "standard",
+        "RemotePkgRef": "flashClust",
+        "RemoteRef": "flashClust",
+        "RemoteRepos": "https://cran.rstudio.com",
+        "RemoteReposName": "CRAN",
+        "RemotePkgPlatform": "x86_64-w64-mingw32",
+        "RemoteSha": "1.01-2"
       }
     },
     "fontawesome": {
@@ -1589,7 +1632,7 @@
         "Maintainer": "Richard Iannone <rich@posit.co>",
         "Repository": "CRAN",
         "Date/Publication": "2024-11-16 17:30:02 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 03:22:42 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-16 02:54:42 UTC; windows"
       }
     },
     "forcats": {
@@ -1619,7 +1662,7 @@
         "Maintainer": "Hadley Wickham <hadley@rstudio.com>",
         "Repository": "CRAN",
         "Date/Publication": "2023-01-29 22:20:02 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 03:59:18 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-16 03:35:14 UTC; windows"
       }
     },
     "fs": {
@@ -1652,7 +1695,7 @@
         "Maintainer": "Gábor Csárdi <csardi.gabor@gmail.com>",
         "Repository": "CRAN",
         "Date/Publication": "2024-10-30 08:40:02 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 02:22:45 UTC; windows",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-16 01:52:16 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -1683,7 +1726,7 @@
         "Maintainer": "Jennifer Bryan <jenny@posit.co>",
         "Repository": "CRAN",
         "Date/Publication": "2023-07-20 18:50:08 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 03:49:36 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-16 03:24:27 UTC; windows"
       }
     },
     "generics": {
@@ -1711,7 +1754,7 @@
         "Maintainer": "Hadley Wickham <hadley@rstudio.com>",
         "Repository": "CRAN",
         "Date/Publication": "2022-07-05 19:40:02 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 02:22:44 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-16 01:52:15 UTC; windows"
       }
     },
     "ggplot2": {
@@ -1743,7 +1786,7 @@
         "Maintainer": "Thomas Lin Pedersen <thomas.pedersen@posit.co>",
         "Repository": "CRAN",
         "Date/Publication": "2024-04-23 08:00:08 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 03:59:14 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-16 03:35:04 UTC; windows"
       }
     },
     "ggrepel": {
@@ -1771,7 +1814,7 @@
         "Maintainer": "Kamil Slowikowski <kslowikowski@gmail.com>",
         "Repository": "CRAN",
         "Date/Publication": "2024-09-07 21:50:02 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 04:20:26 UTC; windows",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-16 04:00:36 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -1801,7 +1844,7 @@
         "Maintainer": "Jeffrey B. Arnold <jeffrey.arnold@gmail.com>",
         "Repository": "CRAN",
         "Date/Publication": "2024-02-10 00:30:02 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 04:20:35 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-16 04:00:51 UTC; windows"
       }
     },
     "glue": {
@@ -1831,7 +1874,7 @@
         "Maintainer": "Jennifer Bryan <jenny@posit.co>",
         "Repository": "CRAN",
         "Date/Publication": "2024-09-30 22:30:01 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 02:22:43 UTC; windows",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-16 01:52:16 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -1862,7 +1905,7 @@
         "Maintainer": "Jennifer Bryan <jenny@posit.co>",
         "Repository": "CRAN",
         "Date/Publication": "2023-06-11 19:30:08 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 03:59:24 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-16 03:35:15 UTC; windows"
       }
     },
     "googlesheets4": {
@@ -1892,7 +1935,7 @@
         "Maintainer": "Jennifer Bryan <jenny@posit.co>",
         "Repository": "CRAN",
         "Date/Publication": "2023-06-11 04:00:02 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 04:20:30 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-16 04:00:42 UTC; windows"
       }
     },
     "gtable": {
@@ -1922,7 +1965,7 @@
         "Maintainer": "Thomas Lin Pedersen <thomas.pedersen@posit.co>",
         "Repository": "CRAN",
         "Date/Publication": "2024-10-25 13:20:02 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 03:22:40 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-16 02:54:40 UTC; windows"
       }
     },
     "haven": {
@@ -1953,7 +1996,7 @@
         "Maintainer": "Hadley Wickham <hadley@posit.co>",
         "Repository": "CRAN",
         "Date/Publication": "2023-11-30 15:10:02 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 04:38:41 UTC; windows",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-16 04:20:27 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -1982,7 +2025,7 @@
         "Maintainer": "Yihui Xie <xie@yihui.name>",
         "Repository": "CRAN",
         "Date/Publication": "2024-05-26 20:00:03 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 03:10:33 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-16 02:47:25 UTC; windows"
       }
     },
     "hms": {
@@ -2012,7 +2055,7 @@
         "Maintainer": "Kirill Müller <kirill@cynkra.com>",
         "Repository": "CRAN",
         "Date/Publication": "2023-03-21 18:10:02 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 03:39:29 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-16 03:12:07 UTC; windows"
       }
     },
     "htmltools": {
@@ -2043,7 +2086,7 @@
         "Maintainer": "Carson Sievert <carson@posit.co>",
         "Repository": "CRAN",
         "Date/Publication": "2024-04-04 05:03:00 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 03:10:34 UTC; windows",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-16 02:47:27 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -2072,7 +2115,7 @@
         "Maintainer": "Carson Sievert <carson@posit.co>",
         "Repository": "CRAN",
         "Date/Publication": "2023-12-06 06:00:06 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 03:59:16 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-25 03:43:45 UTC; windows"
       }
     },
     "httpuv": {
@@ -2102,7 +2145,7 @@
         "Maintainer": "Winston Chang <winston@posit.co>",
         "Repository": "CRAN",
         "Date/Publication": "2024-03-26 05:50:06 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 03:39:24 UTC; windows",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-25 03:26:19 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -2131,7 +2174,7 @@
         "Maintainer": "Hadley Wickham <hadley@posit.co>",
         "Repository": "CRAN",
         "Date/Publication": "2023-08-15 09:00:02 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 03:39:30 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-16 03:12:07 UTC; windows"
       }
     },
     "ids": {
@@ -2156,7 +2199,7 @@
         "Maintainer": "Rich FitzJohn <rich.fitzjohn@gmail.com>",
         "Repository": "CRAN",
         "Date/Publication": "2017-05-31 08:49:59 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 03:39:34 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-16 03:12:19 UTC; windows"
       }
     },
     "isoband": {
@@ -2185,7 +2228,7 @@
         "Maintainer": "Hadley Wickham <hadley@posit.co>",
         "Repository": "CRAN",
         "Date/Publication": "2022-12-20 10:00:13 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 02:22:42 UTC; windows",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-16 01:52:14 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -2210,7 +2253,7 @@
         "Maintainer": "Carson Sievert <carson@rstudio.com>",
         "Repository": "CRAN",
         "Date/Publication": "2021-04-26 17:10:02 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 03:22:42 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-16 02:54:39 UTC; windows"
       }
     },
     "jsonlite": {
@@ -2218,7 +2261,7 @@
       "Repository": "https://cran.rstudio.com",
       "description": {
         "Package": "jsonlite",
-        "Version": "1.9.1",
+        "Version": "1.9.0",
         "Title": "A Simple and Robust JSON Parser and Generator for R",
         "License": "MIT + file LICENSE",
         "Depends": "methods",
@@ -2232,11 +2275,11 @@
         "RoxygenNote": "7.2.3",
         "Encoding": "UTF-8",
         "NeedsCompilation": "yes",
-        "Packaged": "2025-03-03 14:17:56 UTC; jeroen",
+        "Packaged": "2025-02-19 13:02:13 UTC; jeroen",
         "Author": "Jeroen Ooms [aut, cre] (<https://orcid.org/0000-0002-4035-0289>),\n  Duncan Temple Lang [ctb],\n  Lloyd Hilaiel [cph] (author of bundled libyajl)",
         "Repository": "CRAN",
-        "Date/Publication": "2025-03-03 22:10:02 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 02:22:45 UTC; windows",
+        "Date/Publication": "2025-02-19 15:50:06 UTC",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-02-25 02:14:49 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -2247,27 +2290,27 @@
         "Package": "knitr",
         "Type": "Package",
         "Title": "A General-Purpose Package for Dynamic Report Generation in R",
-        "Version": "1.50",
-        "Authors@R": "c(\n    person(\"Yihui\", \"Xie\", role = c(\"aut\", \"cre\"), email = \"xie@yihui.name\", comment = c(ORCID = \"0000-0003-0645-5666\", URL = \"https://yihui.org\")),\n    person(\"Abhraneel\", \"Sarma\", role = \"ctb\"),\n    person(\"Adam\", \"Vogt\", role = \"ctb\"),\n    person(\"Alastair\", \"Andrew\", role = \"ctb\"),\n    person(\"Alex\", \"Zvoleff\", role = \"ctb\"),\n    person(\"Amar\", \"Al-Zubaidi\", role = \"ctb\"),\n    person(\"Andre\", \"Simon\", role = \"ctb\", comment = \"the CSS files under inst/themes/ were derived from the Highlight package http://www.andre-simon.de\"),\n    person(\"Aron\", \"Atkins\", role = \"ctb\"),\n    person(\"Aaron\", \"Wolen\", role = \"ctb\"),\n    person(\"Ashley\", \"Manton\", role = \"ctb\"),\n    person(\"Atsushi\", \"Yasumoto\", role = \"ctb\", comment = c(ORCID = \"0000-0002-8335-495X\")),\n    person(\"Ben\", \"Baumer\", role = \"ctb\"),\n    person(\"Brian\", \"Diggs\", role = \"ctb\"),\n    person(\"Brian\", \"Zhang\", role = \"ctb\"),\n    person(\"Bulat\", \"Yapparov\", role = \"ctb\"),\n    person(\"Cassio\", \"Pereira\", role = \"ctb\"),\n    person(\"Christophe\", \"Dervieux\", role = \"ctb\"),\n    person(\"David\", \"Hall\", role = \"ctb\"),\n    person(\"David\", \"Hugh-Jones\", role = \"ctb\"),\n    person(\"David\", \"Robinson\", role = \"ctb\"),\n    person(\"Doug\", \"Hemken\", role = \"ctb\"),\n    person(\"Duncan\", \"Murdoch\", role = \"ctb\"),\n    person(\"Elio\", \"Campitelli\", role = \"ctb\"),\n    person(\"Ellis\", \"Hughes\", role = \"ctb\"),\n    person(\"Emily\", \"Riederer\", role = \"ctb\"),\n    person(\"Fabian\", \"Hirschmann\", role = \"ctb\"),\n    person(\"Fitch\", \"Simeon\", role = \"ctb\"),\n    person(\"Forest\", \"Fang\", role = \"ctb\"),\n    person(c(\"Frank\", \"E\", \"Harrell\", \"Jr\"), role = \"ctb\", comment = \"the Sweavel package at inst/misc/Sweavel.sty\"),\n    person(\"Garrick\", \"Aden-Buie\", role = \"ctb\"),\n    person(\"Gregoire\", \"Detrez\", role = \"ctb\"),\n    person(\"Hadley\", \"Wickham\", role = \"ctb\"),\n    person(\"Hao\", \"Zhu\", role = \"ctb\"),\n    person(\"Heewon\", \"Jeon\", role = \"ctb\"),\n    person(\"Henrik\", \"Bengtsson\", role = \"ctb\"),\n    person(\"Hiroaki\", \"Yutani\", role = \"ctb\"),\n    person(\"Ian\", \"Lyttle\", role = \"ctb\"),\n    person(\"Hodges\", \"Daniel\", role = \"ctb\"),\n    person(\"Jacob\", \"Bien\", role = \"ctb\"),\n    person(\"Jake\", \"Burkhead\", role = \"ctb\"),\n    person(\"James\", \"Manton\", role = \"ctb\"),\n    person(\"Jared\", \"Lander\", role = \"ctb\"),\n    person(\"Jason\", \"Punyon\", role = \"ctb\"),\n    person(\"Javier\", \"Luraschi\", role = \"ctb\"),\n    person(\"Jeff\", \"Arnold\", role = \"ctb\"),\n    person(\"Jenny\", \"Bryan\", role = \"ctb\"),\n    person(\"Jeremy\", \"Ashkenas\", role = c(\"ctb\", \"cph\"), comment = \"the CSS file at inst/misc/docco-classic.css\"),\n    person(\"Jeremy\", \"Stephens\", role = \"ctb\"),\n    person(\"Jim\", \"Hester\", role = \"ctb\"),\n    person(\"Joe\", \"Cheng\", role = \"ctb\"),\n    person(\"Johannes\", \"Ranke\", role = \"ctb\"),\n    person(\"John\", \"Honaker\", role = \"ctb\"),\n    person(\"John\", \"Muschelli\", role = \"ctb\"),\n    person(\"Jonathan\", \"Keane\", role = \"ctb\"),\n    person(\"JJ\", \"Allaire\", role = \"ctb\"),\n    person(\"Johan\", \"Toloe\", role = \"ctb\"),\n    person(\"Jonathan\", \"Sidi\", role = \"ctb\"),\n    person(\"Joseph\", \"Larmarange\", role = \"ctb\"),\n    person(\"Julien\", \"Barnier\", role = \"ctb\"),\n    person(\"Kaiyin\", \"Zhong\", role = \"ctb\"),\n    person(\"Kamil\", \"Slowikowski\", role = \"ctb\"),\n    person(\"Karl\", \"Forner\", role = \"ctb\"),\n    person(c(\"Kevin\", \"K.\"), \"Smith\", role = \"ctb\"),\n    person(\"Kirill\", \"Mueller\", role = \"ctb\"),\n    person(\"Kohske\", \"Takahashi\", role = \"ctb\"),\n    person(\"Lorenz\", \"Walthert\", role = \"ctb\"),\n    person(\"Lucas\", \"Gallindo\", role = \"ctb\"),\n    person(\"Marius\", \"Hofert\", role = \"ctb\"),\n    person(\"Martin\", \"Modrák\", role = \"ctb\"),\n    person(\"Michael\", \"Chirico\", role = \"ctb\"),\n    person(\"Michael\", \"Friendly\", role = \"ctb\"),\n    person(\"Michal\", \"Bojanowski\", role = \"ctb\"),\n    person(\"Michel\", \"Kuhlmann\", role = \"ctb\"),\n    person(\"Miller\", \"Patrick\", role = \"ctb\"),\n    person(\"Nacho\", \"Caballero\", role = \"ctb\"),\n    person(\"Nick\", \"Salkowski\", role = \"ctb\"),\n    person(\"Niels Richard\", \"Hansen\", role = \"ctb\"),\n    person(\"Noam\", \"Ross\", role = \"ctb\"),\n    person(\"Obada\", \"Mahdi\", role = \"ctb\"),\n    person(\"Pavel N.\", \"Krivitsky\", role = \"ctb\", comment=c(ORCID = \"0000-0002-9101-3362\")),\n    person(\"Pedro\", \"Faria\", role = \"ctb\"),\n    person(\"Qiang\", \"Li\", role = \"ctb\"),\n    person(\"Ramnath\", \"Vaidyanathan\", role = \"ctb\"),\n    person(\"Richard\", \"Cotton\", role = \"ctb\"),\n    person(\"Robert\", \"Krzyzanowski\", role = \"ctb\"),\n    person(\"Rodrigo\", \"Copetti\", role = \"ctb\"),\n    person(\"Romain\", \"Francois\", role = \"ctb\"),\n    person(\"Ruaridh\", \"Williamson\", role = \"ctb\"),\n    person(\"Sagiru\", \"Mati\", role = \"ctb\", comment = c(ORCID = \"0000-0003-1413-3974\")),\n    person(\"Scott\", \"Kostyshak\", role = \"ctb\"),\n    person(\"Sebastian\", \"Meyer\", role = \"ctb\"),\n    person(\"Sietse\", \"Brouwer\", role = \"ctb\"),\n    person(c(\"Simon\", \"de\"), \"Bernard\", role = \"ctb\"),\n    person(\"Sylvain\", \"Rousseau\", role = \"ctb\"),\n    person(\"Taiyun\", \"Wei\", role = \"ctb\"),\n    person(\"Thibaut\", \"Assus\", role = \"ctb\"),\n    person(\"Thibaut\", \"Lamadon\", role = \"ctb\"),\n    person(\"Thomas\", \"Leeper\", role = \"ctb\"),\n    person(\"Tim\", \"Mastny\", role = \"ctb\"),\n    person(\"Tom\", \"Torsney-Weir\", role = \"ctb\"),\n    person(\"Trevor\", \"Davis\", role = \"ctb\"),\n    person(\"Viktoras\", \"Veitas\", role = \"ctb\"),\n    person(\"Weicheng\", \"Zhu\", role = \"ctb\"),\n    person(\"Wush\", \"Wu\", role = \"ctb\"),\n    person(\"Zachary\", \"Foster\", role = \"ctb\"),\n    person(\"Zhian N.\", \"Kamvar\", role = \"ctb\", comment = c(ORCID = \"0000-0003-1458-7108\")),\n    person(given = \"Posit Software, PBC\", role = c(\"cph\", \"fnd\"))\n    )",
+        "Version": "1.49",
+        "Authors@R": "c(\n    person(\"Yihui\", \"Xie\", role = c(\"aut\", \"cre\"), email = \"xie@yihui.name\", comment = c(ORCID = \"0000-0003-0645-5666\")),\n    person(\"Abhraneel\", \"Sarma\", role = \"ctb\"),\n    person(\"Adam\", \"Vogt\", role = \"ctb\"),\n    person(\"Alastair\", \"Andrew\", role = \"ctb\"),\n    person(\"Alex\", \"Zvoleff\", role = \"ctb\"),\n    person(\"Amar\", \"Al-Zubaidi\", role = \"ctb\"),\n    person(\"Andre\", \"Simon\", role = \"ctb\", comment = \"the CSS files under inst/themes/ were derived from the Highlight package http://www.andre-simon.de\"),\n    person(\"Aron\", \"Atkins\", role = \"ctb\"),\n    person(\"Aaron\", \"Wolen\", role = \"ctb\"),\n    person(\"Ashley\", \"Manton\", role = \"ctb\"),\n    person(\"Atsushi\", \"Yasumoto\", role = \"ctb\", comment = c(ORCID = \"0000-0002-8335-495X\")),\n    person(\"Ben\", \"Baumer\", role = \"ctb\"),\n    person(\"Brian\", \"Diggs\", role = \"ctb\"),\n    person(\"Brian\", \"Zhang\", role = \"ctb\"),\n    person(\"Bulat\", \"Yapparov\", role = \"ctb\"),\n    person(\"Cassio\", \"Pereira\", role = \"ctb\"),\n    person(\"Christophe\", \"Dervieux\", role = \"ctb\"),\n    person(\"David\", \"Hall\", role = \"ctb\"),\n    person(\"David\", \"Hugh-Jones\", role = \"ctb\"),\n    person(\"David\", \"Robinson\", role = \"ctb\"),\n    person(\"Doug\", \"Hemken\", role = \"ctb\"),\n    person(\"Duncan\", \"Murdoch\", role = \"ctb\"),\n    person(\"Elio\", \"Campitelli\", role = \"ctb\"),\n    person(\"Ellis\", \"Hughes\", role = \"ctb\"),\n    person(\"Emily\", \"Riederer\", role = \"ctb\"),\n    person(\"Fabian\", \"Hirschmann\", role = \"ctb\"),\n    person(\"Fitch\", \"Simeon\", role = \"ctb\"),\n    person(\"Forest\", \"Fang\", role = \"ctb\"),\n    person(c(\"Frank\", \"E\", \"Harrell\", \"Jr\"), role = \"ctb\", comment = \"the Sweavel package at inst/misc/Sweavel.sty\"),\n    person(\"Garrick\", \"Aden-Buie\", role = \"ctb\"),\n    person(\"Gregoire\", \"Detrez\", role = \"ctb\"),\n    person(\"Hadley\", \"Wickham\", role = \"ctb\"),\n    person(\"Hao\", \"Zhu\", role = \"ctb\"),\n    person(\"Heewon\", \"Jeon\", role = \"ctb\"),\n    person(\"Henrik\", \"Bengtsson\", role = \"ctb\"),\n    person(\"Hiroaki\", \"Yutani\", role = \"ctb\"),\n    person(\"Ian\", \"Lyttle\", role = \"ctb\"),\n    person(\"Hodges\", \"Daniel\", role = \"ctb\"),\n    person(\"Jacob\", \"Bien\", role = \"ctb\"),\n    person(\"Jake\", \"Burkhead\", role = \"ctb\"),\n    person(\"James\", \"Manton\", role = \"ctb\"),\n    person(\"Jared\", \"Lander\", role = \"ctb\"),\n    person(\"Jason\", \"Punyon\", role = \"ctb\"),\n    person(\"Javier\", \"Luraschi\", role = \"ctb\"),\n    person(\"Jeff\", \"Arnold\", role = \"ctb\"),\n    person(\"Jenny\", \"Bryan\", role = \"ctb\"),\n    person(\"Jeremy\", \"Ashkenas\", role = c(\"ctb\", \"cph\"), comment = \"the CSS file at inst/misc/docco-classic.css\"),\n    person(\"Jeremy\", \"Stephens\", role = \"ctb\"),\n    person(\"Jim\", \"Hester\", role = \"ctb\"),\n    person(\"Joe\", \"Cheng\", role = \"ctb\"),\n    person(\"Johannes\", \"Ranke\", role = \"ctb\"),\n    person(\"John\", \"Honaker\", role = \"ctb\"),\n    person(\"John\", \"Muschelli\", role = \"ctb\"),\n    person(\"Jonathan\", \"Keane\", role = \"ctb\"),\n    person(\"JJ\", \"Allaire\", role = \"ctb\"),\n    person(\"Johan\", \"Toloe\", role = \"ctb\"),\n    person(\"Jonathan\", \"Sidi\", role = \"ctb\"),\n    person(\"Joseph\", \"Larmarange\", role = \"ctb\"),\n    person(\"Julien\", \"Barnier\", role = \"ctb\"),\n    person(\"Kaiyin\", \"Zhong\", role = \"ctb\"),\n    person(\"Kamil\", \"Slowikowski\", role = \"ctb\"),\n    person(\"Karl\", \"Forner\", role = \"ctb\"),\n    person(c(\"Kevin\", \"K.\"), \"Smith\", role = \"ctb\"),\n    person(\"Kirill\", \"Mueller\", role = \"ctb\"),\n    person(\"Kohske\", \"Takahashi\", role = \"ctb\"),\n    person(\"Lorenz\", \"Walthert\", role = \"ctb\"),\n    person(\"Lucas\", \"Gallindo\", role = \"ctb\"),\n    person(\"Marius\", \"Hofert\", role = \"ctb\"),\n    person(\"Martin\", \"Modrák\", role = \"ctb\"),\n    person(\"Michael\", \"Chirico\", role = \"ctb\"),\n    person(\"Michael\", \"Friendly\", role = \"ctb\"),\n    person(\"Michal\", \"Bojanowski\", role = \"ctb\"),\n    person(\"Michel\", \"Kuhlmann\", role = \"ctb\"),\n    person(\"Miller\", \"Patrick\", role = \"ctb\"),\n    person(\"Nacho\", \"Caballero\", role = \"ctb\"),\n    person(\"Nick\", \"Salkowski\", role = \"ctb\"),\n    person(\"Niels Richard\", \"Hansen\", role = \"ctb\"),\n    person(\"Noam\", \"Ross\", role = \"ctb\"),\n    person(\"Obada\", \"Mahdi\", role = \"ctb\"),\n    person(\"Pavel N.\", \"Krivitsky\", role = \"ctb\", comment=c(ORCID = \"0000-0002-9101-3362\")),\n    person(\"Pedro\", \"Faria\", role = \"ctb\"),\n    person(\"Qiang\", \"Li\", role = \"ctb\"),\n    person(\"Ramnath\", \"Vaidyanathan\", role = \"ctb\"),\n    person(\"Richard\", \"Cotton\", role = \"ctb\"),\n    person(\"Robert\", \"Krzyzanowski\", role = \"ctb\"),\n    person(\"Rodrigo\", \"Copetti\", role = \"ctb\"),\n    person(\"Romain\", \"Francois\", role = \"ctb\"),\n    person(\"Ruaridh\", \"Williamson\", role = \"ctb\"),\n    person(\"Sagiru\", \"Mati\", role = \"ctb\", comment = c(ORCID = \"0000-0003-1413-3974\")),\n    person(\"Scott\", \"Kostyshak\", role = \"ctb\"),\n    person(\"Sebastian\", \"Meyer\", role = \"ctb\"),\n    person(\"Sietse\", \"Brouwer\", role = \"ctb\"),\n    person(c(\"Simon\", \"de\"), \"Bernard\", role = \"ctb\"),\n    person(\"Sylvain\", \"Rousseau\", role = \"ctb\"),\n    person(\"Taiyun\", \"Wei\", role = \"ctb\"),\n    person(\"Thibaut\", \"Assus\", role = \"ctb\"),\n    person(\"Thibaut\", \"Lamadon\", role = \"ctb\"),\n    person(\"Thomas\", \"Leeper\", role = \"ctb\"),\n    person(\"Tim\", \"Mastny\", role = \"ctb\"),\n    person(\"Tom\", \"Torsney-Weir\", role = \"ctb\"),\n    person(\"Trevor\", \"Davis\", role = \"ctb\"),\n    person(\"Viktoras\", \"Veitas\", role = \"ctb\"),\n    person(\"Weicheng\", \"Zhu\", role = \"ctb\"),\n    person(\"Wush\", \"Wu\", role = \"ctb\"),\n    person(\"Zachary\", \"Foster\", role = \"ctb\"),\n    person(\"Zhian N.\", \"Kamvar\", role = \"ctb\", comment = c(ORCID = \"0000-0003-1458-7108\")),\n    person(given = \"Posit Software, PBC\", role = c(\"cph\", \"fnd\"))\n    )",
         "Description": "Provides a general-purpose tool for dynamic report generation in R\n    using Literate Programming techniques.",
         "Depends": "R (>= 3.6.0)",
-        "Imports": "evaluate (>= 0.15), highr (>= 0.11), methods, tools, xfun (>=\n0.51), yaml (>= 2.1.19)",
-        "Suggests": "bslib, codetools, DBI (>= 0.4-1), digest, formatR, gifski,\ngridSVG, htmlwidgets (>= 0.7), jpeg, JuliaCall (>= 0.11.1),\nmagick, litedown, markdown (>= 1.3), png, ragg, reticulate (>=\n1.4), rgl (>= 0.95.1201), rlang, rmarkdown, sass, showtext,\nstyler (>= 1.2.0), targets (>= 0.6.0), testit, tibble,\ntikzDevice (>= 0.10), tinytex (>= 0.56), webshot, rstudioapi,\nsvglite",
+        "Imports": "evaluate (>= 0.15), highr (>= 0.11), methods, tools, xfun (>=\n0.48), yaml (>= 2.1.19)",
+        "Suggests": "bslib, codetools, DBI (>= 0.4-1), digest, formatR, gifski,\ngridSVG, htmlwidgets (>= 0.7), jpeg, JuliaCall (>= 0.11.1),\nmagick, litedown, markdown (>= 1.3), png, ragg, reticulate (>=\n1.4), rgl (>= 0.95.1201), rlang, rmarkdown, sass, showtext,\nstyler (>= 1.2.0), targets (>= 0.6.0), testit, tibble,\ntikzDevice (>= 0.10), tinytex (>= 0.46), webshot, rstudioapi,\nsvglite",
         "License": "GPL",
         "URL": "https://yihui.org/knitr/",
         "BugReports": "https://github.com/yihui/knitr/issues",
         "Encoding": "UTF-8",
         "VignetteBuilder": "litedown, knitr",
         "SystemRequirements": "Package vignettes based on R Markdown v2 or\nreStructuredText require Pandoc (http://pandoc.org). The\nfunction rst2pdf() requires rst2pdf\n(https://github.com/rst2pdf/rst2pdf).",
-        "Collate": "'block.R' 'cache.R' 'citation.R' 'hooks-html.R' 'plot.R'\n'utils.R' 'defaults.R' 'concordance.R' 'engine.R' 'highlight.R'\n'themes.R' 'header.R' 'hooks-asciidoc.R' 'hooks-chunk.R'\n'hooks-extra.R' 'hooks-latex.R' 'hooks-md.R' 'hooks-rst.R'\n'hooks-textile.R' 'hooks.R' 'output.R' 'package.R' 'pandoc.R'\n'params.R' 'parser.R' 'pattern.R' 'rocco.R' 'spin.R' 'table.R'\n'template.R' 'utils-conversion.R' 'utils-rd2html.R'\n'utils-string.R' 'utils-sweave.R' 'utils-upload.R'\n'utils-vignettes.R' 'zzz.R'",
+        "Collate": "'block.R' 'cache.R' 'utils.R' 'citation.R' 'hooks-html.R'\n'plot.R' 'defaults.R' 'concordance.R' 'engine.R' 'highlight.R'\n'themes.R' 'header.R' 'hooks-asciidoc.R' 'hooks-chunk.R'\n'hooks-extra.R' 'hooks-latex.R' 'hooks-md.R' 'hooks-rst.R'\n'hooks-textile.R' 'hooks.R' 'output.R' 'package.R' 'pandoc.R'\n'params.R' 'parser.R' 'pattern.R' 'rocco.R' 'spin.R' 'table.R'\n'template.R' 'utils-conversion.R' 'utils-rd2html.R'\n'utils-string.R' 'utils-sweave.R' 'utils-upload.R'\n'utils-vignettes.R' 'zzz.R'",
         "RoxygenNote": "7.3.2",
         "NeedsCompilation": "no",
-        "Packaged": "2025-03-15 00:17:19 UTC; runner",
-        "Author": "Yihui Xie [aut, cre] (<https://orcid.org/0000-0003-0645-5666>,\n    https://yihui.org),\n  Abhraneel Sarma [ctb],\n  Adam Vogt [ctb],\n  Alastair Andrew [ctb],\n  Alex Zvoleff [ctb],\n  Amar Al-Zubaidi [ctb],\n  Andre Simon [ctb] (the CSS files under inst/themes/ were derived from\n    the Highlight package http://www.andre-simon.de),\n  Aron Atkins [ctb],\n  Aaron Wolen [ctb],\n  Ashley Manton [ctb],\n  Atsushi Yasumoto [ctb] (<https://orcid.org/0000-0002-8335-495X>),\n  Ben Baumer [ctb],\n  Brian Diggs [ctb],\n  Brian Zhang [ctb],\n  Bulat Yapparov [ctb],\n  Cassio Pereira [ctb],\n  Christophe Dervieux [ctb],\n  David Hall [ctb],\n  David Hugh-Jones [ctb],\n  David Robinson [ctb],\n  Doug Hemken [ctb],\n  Duncan Murdoch [ctb],\n  Elio Campitelli [ctb],\n  Ellis Hughes [ctb],\n  Emily Riederer [ctb],\n  Fabian Hirschmann [ctb],\n  Fitch Simeon [ctb],\n  Forest Fang [ctb],\n  Frank E Harrell Jr [ctb] (the Sweavel package at inst/misc/Sweavel.sty),\n  Garrick Aden-Buie [ctb],\n  Gregoire Detrez [ctb],\n  Hadley Wickham [ctb],\n  Hao Zhu [ctb],\n  Heewon Jeon [ctb],\n  Henrik Bengtsson [ctb],\n  Hiroaki Yutani [ctb],\n  Ian Lyttle [ctb],\n  Hodges Daniel [ctb],\n  Jacob Bien [ctb],\n  Jake Burkhead [ctb],\n  James Manton [ctb],\n  Jared Lander [ctb],\n  Jason Punyon [ctb],\n  Javier Luraschi [ctb],\n  Jeff Arnold [ctb],\n  Jenny Bryan [ctb],\n  Jeremy Ashkenas [ctb, cph] (the CSS file at\n    inst/misc/docco-classic.css),\n  Jeremy Stephens [ctb],\n  Jim Hester [ctb],\n  Joe Cheng [ctb],\n  Johannes Ranke [ctb],\n  John Honaker [ctb],\n  John Muschelli [ctb],\n  Jonathan Keane [ctb],\n  JJ Allaire [ctb],\n  Johan Toloe [ctb],\n  Jonathan Sidi [ctb],\n  Joseph Larmarange [ctb],\n  Julien Barnier [ctb],\n  Kaiyin Zhong [ctb],\n  Kamil Slowikowski [ctb],\n  Karl Forner [ctb],\n  Kevin K. Smith [ctb],\n  Kirill Mueller [ctb],\n  Kohske Takahashi [ctb],\n  Lorenz Walthert [ctb],\n  Lucas Gallindo [ctb],\n  Marius Hofert [ctb],\n  Martin Modrák [ctb],\n  Michael Chirico [ctb],\n  Michael Friendly [ctb],\n  Michal Bojanowski [ctb],\n  Michel Kuhlmann [ctb],\n  Miller Patrick [ctb],\n  Nacho Caballero [ctb],\n  Nick Salkowski [ctb],\n  Niels Richard Hansen [ctb],\n  Noam Ross [ctb],\n  Obada Mahdi [ctb],\n  Pavel N. Krivitsky [ctb] (<https://orcid.org/0000-0002-9101-3362>),\n  Pedro Faria [ctb],\n  Qiang Li [ctb],\n  Ramnath Vaidyanathan [ctb],\n  Richard Cotton [ctb],\n  Robert Krzyzanowski [ctb],\n  Rodrigo Copetti [ctb],\n  Romain Francois [ctb],\n  Ruaridh Williamson [ctb],\n  Sagiru Mati [ctb] (<https://orcid.org/0000-0003-1413-3974>),\n  Scott Kostyshak [ctb],\n  Sebastian Meyer [ctb],\n  Sietse Brouwer [ctb],\n  Simon de Bernard [ctb],\n  Sylvain Rousseau [ctb],\n  Taiyun Wei [ctb],\n  Thibaut Assus [ctb],\n  Thibaut Lamadon [ctb],\n  Thomas Leeper [ctb],\n  Tim Mastny [ctb],\n  Tom Torsney-Weir [ctb],\n  Trevor Davis [ctb],\n  Viktoras Veitas [ctb],\n  Weicheng Zhu [ctb],\n  Wush Wu [ctb],\n  Zachary Foster [ctb],\n  Zhian N. Kamvar [ctb] (<https://orcid.org/0000-0003-1458-7108>),\n  Posit Software, PBC [cph, fnd]",
+        "Packaged": "2024-11-06 23:10:53 UTC; runner",
+        "Author": "Yihui Xie [aut, cre] (<https://orcid.org/0000-0003-0645-5666>),\n  Abhraneel Sarma [ctb],\n  Adam Vogt [ctb],\n  Alastair Andrew [ctb],\n  Alex Zvoleff [ctb],\n  Amar Al-Zubaidi [ctb],\n  Andre Simon [ctb] (the CSS files under inst/themes/ were derived from\n    the Highlight package http://www.andre-simon.de),\n  Aron Atkins [ctb],\n  Aaron Wolen [ctb],\n  Ashley Manton [ctb],\n  Atsushi Yasumoto [ctb] (<https://orcid.org/0000-0002-8335-495X>),\n  Ben Baumer [ctb],\n  Brian Diggs [ctb],\n  Brian Zhang [ctb],\n  Bulat Yapparov [ctb],\n  Cassio Pereira [ctb],\n  Christophe Dervieux [ctb],\n  David Hall [ctb],\n  David Hugh-Jones [ctb],\n  David Robinson [ctb],\n  Doug Hemken [ctb],\n  Duncan Murdoch [ctb],\n  Elio Campitelli [ctb],\n  Ellis Hughes [ctb],\n  Emily Riederer [ctb],\n  Fabian Hirschmann [ctb],\n  Fitch Simeon [ctb],\n  Forest Fang [ctb],\n  Frank E Harrell Jr [ctb] (the Sweavel package at inst/misc/Sweavel.sty),\n  Garrick Aden-Buie [ctb],\n  Gregoire Detrez [ctb],\n  Hadley Wickham [ctb],\n  Hao Zhu [ctb],\n  Heewon Jeon [ctb],\n  Henrik Bengtsson [ctb],\n  Hiroaki Yutani [ctb],\n  Ian Lyttle [ctb],\n  Hodges Daniel [ctb],\n  Jacob Bien [ctb],\n  Jake Burkhead [ctb],\n  James Manton [ctb],\n  Jared Lander [ctb],\n  Jason Punyon [ctb],\n  Javier Luraschi [ctb],\n  Jeff Arnold [ctb],\n  Jenny Bryan [ctb],\n  Jeremy Ashkenas [ctb, cph] (the CSS file at\n    inst/misc/docco-classic.css),\n  Jeremy Stephens [ctb],\n  Jim Hester [ctb],\n  Joe Cheng [ctb],\n  Johannes Ranke [ctb],\n  John Honaker [ctb],\n  John Muschelli [ctb],\n  Jonathan Keane [ctb],\n  JJ Allaire [ctb],\n  Johan Toloe [ctb],\n  Jonathan Sidi [ctb],\n  Joseph Larmarange [ctb],\n  Julien Barnier [ctb],\n  Kaiyin Zhong [ctb],\n  Kamil Slowikowski [ctb],\n  Karl Forner [ctb],\n  Kevin K. Smith [ctb],\n  Kirill Mueller [ctb],\n  Kohske Takahashi [ctb],\n  Lorenz Walthert [ctb],\n  Lucas Gallindo [ctb],\n  Marius Hofert [ctb],\n  Martin Modrák [ctb],\n  Michael Chirico [ctb],\n  Michael Friendly [ctb],\n  Michal Bojanowski [ctb],\n  Michel Kuhlmann [ctb],\n  Miller Patrick [ctb],\n  Nacho Caballero [ctb],\n  Nick Salkowski [ctb],\n  Niels Richard Hansen [ctb],\n  Noam Ross [ctb],\n  Obada Mahdi [ctb],\n  Pavel N. Krivitsky [ctb] (<https://orcid.org/0000-0002-9101-3362>),\n  Pedro Faria [ctb],\n  Qiang Li [ctb],\n  Ramnath Vaidyanathan [ctb],\n  Richard Cotton [ctb],\n  Robert Krzyzanowski [ctb],\n  Rodrigo Copetti [ctb],\n  Romain Francois [ctb],\n  Ruaridh Williamson [ctb],\n  Sagiru Mati [ctb] (<https://orcid.org/0000-0003-1413-3974>),\n  Scott Kostyshak [ctb],\n  Sebastian Meyer [ctb],\n  Sietse Brouwer [ctb],\n  Simon de Bernard [ctb],\n  Sylvain Rousseau [ctb],\n  Taiyun Wei [ctb],\n  Thibaut Assus [ctb],\n  Thibaut Lamadon [ctb],\n  Thomas Leeper [ctb],\n  Tim Mastny [ctb],\n  Tom Torsney-Weir [ctb],\n  Trevor Davis [ctb],\n  Viktoras Veitas [ctb],\n  Weicheng Zhu [ctb],\n  Wush Wu [ctb],\n  Zachary Foster [ctb],\n  Zhian N. Kamvar [ctb] (<https://orcid.org/0000-0003-1458-7108>),\n  Posit Software, PBC [cph, fnd]",
         "Maintainer": "Yihui Xie <xie@yihui.name>",
         "Repository": "CRAN",
-        "Date/Publication": "2025-03-16 09:20:02 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 00:51:15 UTC; windows"
+        "Date/Publication": "2024-11-08 09:30:02 UTC",
+        "Built": "R 4.4.2; ; 2025-01-16 02:54:40 UTC; windows"
       }
     },
     "labeling": {
@@ -2317,7 +2360,7 @@
         "Maintainer": "Winston Chang <winston@posit.co>",
         "Repository": "CRAN",
         "Date/Publication": "2024-11-27 23:40:02 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 03:10:34 UTC; windows",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-25 02:52:37 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -2372,7 +2415,7 @@
         "Maintainer": "Hadley Wickham <hadley@rstudio.com>",
         "Repository": "CRAN",
         "Date/Publication": "2019-03-15 17:50:07 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 02:23:25 UTC; windows",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-25 02:07:26 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -2393,8 +2436,15 @@
         "Packaged": "2024-06-10 04:09:20 UTC; tlum005",
         "Repository": "CRAN",
         "Date/Publication": "2024-06-10 05:10:02 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 02:22:45 UTC; windows",
-        "Archs": "x64"
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-02-25 02:14:59 UTC; windows",
+        "Archs": "x64",
+        "RemoteType": "standard",
+        "RemotePkgRef": "leaps",
+        "RemoteRef": "leaps",
+        "RemoteRepos": "https://cran.rstudio.com",
+        "RemoteReposName": "CRAN",
+        "RemotePkgPlatform": "x86_64-w64-mingw32",
+        "RemoteSha": "3.2"
       }
     },
     "lifecycle": {
@@ -2423,7 +2473,7 @@
         "Maintainer": "Lionel Henry <lionel@posit.co>",
         "Repository": "CRAN",
         "Date/Publication": "2023-11-07 10:10:10 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 03:10:34 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-16 02:47:26 UTC; windows"
       }
     },
     "lme4": {
@@ -2451,7 +2501,7 @@
         "Maintainer": "Ben Bolker <bbolker+lme4@gmail.com>",
         "Repository": "CRAN",
         "Date/Publication": "2025-01-11 15:40:06 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 03:39:27 UTC; windows",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-30 02:58:44 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -2486,7 +2536,7 @@
         "Author": "Vitalie Spinu [aut, cre],\n  Garrett Grolemund [aut],\n  Hadley Wickham [aut],\n  Davis Vaughan [ctb],\n  Ian Lyttle [ctb],\n  Imanuel Costigan [ctb],\n  Jason Law [ctb],\n  Doug Mitarotonda [ctb],\n  Joseph Larmarange [ctb],\n  Jonathan Boiser [ctb],\n  Chel Hee Lee [ctb]",
         "Repository": "CRAN",
         "Date/Publication": "2024-12-08 12:10:02 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 03:10:39 UTC; windows",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-16 02:47:26 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -2516,7 +2566,7 @@
         "Maintainer": "Lionel Henry <lionel@rstudio.com>",
         "Repository": "CRAN",
         "Date/Publication": "2022-03-30 07:30:09 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 02:22:42 UTC; windows",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-16 01:52:14 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -2542,7 +2592,7 @@
         "Maintainer": "Winston Chang <winston@rstudio.com>",
         "Repository": "CRAN",
         "Date/Publication": "2021-11-26 16:11:10 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 03:22:42 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-16 02:54:40 UTC; windows"
       }
     },
     "mgcv": {
@@ -2593,7 +2643,7 @@
         "Maintainer": "Joshua M. Ulrich <josh.m.ulrich@gmail.com>",
         "Repository": "CRAN",
         "Date/Publication": "2024-09-04 18:30:02 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 02:22:45 UTC; windows",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-30 01:42:45 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -2644,7 +2694,7 @@
         "Repository": "CRAN",
         "Date/Publication": "2024-08-17 21:50:06 UTC",
         "Author": "Douglas Bates [aut],\n  Katharine M. Mullen [aut, cre],\n  John C. Nash [aut],\n  Ravi Varadhan [aut]",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 03:10:34 UTC; windows",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-30 02:25:19 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -2674,7 +2724,7 @@
         "Maintainer": "Hadley Wickham <hadley@posit.co>",
         "Repository": "CRAN",
         "Date/Publication": "2023-03-22 13:00:07 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 04:52:12 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-16 04:35:20 UTC; windows"
       }
     },
     "multcompView": {
@@ -2697,7 +2747,14 @@
         "NeedsCompilation": "no",
         "Repository": "CRAN",
         "Date/Publication": "2024-03-08 05:00:02 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 02:23:55 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-02-25 02:15:28 UTC; windows",
+        "RemoteType": "standard",
+        "RemotePkgRef": "multcompView",
+        "RemoteRef": "multcompView",
+        "RemoteRepos": "https://cran.rstudio.com",
+        "RemoteReposName": "CRAN",
+        "RemotePkgPlatform": "x86_64-w64-mingw32",
+        "RemoteSha": "0.1-10"
       }
     },
     "munsell": {
@@ -2722,7 +2779,7 @@
         "Packaged": "2024-04-01 20:42:09 UTC; charlottewickham",
         "Repository": "CRAN",
         "Date/Publication": "2024-04-01 23:40:10 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 03:10:33 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-16 02:47:26 UTC; windows"
       }
     },
     "mvtnorm": {
@@ -2746,8 +2803,15 @@
         "Maintainer": "Torsten Hothorn <Torsten.Hothorn@R-project.org>",
         "Repository": "CRAN",
         "Date/Publication": "2025-01-10 16:20:10 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 02:22:44 UTC; windows",
-        "Archs": "x64"
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-02-25 02:15:17 UTC; windows",
+        "Archs": "x64",
+        "RemoteType": "standard",
+        "RemotePkgRef": "mvtnorm",
+        "RemoteRef": "mvtnorm",
+        "RemoteRepos": "https://cran.rstudio.com",
+        "RemoteReposName": "CRAN",
+        "RemotePkgPlatform": "x86_64-w64-mingw32",
+        "RemoteSha": "1.3-3"
       }
     },
     "nlme": {
@@ -2788,25 +2852,25 @@
         "Package": "nloptr",
         "Type": "Package",
         "Title": "R Interface to NLopt",
-        "Version": "2.2.0",
-        "Authors@R": "c(person(\"Jelmer\", \"Ypma\", role = \"aut\",\n                    email = \"uctpjyy@ucl.ac.uk\"),\n             person(c(\"Steven\", \"G.\"), \"Johnson\", role = \"aut\",\n                    comment = \"author of the NLopt C library\"),\n             person(\"Aymeric\", \"Stamm\", role = c(\"ctb\", \"cre\"),\n                    email = \"aymeric.stamm@cnrs.fr\",\n                    comment = c(ORCID = \"0000-0002-8725-3654\")),\n             person(c(\"Hans\", \"W.\"), \"Borchers\", role = \"ctb\",\n                    email = \"hwborchers@googlemail.com\"),\n             person(\"Dirk\", \"Eddelbuettel\", role = \"ctb\",\n                    email = \"edd@debian.org\"),\n             person(\"Brian\", \"Ripley\", role = \"ctb\",\n                    comment = \"build process on multiple OS\"),\n             person(\"Kurt\", \"Hornik\", role = \"ctb\",\n                    comment = \"build process on multiple OS\"),\n             person(\"Julien\", \"Chiquet\", role = \"ctb\"),\n             person(\"Avraham\", \"Adler\", role = \"ctb\", \n                    email = \"Avraham.Adler@gmail.com\",\n                    comment = c(ORCID = \"0000-0002-3039-0703\")),\n             person(\"Xiongtao\", \"Dai\", role = \"ctb\"),\n             person(\"Jeroen\", \"Ooms\", role = \"ctb\",\n                    email = \"jeroen@berkeley.edu\"),\n             person(\"Tomas\", \"Kalibera\", role = \"ctb\"),\n             person(\"Mikael\", \"Jagan\", role = \"ctb\"))",
+        "Version": "2.1.1",
+        "Authors@R": "c(person(\"Jelmer\", \"Ypma\", role = \"aut\",\n                    email = \"uctpjyy@ucl.ac.uk\"),\n             person(c(\"Steven\", \"G.\"), \"Johnson\", role = \"aut\",\n                    comment = \"author of the NLopt C library\"),\n             person(\"Aymeric\", \"Stamm\", role = c(\"ctb\", \"cre\"),\n                    email = \"aymeric.stamm@cnrs.fr\",\n                    comment = c(ORCID = \"0000-0002-8725-3654\")),\n             person(c(\"Hans\", \"W.\"), \"Borchers\", role = \"ctb\",\n                    email = \"hwborchers@googlemail.com\"),\n             person(\"Dirk\", \"Eddelbuettel\", role = \"ctb\",\n                    email = \"edd@debian.org\"),\n             person(\"Brian\", \"Ripley\", role = \"ctb\",\n                    comment = \"build process on multiple OS\"),\n             person(\"Kurt\", \"Hornik\", role = \"ctb\",\n                    comment = \"build process on multiple OS\"),\n             person(\"Julien\", \"Chiquet\", role = \"ctb\"),\n             person(\"Avraham\", \"Adler\", role = \"ctb\", \n                    email = \"Avraham.Adler@gmail.com\",\n                    comment = c(ORCID = \"0000-0002-3039-0703\")),\n             person(\"Xiongtao\", \"Dai\", role = \"ctb\"),\n             person(\"Jeroen\", \"Ooms\", role = \"ctb\",\n                    email = \"jeroen@berkeley.edu\"))",
         "Description": "\n    Solve optimization problems using an R interface to NLopt. NLopt is a \n    free/open-source library for nonlinear optimization, providing a common\n    interface for a number of different free optimization routines available\n    online as well as original implementations of various other algorithms.\n    See <https://nlopt.readthedocs.io/en/latest/NLopt_Algorithms/> for more\n    information on the available algorithms. Building from included sources \n    requires 'CMake'. On Linux and 'macOS', if a suitable system build of \n    NLopt (2.7.0 or later) is found, it is used; otherwise, it is built \n    from included sources via 'CMake'. On Windows, NLopt is obtained through \n    'rwinlib' for 'R <= 4.1.x' or grabbed from the appropriate toolchain for\n    'R >= 4.2.0'.",
         "License": "LGPL (>= 3)",
         "SystemRequirements": "cmake (>= 3.2.0) which is used only on Linux or\nmacOS systems when no system build of nlopt (>= 2.7.0) can be\nfound.",
+        "Biarch": "true",
         "Encoding": "UTF-8",
-        "RoxygenNote": "7.3.2",
+        "RoxygenNote": "7.3.1",
         "Suggests": "knitr, rmarkdown, covr, tinytest",
         "VignetteBuilder": "knitr",
         "URL": "https://github.com/astamm/nloptr, https://astamm.github.io/nloptr/",
         "BugReports": "https://github.com/astamm/nloptr/issues",
         "NeedsCompilation": "yes",
-        "UseLTO": "yes",
-        "Packaged": "2025-03-12 01:01:41 UTC; stamm-a",
-        "Author": "Jelmer Ypma [aut],\n  Steven G. Johnson [aut] (author of the NLopt C library),\n  Aymeric Stamm [ctb, cre] (<https://orcid.org/0000-0002-8725-3654>),\n  Hans W. Borchers [ctb],\n  Dirk Eddelbuettel [ctb],\n  Brian Ripley [ctb] (build process on multiple OS),\n  Kurt Hornik [ctb] (build process on multiple OS),\n  Julien Chiquet [ctb],\n  Avraham Adler [ctb] (<https://orcid.org/0000-0002-3039-0703>),\n  Xiongtao Dai [ctb],\n  Jeroen Ooms [ctb],\n  Tomas Kalibera [ctb],\n  Mikael Jagan [ctb]",
+        "Packaged": "2024-06-24 15:47:10 UTC; stamm-a",
+        "Author": "Jelmer Ypma [aut],\n  Steven G. Johnson [aut] (author of the NLopt C library),\n  Aymeric Stamm [ctb, cre] (<https://orcid.org/0000-0002-8725-3654>),\n  Hans W. Borchers [ctb],\n  Dirk Eddelbuettel [ctb],\n  Brian Ripley [ctb] (build process on multiple OS),\n  Kurt Hornik [ctb] (build process on multiple OS),\n  Julien Chiquet [ctb],\n  Avraham Adler [ctb] (<https://orcid.org/0000-0002-3039-0703>),\n  Xiongtao Dai [ctb],\n  Jeroen Ooms [ctb]",
         "Maintainer": "Aymeric Stamm <aymeric.stamm@cnrs.fr>",
         "Repository": "CRAN",
-        "Date/Publication": "2025-03-12 07:50:03 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 02:22:45 UTC; windows",
+        "Date/Publication": "2024-06-25 10:00:02 UTC",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-30 01:42:46 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -2866,7 +2930,7 @@
         "Package": "openssl",
         "Type": "Package",
         "Title": "Toolkit for Encryption, Signatures and Certificates Based on\nOpenSSL",
-        "Version": "2.3.2",
+        "Version": "2.3.1",
         "Authors@R": "c(person(\"Jeroen\", \"Ooms\", role = c(\"aut\", \"cre\"), email = \"jeroenooms@gmail.com\",\n    comment = c(ORCID = \"0000-0002-4035-0289\")),\n    person(\"Oliver\", \"Keyes\", role = \"ctb\"))",
         "Description": "Bindings to OpenSSL libssl and libcrypto, plus custom SSH key parsers.\n    Supports RSA, DSA and EC curves P-256, P-384, P-521, and curve25519. Cryptographic\n    signatures can either be created and verified manually or via x509 certificates. \n    AES can be used in cbc, ctr or gcm mode for symmetric encryption; RSA for asymmetric\n    (public key) encryption or EC for Diffie Hellman. High-level envelope functions \n    combine RSA and AES for encrypting arbitrary sized data. Other utilities include key\n    generators, hash functions (md5, sha1, sha256, etc), base64 encoder, a secure random\n    number generator, and 'bignum' math methods for manually performing crypto \n    calculations on large multibyte integers.",
         "License": "MIT + file LICENSE",
@@ -2879,12 +2943,12 @@
         "RoxygenNote": "7.3.2",
         "Encoding": "UTF-8",
         "NeedsCompilation": "yes",
-        "Packaged": "2025-02-03 10:27:29 UTC; jeroen",
+        "Packaged": "2025-01-08 21:40:58 UTC; jeroen",
         "Author": "Jeroen Ooms [aut, cre] (<https://orcid.org/0000-0002-4035-0289>),\n  Oliver Keyes [ctb]",
         "Maintainer": "Jeroen Ooms <jeroenooms@gmail.com>",
         "Repository": "CRAN",
-        "Date/Publication": "2025-02-03 14:20:02 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 03:22:57 UTC; windows",
+        "Date/Publication": "2025-01-09 12:50:02 UTC",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-16 02:54:50 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -2913,7 +2977,7 @@
         "Author": "Thomas Lin Pedersen [cre, aut]\n    (<https://orcid.org/0000-0002-5147-4711>)",
         "Repository": "CRAN",
         "Date/Publication": "2024-09-16 09:30:02 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 04:20:26 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-16 04:00:41 UTC; windows"
       }
     },
     "pbkrtest": {
@@ -2941,7 +3005,7 @@
         "Author": "Ulrich Halekoh [aut, cph],\n  Søren Højsgaard [aut, cre, cph]",
         "Repository": "CRAN",
         "Date/Publication": "2024-06-26 22:20:02 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 05:13:38 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-30 04:39:38 UTC; windows"
       }
     },
     "pillar": {
@@ -2974,7 +3038,7 @@
         "Maintainer": "Kirill Müller <kirill@cynkra.com>",
         "Repository": "CRAN",
         "Date/Publication": "2025-01-07 11:10:06 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 03:39:22 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-16 03:12:07 UTC; windows"
       }
     },
     "pkgconfig": {
@@ -2998,7 +3062,7 @@
         "Packaged": "2019-09-22 08:42:40 UTC; gaborcsardi",
         "Repository": "CRAN",
         "Date/Publication": "2019-09-22 09:20:02 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 02:22:43 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-16 01:52:14 UTC; windows"
       }
     },
     "plotly": {
@@ -3026,7 +3090,7 @@
         "Maintainer": "Carson Sievert <cpsievert1@gmail.com>",
         "Repository": "CRAN",
         "Date/Publication": "2024-01-13 22:40:02 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 04:38:34 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-25 04:26:41 UTC; windows"
       }
     },
     "prettyunits": {
@@ -3051,7 +3115,7 @@
         "Maintainer": "Gabor Csardi <csardi.gabor@gmail.com>",
         "Repository": "CRAN",
         "Date/Publication": "2023-09-24 21:10:02 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 02:23:06 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-16 01:52:40 UTC; windows"
       }
     },
     "processx": {
@@ -3060,7 +3124,7 @@
       "description": {
         "Package": "processx",
         "Title": "Execute and Control System Processes",
-        "Version": "3.8.6",
+        "Version": "3.8.5",
         "Authors@R": "c(\n    person(\"Gábor\", \"Csárdi\", , \"csardi.gabor@gmail.com\", role = c(\"aut\", \"cre\", \"cph\"),\n           comment = c(ORCID = \"0000-0001-7098-9676\")),\n    person(\"Winston\", \"Chang\", role = \"aut\"),\n    person(\"Posit Software, PBC\", role = c(\"cph\", \"fnd\")),\n    person(\"Ascent Digital Services\", role = c(\"cph\", \"fnd\"))\n  )",
         "Description": "Tools to run system processes in the background.  It can\n    check if a background process is running; wait on a background process\n    to finish; get the exit status of finished processes; kill background\n    processes. It can read the standard output and error of the processes,\n    using non-blocking connections. 'processx' can poll a process for\n    standard output or error, with a timeout. It can also poll several\n    processes at once.",
         "License": "MIT + file LICENSE",
@@ -3074,12 +3138,12 @@
         "Encoding": "UTF-8",
         "RoxygenNote": "7.3.1.9000",
         "NeedsCompilation": "yes",
-        "Packaged": "2025-02-19 21:20:47 UTC; gaborcsardi",
+        "Packaged": "2025-01-08 20:40:10 UTC; gaborcsardi",
         "Author": "Gábor Csárdi [aut, cre, cph] (<https://orcid.org/0000-0001-7098-9676>),\n  Winston Chang [aut],\n  Posit Software, PBC [cph, fnd],\n  Ascent Digital Services [cph, fnd]",
         "Maintainer": "Gábor Csárdi <csardi.gabor@gmail.com>",
         "Repository": "CRAN",
-        "Date/Publication": "2025-02-21 17:00:01 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 03:10:37 UTC; windows",
+        "Date/Publication": "2025-01-08 21:30:02 UTC",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-16 02:47:26 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -3108,7 +3172,7 @@
         "Maintainer": "Gábor Csárdi <csardi.gabor@gmail.com>",
         "Repository": "CRAN",
         "Date/Publication": "2023-12-06 10:30:02 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 03:49:30 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-16 03:24:22 UTC; windows"
       }
     },
     "promises": {
@@ -3138,7 +3202,7 @@
         "Maintainer": "Joe Cheng <joe@posit.co>",
         "Repository": "CRAN",
         "Date/Publication": "2024-11-28 00:40:02 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 03:22:42 UTC; windows",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-25 03:09:42 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -3148,7 +3212,7 @@
       "description": {
         "Package": "ps",
         "Title": "List, Query, Manipulate System Processes",
-        "Version": "1.9.0",
+        "Version": "1.8.1",
         "Authors@R": "c(\n    person(\"Jay\", \"Loden\", role = \"aut\"),\n    person(\"Dave\", \"Daeschler\", role = \"aut\"),\n    person(\"Giampaolo\", \"Rodola'\", role = \"aut\"),\n    person(\"Gábor\", \"Csárdi\", , \"csardi.gabor@gmail.com\", role = c(\"aut\", \"cre\")),\n    person(\"Posit Software, PBC\", role = c(\"cph\", \"fnd\"))\n  )",
         "Description": "List, query and manipulate all system processes, on\n    'Windows', 'Linux' and 'macOS'.",
         "License": "MIT + file LICENSE",
@@ -3163,12 +3227,12 @@
         "Encoding": "UTF-8",
         "RoxygenNote": "7.3.2",
         "NeedsCompilation": "yes",
-        "Packaged": "2025-02-18 15:40:48 UTC; gaborcsardi",
+        "Packaged": "2024-10-28 21:43:41 UTC; gaborcsardi",
         "Author": "Jay Loden [aut],\n  Dave Daeschler [aut],\n  Giampaolo Rodola' [aut],\n  Gábor Csárdi [aut, cre],\n  Posit Software, PBC [cph, fnd]",
         "Maintainer": "Gábor Csárdi <csardi.gabor@gmail.com>",
         "Repository": "CRAN",
-        "Date/Publication": "2025-02-18 23:10:02 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 02:23:10 UTC; windows",
+        "Date/Publication": "2024-10-28 22:10:02 UTC",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-16 01:52:30 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -3202,7 +3266,7 @@
         "Maintainer": "Hadley Wickham <hadley@posit.co>",
         "Repository": "CRAN",
         "Date/Publication": "2025-02-05 18:00:01 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 03:39:36 UTC; windows",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-02-25 03:20:07 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -3213,7 +3277,7 @@
         "Package": "quantreg",
         "Title": "Quantile Regression",
         "Description": "Estimation and inference methods for models for conditional quantile functions: \n  Linear and nonlinear parametric and non-parametric (total variation penalized) models \n  for conditional quantiles of a univariate response and several methods for handling\n  censored survival data.  Portfolio selection methods based on expected shortfall\n  risk are also now included. See Koenker, R. (2005) Quantile Regression, Cambridge U. Press,\n  <doi:10.1017/CBO9780511754098> and Koenker, R. et al. (2017) Handbook of Quantile Regression, \n  CRC Press, <doi:10.1201/9781315120256>. ",
-        "Version": "6.1",
+        "Version": "6.00",
         "Authors@R": "c(\n    person(\"Roger\", \"Koenker\",  role = c(\"cre\",\"aut\"), email =  \"rkoenker@illinois.edu\"),\n    person(\"Stephen\", \"Portnoy\",  role = c(\"ctb\"), \n\tcomment = \"Contributions to Censored QR code\", email =  \"sportnoy@illinois.edu\"),\n    person(c(\"Pin\", \"Tian\"), \"Ng\",  role = c(\"ctb\"), \n\tcomment = \"Contributions to Sparse QR code\", email =  \"pin.ng@nau.edu\"),\n    person(\"Blaise\", \"Melly\",  role = c(\"ctb\"), \n\tcomment = \"Contributions to preprocessing code\", email =  \"mellyblaise@gmail.com\"),\n    person(\"Achim\", \"Zeileis\",  role = c(\"ctb\"), \n\tcomment = \"Contributions to dynrq code essentially identical to his dynlm code\", \n\temail =  \"Achim.Zeileis@uibk.ac.at\"),\n    person(\"Philip\", \"Grosjean\",  role = c(\"ctb\"), \n\tcomment = \"Contributions to nlrq code\", email =  \"phgrosjean@sciviews.org\"),\n    person(\"Cleve\", \"Moler\",  role = c(\"ctb\"), \n\tcomment = \"author of several linpack routines\"),\n    person(\"Yousef\", \"Saad\",  role = c(\"ctb\"), \n\tcomment = \"author of sparskit2\"),\n    person(\"Victor\", \"Chernozhukov\",  role = c(\"ctb\"), \n\tcomment = \"contributions to extreme value inference code\"),\n    person(\"Ivan\", \"Fernandez-Val\",  role = c(\"ctb\"), \n\tcomment = \"contributions to extreme value inference code\"),\n    person(\"Martin\", \"Maechler\", role = \"ctb\", comment = c(\"tweaks (src/chlfct.f, 'tiny','Large')\",\n\t\t\t\tORCID = \"0000-0002-8685-9910\")),\n    person(c(\"Brian\", \"D\"), \"Ripley\",  role = c(\"trl\",\"ctb\"), \n\tcomment = \"Initial (2001) R port from S (to my everlasting shame -- \n\thow could I have been so slow to adopt R!) and for numerous other \n\tsuggestions and useful advice\", email =  \"ripley@stats.ox.ac.uk\"))",
         "Maintainer": "Roger Koenker <rkoenker@illinois.edu>",
         "Repository": "CRAN",
@@ -3224,10 +3288,10 @@
         "URL": "https://www.r-project.org",
         "NeedsCompilation": "yes",
         "VignetteBuilder": "R.rsp",
-        "Packaged": "2025-02-28 17:44:44 UTC; roger",
+        "Packaged": "2025-01-29 14:54:51 UTC; roger",
         "Author": "Roger Koenker [cre, aut],\n  Stephen Portnoy [ctb] (Contributions to Censored QR code),\n  Pin Tian Ng [ctb] (Contributions to Sparse QR code),\n  Blaise Melly [ctb] (Contributions to preprocessing code),\n  Achim Zeileis [ctb] (Contributions to dynrq code essentially identical\n    to his dynlm code),\n  Philip Grosjean [ctb] (Contributions to nlrq code),\n  Cleve Moler [ctb] (author of several linpack routines),\n  Yousef Saad [ctb] (author of sparskit2),\n  Victor Chernozhukov [ctb] (contributions to extreme value inference\n    code),\n  Ivan Fernandez-Val [ctb] (contributions to extreme value inference\n    code),\n  Martin Maechler [ctb] (tweaks (src/chlfct.f, 'tiny','Large'),\n    <https://orcid.org/0000-0002-8685-9910>),\n  Brian D Ripley [trl, ctb] (Initial (2001) R port from S (to my\n    everlasting shame -- how could I have been so slow to adopt R!) and\n    for numerous other suggestions and useful advice)",
-        "Date/Publication": "2025-03-10 08:50:09 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 03:39:27 UTC; windows",
+        "Date/Publication": "2025-01-29 16:40:05 UTC",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-30 00:51:13 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -3258,7 +3322,7 @@
         "Author": "Thomas Lin Pedersen [cre, aut]\n    (<https://orcid.org/0000-0002-5147-4711>),\n  Maxim Shemanarev [aut, cph] (Author of AGG),\n  Tony Juricic [ctb, cph] (Contributor to AGG),\n  Milan Marusinec [ctb, cph] (Contributor to AGG),\n  Spencer Garrett [ctb] (Contributor to AGG),\n  Posit, PBC [cph, fnd]",
         "Repository": "CRAN",
         "Date/Publication": "2024-09-11 17:50:02 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 03:49:29 UTC; windows",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-16 03:24:23 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -3287,7 +3351,7 @@
         "Maintainer": "Hadley Wickham <hadley@rstudio.com>",
         "Repository": "CRAN",
         "Date/Publication": "2021-01-31 05:40:02 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 02:22:43 UTC; windows",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-16 01:52:14 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -3315,7 +3379,7 @@
         "Maintainer": "Georgi N. Boshnakov <georgi.boshnakov@manchester.ac.uk>",
         "Repository": "CRAN",
         "Date/Publication": "2024-10-04 08:30:02 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 02:22:45 UTC; windows",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-30 01:42:46 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -3348,7 +3412,7 @@
         "Maintainer": "Jennifer Bryan <jenny@posit.co>",
         "Repository": "CRAN",
         "Date/Publication": "2024-01-10 23:20:02 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 04:20:23 UTC; windows",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-16 04:00:33 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -3358,7 +3422,7 @@
       "description": {
         "Package": "readxl",
         "Title": "Read Excel Files",
-        "Version": "1.4.5",
+        "Version": "1.4.3",
         "Authors@R": "c(\n    person(\"Hadley\", \"Wickham\", , \"hadley@posit.co\", role = \"aut\",\n           comment = c(ORCID = \"0000-0003-4757-117X\")),\n    person(\"Jennifer\", \"Bryan\", , \"jenny@posit.co\", role = c(\"aut\", \"cre\"),\n           comment = c(ORCID = \"0000-0002-6983-2759\")),\n    person(\"Posit, PBC\", role = c(\"cph\", \"fnd\"),\n           comment = \"Copyright holder of all R code and all C/C++ code without explicit copyright attribution\"),\n    person(\"Marcin\", \"Kalicinski\", role = c(\"ctb\", \"cph\"),\n           comment = \"Author of included RapidXML code\"),\n    person(\"Komarov Valery\", role = c(\"ctb\", \"cph\"),\n           comment = \"Author of included libxls code\"),\n    person(\"Christophe Leitienne\", role = c(\"ctb\", \"cph\"),\n           comment = \"Author of included libxls code\"),\n    person(\"Bob Colbert\", role = c(\"ctb\", \"cph\"),\n           comment = \"Author of included libxls code\"),\n    person(\"David Hoerl\", role = c(\"ctb\", \"cph\"),\n           comment = \"Author of included libxls code\"),\n    person(\"Evan Miller\", role = c(\"ctb\", \"cph\"),\n           comment = \"Author of included libxls code\")\n  )",
         "Description": "Import excel files into R. Supports '.xls' via the embedded\n    'libxls' C library <https://github.com/libxls/libxls> and '.xlsx' via\n    the embedded 'RapidXML' C++ library <https://rapidxml.sourceforge.net/>.\n    Works on Windows, Mac and Linux without external dependencies.",
         "License": "MIT + file LICENSE",
@@ -3372,15 +3436,15 @@
         "Config/Needs/website": "tidyverse/tidytemplate, tidyverse",
         "Config/testthat/edition": "3",
         "Encoding": "UTF-8",
-        "Note": "libxls v1.6.3 c199d13",
-        "RoxygenNote": "7.3.2",
+        "Note": "libxls v1.6.2 (patched) 45abe77",
+        "RoxygenNote": "7.2.3",
         "NeedsCompilation": "yes",
-        "Packaged": "2025-03-07 07:25:57 UTC; jenny",
+        "Packaged": "2023-07-05 19:59:43 UTC; jenny",
         "Author": "Hadley Wickham [aut] (<https://orcid.org/0000-0003-4757-117X>),\n  Jennifer Bryan [aut, cre] (<https://orcid.org/0000-0002-6983-2759>),\n  Posit, PBC [cph, fnd] (Copyright holder of all R code and all C/C++\n    code without explicit copyright attribution),\n  Marcin Kalicinski [ctb, cph] (Author of included RapidXML code),\n  Komarov Valery [ctb, cph] (Author of included libxls code),\n  Christophe Leitienne [ctb, cph] (Author of included libxls code),\n  Bob Colbert [ctb, cph] (Author of included libxls code),\n  David Hoerl [ctb, cph] (Author of included libxls code),\n  Evan Miller [ctb, cph] (Author of included libxls code)",
         "Maintainer": "Jennifer Bryan <jenny@posit.co>",
         "Repository": "CRAN",
-        "Date/Publication": "2025-03-07 17:10:02 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 04:20:23 UTC; windows",
+        "Date/Publication": "2023-07-06 22:00:09 UTC",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-16 04:00:24 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -3406,7 +3470,7 @@
         "Maintainer": "Ben Bolker <bolker@mcmaster.ca>",
         "Repository": "CRAN",
         "Date/Publication": "2024-11-03 05:30:11 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 03:22:45 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-30 02:42:34 UTC; windows"
       }
     },
     "rematch": {
@@ -3429,7 +3493,7 @@
         "Packaged": "2023-08-30 12:10:51 UTC; gaborcsardi",
         "Repository": "CRAN",
         "Date/Publication": "2023-08-30 16:50:02 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 02:23:12 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-16 01:52:37 UTC; windows"
       }
     },
     "rematch2": {
@@ -3455,7 +3519,7 @@
         "Maintainer": "Gábor Csárdi <csardi.gabor@gmail.com>",
         "Repository": "CRAN",
         "Date/Publication": "2020-05-01 06:50:02 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 03:59:26 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-16 03:35:15 UTC; windows"
       }
     },
     "reprex": {
@@ -3488,7 +3552,7 @@
         "Maintainer": "Jennifer Bryan <jenny@posit.co>",
         "Repository": "CRAN",
         "Date/Publication": "2024-07-06 13:50:01 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 03:59:26 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-16 03:35:15 UTC; windows"
       }
     },
     "rlang": {
@@ -3496,7 +3560,7 @@
       "Repository": "https://cran.rstudio.com",
       "description": {
         "Package": "rlang",
-        "Version": "1.1.5",
+        "Version": "1.1.4",
         "Title": "Functions for Base Types and Core R and 'Tidyverse' Features",
         "Description": "A toolbox for working with base types, core R features\n  like the condition system, and core 'Tidyverse' features like tidy\n  evaluation.",
         "Authors@R": "c(\n    person(\"Lionel\", \"Henry\", ,\"lionel@posit.co\", c(\"aut\", \"cre\")),\n    person(\"Hadley\", \"Wickham\", ,\"hadley@posit.co\", \"aut\"),\n    person(given = \"mikefc\",\n           email = \"mikefc@coolbutuseless.com\", \n           role = \"cph\", \n           comment = \"Hash implementation based on Mike's xxhashlite\"),\n    person(given = \"Yann\",\n           family = \"Collet\",\n           role = \"cph\", \n           comment = \"Author of the embedded xxHash library\"),\n    person(given = \"Posit, PBC\", role = c(\"cph\", \"fnd\"))\n    )",
@@ -3508,18 +3572,18 @@
         "Suggests": "cli (>= 3.1.0), covr, crayon, fs, glue, knitr, magrittr,\nmethods, pillar, rmarkdown, stats, testthat (>= 3.0.0), tibble,\nusethis, vctrs (>= 0.2.3), withr",
         "Enhances": "winch",
         "Encoding": "UTF-8",
-        "RoxygenNote": "7.3.2",
+        "RoxygenNote": "7.3.1",
         "URL": "https://rlang.r-lib.org, https://github.com/r-lib/rlang",
         "BugReports": "https://github.com/r-lib/rlang/issues",
         "Config/testthat/edition": "3",
         "Config/Needs/website": "dplyr, tidyverse/tidytemplate",
         "NeedsCompilation": "yes",
-        "Packaged": "2025-01-17 08:43:17 UTC; lionel",
+        "Packaged": "2024-05-31 12:46:04 UTC; lionel",
         "Author": "Lionel Henry [aut, cre],\n  Hadley Wickham [aut],\n  mikefc [cph] (Hash implementation based on Mike's xxhashlite),\n  Yann Collet [cph] (Author of the embedded xxHash library),\n  Posit, PBC [cph, fnd]",
         "Maintainer": "Lionel Henry <lionel@posit.co>",
         "Repository": "CRAN",
-        "Date/Publication": "2025-01-17 14:30:02 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 02:22:43 UTC; windows",
+        "Date/Publication": "2024-06-04 09:45:03 UTC",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-16 01:52:16 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -3551,7 +3615,7 @@
         "Maintainer": "Yihui Xie <xie@yihui.name>",
         "Repository": "CRAN",
         "Date/Publication": "2024-11-04 12:30:09 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 03:49:30 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-16 03:24:15 UTC; windows"
       }
     },
     "rstudioapi": {
@@ -3576,7 +3640,7 @@
         "Author": "Kevin Ushey [aut, cre],\n  JJ Allaire [aut],\n  Hadley Wickham [aut],\n  Gary Ritchie [aut],\n  RStudio [cph]",
         "Repository": "CRAN",
         "Date/Publication": "2024-10-22 22:40:02 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 02:22:58 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-16 01:52:15 UTC; windows"
       }
     },
     "rvest": {
@@ -3607,7 +3671,7 @@
         "Maintainer": "Hadley Wickham <hadley@posit.co>",
         "Repository": "CRAN",
         "Date/Publication": "2024-02-12 20:10:02 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 03:59:26 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-16 03:35:15 UTC; windows"
       }
     },
     "sass": {
@@ -3636,7 +3700,7 @@
         "Maintainer": "Carson Sievert <carson@rstudio.com>",
         "Repository": "CRAN",
         "Date/Publication": "2024-03-15 22:30:02 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 03:22:42 UTC; windows",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-16 02:54:40 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -3666,7 +3730,7 @@
         "Maintainer": "Thomas Lin Pedersen <thomas.pedersen@posit.co>",
         "Repository": "CRAN",
         "Date/Publication": "2023-11-28 09:10:06 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 03:22:40 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-16 02:54:40 UTC; windows"
       }
     },
     "scatterplot3d": {
@@ -3688,7 +3752,14 @@
         "Packaged": "2023-05-05 08:23:11 UTC; ligges",
         "Repository": "CRAN",
         "Date/Publication": "2023-05-05 09:20:09 UTC",
-        "Built": "R 4.4.0; ; 2024-04-23 00:25:51 UTC; windows"
+        "Built": "R 4.4.0; ; 2024-04-23 00:25:51 UTC; windows",
+        "RemoteType": "standard",
+        "RemotePkgRef": "scatterplot3d",
+        "RemoteRef": "scatterplot3d",
+        "RemoteRepos": "https://cran.rstudio.com",
+        "RemoteReposName": "CRAN",
+        "RemotePkgPlatform": "x86_64-w64-mingw32",
+        "RemoteSha": "0.3-44"
       }
     },
     "selectr": {
@@ -3714,7 +3785,7 @@
         "Maintainer": "Simon Potter <simon@sjp.co.nz>",
         "Repository": "CRAN",
         "Date/Publication": "2019-11-20 07:30:03 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 03:39:34 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-16 03:24:21 UTC; windows"
       }
     },
     "shiny": {
@@ -3745,7 +3816,7 @@
         "Maintainer": "Winston Chang <winston@posit.co>",
         "Repository": "CRAN",
         "Date/Publication": "2024-12-14 00:10:02 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 03:49:29 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-25 03:37:38 UTC; windows"
       }
     },
     "sourcetools": {
@@ -3769,7 +3840,7 @@
         "Packaged": "2023-01-31 18:03:04 UTC; kevin",
         "Repository": "CRAN",
         "Date/Publication": "2023-02-01 10:10:02 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 02:22:43 UTC; windows",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-25 02:07:26 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -3830,7 +3901,7 @@
         "Maintainer": "Hadley Wickham <hadley@posit.co>",
         "Repository": "CRAN",
         "Date/Publication": "2023-11-14 23:10:02 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 03:39:24 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-16 03:12:07 UTC; windows"
       }
     },
     "survival": {
@@ -3884,7 +3955,7 @@
         "Maintainer": "Jeroen Ooms <jeroenooms@gmail.com>",
         "Repository": "CRAN",
         "Date/Publication": "2024-10-04 09:40:02 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 02:22:58 UTC; windows",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-16 01:52:14 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -3895,29 +3966,28 @@
         "Type": "Package",
         "Package": "systemfonts",
         "Title": "System Native Font Finding",
-        "Version": "1.2.1",
+        "Version": "1.1.0",
         "Authors@R": "c(\n    person(\"Thomas Lin\", \"Pedersen\", , \"thomas.pedersen@posit.co\", role = c(\"aut\", \"cre\"),\n           comment = c(ORCID = \"0000-0002-5147-4711\")),\n    person(\"Jeroen\", \"Ooms\", , \"jeroen@berkeley.edu\", role = \"aut\",\n           comment = c(ORCID = \"0000-0002-4035-0289\")),\n    person(\"Devon\", \"Govett\", role = \"aut\",\n           comment = \"Author of font-manager\"),\n    person(\"Posit, PBC\", role = c(\"cph\", \"fnd\"))\n  )",
         "Description": "Provides system native access to the font catalogue. As font\n    handling varies between systems it is difficult to correctly locate\n    installed fonts across different operating systems. The 'systemfonts'\n    package provides bindings to the native libraries on Windows, macOS\n    and Linux for finding font files that can then be used further by e.g.\n    graphic devices. The main use is intended to be from compiled code but\n    'systemfonts' also provides access from R.",
         "License": "MIT + file LICENSE",
         "URL": "https://github.com/r-lib/systemfonts,\nhttps://systemfonts.r-lib.org",
         "BugReports": "https://github.com/r-lib/systemfonts/issues",
         "Depends": "R (>= 3.2.0)",
-        "Suggests": "covr, farver, graphics, knitr, rmarkdown, testthat (>= 2.1.0)",
+        "Suggests": "covr, knitr, rmarkdown, testthat (>= 2.1.0), tools",
         "LinkingTo": "cpp11 (>= 0.2.1)",
         "VignetteBuilder": "knitr",
         "Encoding": "UTF-8",
-        "RoxygenNote": "7.3.2",
+        "RoxygenNote": "7.3.1",
         "SystemRequirements": "fontconfig, freetype2",
         "Config/Needs/website": "tidyverse/tidytemplate",
-        "Imports": "grid, jsonlite, lifecycle, tools, utils",
-        "Config/build/compilation-database": "true",
+        "Imports": "lifecycle",
         "NeedsCompilation": "yes",
-        "Packaged": "2025-01-20 08:28:46 UTC; thomas",
+        "Packaged": "2024-05-13 13:50:57 UTC; thomas",
         "Author": "Thomas Lin Pedersen [aut, cre]\n    (<https://orcid.org/0000-0002-5147-4711>),\n  Jeroen Ooms [aut] (<https://orcid.org/0000-0002-4035-0289>),\n  Devon Govett [aut] (Author of font-manager),\n  Posit, PBC [cph, fnd]",
         "Maintainer": "Thomas Lin Pedersen <thomas.pedersen@posit.co>",
         "Repository": "CRAN",
-        "Date/Publication": "2025-01-20 10:30:02 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 03:22:52 UTC; windows",
+        "Date/Publication": "2024-05-15 11:10:03 UTC",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-16 02:54:52 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -3927,29 +3997,28 @@
       "description": {
         "Package": "textshaping",
         "Title": "Bindings to the 'HarfBuzz' and 'Fribidi' Libraries for Text\nShaping",
-        "Version": "1.0.0",
+        "Version": "0.4.1",
         "Authors@R": "c(\n    person(\"Thomas Lin\", \"Pedersen\", , \"thomas.pedersen@posit.co\", role = c(\"cre\", \"aut\"),\n           comment = c(ORCID = \"0000-0002-5147-4711\")),\n    person(\"Posit, PBC\", role = c(\"cph\", \"fnd\"))\n  )",
         "Description": "Provides access to the text shaping functionality in the\n    'HarfBuzz' library and the bidirectional algorithm in the 'Fribidi'\n    library.  'textshaping' is a low-level utility package mainly for\n    graphic devices that expands upon the font tool-set provided by the\n    'systemfonts' package.",
         "License": "MIT + file LICENSE",
         "URL": "https://github.com/r-lib/textshaping",
         "BugReports": "https://github.com/r-lib/textshaping/issues",
         "Depends": "R (>= 3.2.0)",
-        "Imports": "lifecycle, stats, stringi, systemfonts (>= 1.1.0), utils",
-        "Suggests": "covr, grDevices, grid, knitr, rmarkdown, testthat (>= 3.0.0)",
+        "Imports": "lifecycle, systemfonts (>= 1.1.0)",
+        "Suggests": "covr, knitr, rmarkdown",
         "LinkingTo": "cpp11 (>= 0.2.1), systemfonts (>= 1.0.0)",
         "VignetteBuilder": "knitr",
         "Encoding": "UTF-8",
         "RoxygenNote": "7.3.2",
         "SystemRequirements": "freetype2, harfbuzz, fribidi",
         "Config/build/compilation-database": "true",
-        "Config/testthat/edition": "3",
         "NeedsCompilation": "yes",
-        "Packaged": "2025-01-20 08:47:24 UTC; thomas",
+        "Packaged": "2024-12-06 13:26:23 UTC; thomas",
         "Author": "Thomas Lin Pedersen [cre, aut]\n    (<https://orcid.org/0000-0002-5147-4711>),\n  Posit, PBC [cph, fnd]",
         "Maintainer": "Thomas Lin Pedersen <thomas.pedersen@posit.co>",
         "Repository": "CRAN",
-        "Date/Publication": "2025-01-20 11:00:01 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 03:39:29 UTC; windows",
+        "Date/Publication": "2024-12-06 14:50:02 UTC",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-16 03:12:20 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -3980,7 +4049,7 @@
         "Maintainer": "Carson Sievert <carson@posit.co>",
         "Repository": "CRAN",
         "Date/Publication": "2024-07-29 15:50:02 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 04:02:02 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-25 03:50:34 UTC; windows"
       }
     },
     "tibble": {
@@ -4014,7 +4083,7 @@
         "Maintainer": "Kirill Müller <kirill@cynkra.com>",
         "Repository": "CRAN",
         "Date/Publication": "2023-03-20 06:30:02 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 03:49:28 UTC; windows",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-16 03:24:20 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -4046,7 +4115,7 @@
         "Maintainer": "Hadley Wickham <hadley@posit.co>",
         "Repository": "CRAN",
         "Date/Publication": "2024-01-24 14:50:09 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 04:20:21 UTC; windows",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-16 04:00:29 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -4077,7 +4146,7 @@
         "Maintainer": "Lionel Henry <lionel@posit.co>",
         "Repository": "CRAN",
         "Date/Publication": "2024-03-11 14:10:02 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 03:39:24 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-16 03:12:07 UTC; windows"
       }
     },
     "tidyverse": {
@@ -4106,7 +4175,7 @@
         "Maintainer": "Hadley Wickham <hadley@rstudio.com>",
         "Repository": "CRAN",
         "Date/Publication": "2023-02-22 09:20:06 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 05:09:04 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-16 04:52:53 UTC; windows"
       }
     },
     "timechange": {
@@ -4133,7 +4202,7 @@
         "Maintainer": "Vitalie Spinu <spinuvit@gmail.com>",
         "Repository": "CRAN",
         "Date/Publication": "2024-01-18 09:20:02 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 02:23:40 UTC; windows",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-16 01:53:04 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -4144,7 +4213,7 @@
         "Package": "tinytex",
         "Type": "Package",
         "Title": "Helper Functions to Install and Maintain TeX Live, and Compile\nLaTeX Documents",
-        "Version": "0.56",
+        "Version": "0.54",
         "Authors@R": "c(\n  person(\"Yihui\", \"Xie\", role = c(\"aut\", \"cre\", \"cph\"), email = \"xie@yihui.name\", comment = c(ORCID = \"0000-0003-0645-5666\")),\n  person(given = \"Posit Software, PBC\", role = c(\"cph\", \"fnd\")),\n  person(\"Christophe\", \"Dervieux\", role = \"ctb\", comment = c(ORCID = \"0000-0003-4474-2498\")),\n  person(\"Devon\", \"Ryan\", role = \"ctb\", email = \"dpryan79@gmail.com\", comment = c(ORCID = \"0000-0002-8549-0971\")),\n  person(\"Ethan\", \"Heinzen\", role = \"ctb\"),\n  person(\"Fernando\", \"Cagua\", role = \"ctb\"),\n  person()\n  )",
         "Description": "Helper functions to install and maintain the 'LaTeX' distribution\n  named 'TinyTeX' (<https://yihui.org/tinytex/>), a lightweight, cross-platform,\n  portable, and easy-to-maintain version of 'TeX Live'. This package also\n  contains helper functions to compile 'LaTeX' documents, and install missing\n  'LaTeX' packages automatically.",
         "Imports": "xfun (>= 0.48)",
@@ -4155,12 +4224,12 @@
         "Encoding": "UTF-8",
         "RoxygenNote": "7.3.2",
         "NeedsCompilation": "no",
-        "Packaged": "2025-02-26 22:02:14 UTC; runner",
+        "Packaged": "2024-11-01 14:22:24 UTC; yihui",
         "Author": "Yihui Xie [aut, cre, cph] (<https://orcid.org/0000-0003-0645-5666>),\n  Posit Software, PBC [cph, fnd],\n  Christophe Dervieux [ctb] (<https://orcid.org/0000-0003-4474-2498>),\n  Devon Ryan [ctb] (<https://orcid.org/0000-0002-8549-0971>),\n  Ethan Heinzen [ctb],\n  Fernando Cagua [ctb]",
         "Maintainer": "Yihui Xie <xie@yihui.name>",
         "Repository": "CRAN",
-        "Date/Publication": "2025-02-26 22:50:02 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 02:23:05 UTC; windows"
+        "Date/Publication": "2024-11-01 15:10:02 UTC",
+        "Built": "R 4.4.2; ; 2025-01-16 02:47:25 UTC; windows"
       }
     },
     "tzdb": {
@@ -4169,27 +4238,27 @@
       "description": {
         "Package": "tzdb",
         "Title": "Time Zone Database Information",
-        "Version": "0.5.0",
+        "Version": "0.4.0",
         "Authors@R": "c(\n    person(\"Davis\", \"Vaughan\", , \"davis@posit.co\", role = c(\"aut\", \"cre\")),\n    person(\"Howard\", \"Hinnant\", role = \"cph\",\n           comment = \"Author of the included date library\"),\n    person(\"Posit Software, PBC\", role = c(\"cph\", \"fnd\"))\n  )",
         "Description": "Provides an up-to-date copy of the Internet Assigned Numbers\n    Authority (IANA) Time Zone Database. It is updated periodically to\n    reflect changes made by political bodies to time zone boundaries, UTC\n    offsets, and daylight saving time rules. Additionally, this package\n    provides a C++ interface for working with the 'date' library. 'date'\n    provides comprehensive support for working with dates and date-times,\n    which this package exposes to make it easier for other R packages to\n    utilize. Headers are provided for calendar specific calculations,\n    along with a limited interface for time zone manipulations.",
         "License": "MIT + file LICENSE",
         "URL": "https://tzdb.r-lib.org, https://github.com/r-lib/tzdb",
         "BugReports": "https://github.com/r-lib/tzdb/issues",
-        "Depends": "R (>= 4.0.0)",
+        "Depends": "R (>= 3.5.0)",
         "Suggests": "covr, testthat (>= 3.0.0)",
-        "LinkingTo": "cpp11 (>= 0.5.2)",
+        "LinkingTo": "cpp11 (>= 0.4.2)",
         "Biarch": "yes",
         "Config/Needs/website": "tidyverse/tidytemplate",
         "Config/testthat/edition": "3",
         "Encoding": "UTF-8",
-        "RoxygenNote": "7.3.2",
+        "RoxygenNote": "7.2.3",
         "NeedsCompilation": "yes",
-        "Packaged": "2025-03-14 18:41:13 UTC; davis",
+        "Packaged": "2023-05-12 12:40:06 UTC; davis",
         "Author": "Davis Vaughan [aut, cre],\n  Howard Hinnant [cph] (Author of the included date library),\n  Posit Software, PBC [cph, fnd]",
         "Maintainer": "Davis Vaughan <davis@posit.co>",
         "Repository": "CRAN",
-        "Date/Publication": "2025-03-15 22:50:02 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 00:51:11 UTC; windows",
+        "Date/Publication": "2023-05-12 23:00:02 UTC",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-16 01:52:56 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -4217,7 +4286,7 @@
         "Maintainer": "Kirill Müller <kirill@cynkra.com>",
         "Repository": "CRAN",
         "Date/Publication": "2023-10-22 21:50:02 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 02:22:44 UTC; windows",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-16 01:52:14 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -4271,7 +4340,7 @@
         "Maintainer": "Davis Vaughan <davis@posit.co>",
         "Repository": "CRAN",
         "Date/Publication": "2023-12-01 23:50:02 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 03:22:41 UTC; windows",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-16 02:54:40 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -4299,7 +4368,7 @@
         "Author": "Simon Garnier [aut, cre],\n  Noam Ross [ctb, cph],\n  Bob Rudis [ctb, cph],\n  Marco Sciaini [ctb, cph],\n  Antônio Pedro Camargo [ctb, cph],\n  Cédric Scherer [ctb, cph]",
         "Repository": "CRAN",
         "Date/Publication": "2023-05-02 23:50:02 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 02:22:44 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-16 01:52:14 UTC; windows"
       }
     },
     "vroom": {
@@ -4332,7 +4401,7 @@
         "Maintainer": "Jennifer Bryan <jenny@posit.co>",
         "Repository": "CRAN",
         "Date/Publication": "2023-12-05 23:50:02 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 03:59:19 UTC; windows",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-16 03:35:07 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -4363,7 +4432,7 @@
         "Maintainer": "Lionel Henry <lionel@posit.co>",
         "Repository": "CRAN",
         "Date/Publication": "2024-10-28 13:30:02 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 02:22:45 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-16 01:52:14 UTC; windows"
       }
     },
     "xfun": {
@@ -4373,8 +4442,8 @@
         "Package": "xfun",
         "Type": "Package",
         "Title": "Supporting Functions for Packages Maintained by 'Yihui Xie'",
-        "Version": "0.51",
-        "Authors@R": "c(\n  person(\"Yihui\", \"Xie\", role = c(\"aut\", \"cre\", \"cph\"), email = \"xie@yihui.name\", comment = c(ORCID = \"0000-0003-0645-5666\", URL = \"https://yihui.org\")),\n  person(\"Wush\", \"Wu\", role = \"ctb\"),\n  person(\"Daijiang\", \"Li\", role = \"ctb\"),\n  person(\"Xianying\", \"Tan\", role = \"ctb\"),\n  person(\"Salim\", \"Brüggemann\", role = \"ctb\", email = \"salim-b@pm.me\", comment = c(ORCID = \"0000-0002-5329-5987\")),\n  person(\"Christophe\", \"Dervieux\", role = \"ctb\"),\n  person()\n  )",
+        "Version": "0.50",
+        "Authors@R": "c(\n  person(\"Yihui\", \"Xie\", role = c(\"aut\", \"cre\", \"cph\"), email = \"xie@yihui.name\", comment = c(ORCID = \"0000-0003-0645-5666\")),\n  person(\"Wush\", \"Wu\", role = \"ctb\"),\n  person(\"Daijiang\", \"Li\", role = \"ctb\"),\n  person(\"Xianying\", \"Tan\", role = \"ctb\"),\n  person(\"Salim\", \"Brüggemann\", role = \"ctb\", email = \"salim-b@pm.me\", comment = c(ORCID = \"0000-0002-5329-5987\")),\n  person(\"Christophe\", \"Dervieux\", role = \"ctb\"),\n  person()\n  )",
         "Description": "Miscellaneous functions commonly used in other packages maintained by 'Yihui Xie'.",
         "Depends": "R (>= 3.2.0)",
         "Imports": "grDevices, stats, tools",
@@ -4386,12 +4455,12 @@
         "RoxygenNote": "7.3.2",
         "VignetteBuilder": "litedown",
         "NeedsCompilation": "yes",
-        "Packaged": "2025-02-19 15:23:21 UTC; runner",
-        "Author": "Yihui Xie [aut, cre, cph] (<https://orcid.org/0000-0003-0645-5666>,\n    https://yihui.org),\n  Wush Wu [ctb],\n  Daijiang Li [ctb],\n  Xianying Tan [ctb],\n  Salim Brüggemann [ctb] (<https://orcid.org/0000-0002-5329-5987>),\n  Christophe Dervieux [ctb]",
+        "Packaged": "2025-01-07 14:01:22 UTC; runner",
+        "Author": "Yihui Xie [aut, cre, cph] (<https://orcid.org/0000-0003-0645-5666>),\n  Wush Wu [ctb],\n  Daijiang Li [ctb],\n  Xianying Tan [ctb],\n  Salim Brüggemann [ctb] (<https://orcid.org/0000-0002-5329-5987>),\n  Christophe Dervieux [ctb]",
         "Maintainer": "Yihui Xie <xie@yihui.name>",
         "Repository": "CRAN",
-        "Date/Publication": "2025-02-19 16:00:02 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 02:22:46 UTC; windows",
+        "Date/Publication": "2025-01-07 15:20:02 UTC",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-16 01:52:16 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -4401,15 +4470,15 @@
       "description": {
         "Package": "xml2",
         "Title": "Parse XML",
-        "Version": "1.3.8",
-        "Authors@R": "c(\n    person(\"Hadley\", \"Wickham\", role = \"aut\"),\n    person(\"Jim\", \"Hester\", role = \"aut\"),\n    person(\"Jeroen\", \"Ooms\", email = \"jeroenooms@gmail.com\", role = c(\"aut\", \"cre\")),\n    person(\"Posit Software, PBC\", role = c(\"cph\", \"fnd\")),\n    person(\"R Foundation\", role = \"ctb\",\n           comment = \"Copy of R-project homepage cached as example\")\n  )",
-        "Description": "Bindings to 'libxml2' for working with XML data using a simple, \n    consistent interface based on 'XPath' expressions. Also supports XML schema\n    validation; for 'XSLT' transformations see the 'xslt' package.",
+        "Version": "1.3.6",
+        "Authors@R": "c(\n    person(\"Hadley\", \"Wickham\", , \"hadley@posit.co\", role = c(\"aut\", \"cre\")),\n    person(\"Jim\", \"Hester\", role = \"aut\"),\n    person(\"Jeroen\", \"Ooms\", role = \"aut\"),\n    person(\"Posit Software, PBC\", role = c(\"cph\", \"fnd\")),\n    person(\"R Foundation\", role = \"ctb\",\n           comment = \"Copy of R-project homepage cached as example\")\n  )",
+        "Description": "Work with XML files using a simple, consistent interface.\n    Built on top of the 'libxml2' C library.",
         "License": "MIT + file LICENSE",
-        "URL": "https://xml2.r-lib.org, https://r-lib.r-universe.dev/xml2",
+        "URL": "https://xml2.r-lib.org/, https://github.com/r-lib/xml2",
         "BugReports": "https://github.com/r-lib/xml2/issues",
         "Depends": "R (>= 3.6.0)",
         "Imports": "cli, methods, rlang (>= 1.1.0)",
-        "Suggests": "covr, curl, httr, knitr, magrittr, mockery, rmarkdown,\ntestthat (>= 3.2.0), xslt",
+        "Suggests": "covr, curl, httr, knitr, magrittr, mockery, rmarkdown,\ntestthat (>= 3.0.0)",
         "VignetteBuilder": "knitr",
         "Config/Needs/website": "tidyverse/tidytemplate",
         "Encoding": "UTF-8",
@@ -4418,12 +4487,12 @@
         "Collate": "'S4.R' 'as_list.R' 'xml_parse.R' 'as_xml_document.R'\n'classes.R' 'format.R' 'import-standalone-obj-type.R'\n'import-standalone-purrr.R' 'import-standalone-types-check.R'\n'init.R' 'nodeset_apply.R' 'paths.R' 'utils.R' 'xml2-package.R'\n'xml_attr.R' 'xml_children.R' 'xml_document.R' 'xml_find.R'\n'xml_missing.R' 'xml_modify.R' 'xml_name.R' 'xml_namespaces.R'\n'xml_node.R' 'xml_nodeset.R' 'xml_path.R' 'xml_schema.R'\n'xml_serialize.R' 'xml_structure.R' 'xml_text.R' 'xml_type.R'\n'xml_url.R' 'xml_write.R' 'zzz.R'",
         "Config/testthat/edition": "3",
         "NeedsCompilation": "yes",
-        "Packaged": "2025-03-14 14:37:00 UTC; jeroen",
-        "Author": "Hadley Wickham [aut],\n  Jim Hester [aut],\n  Jeroen Ooms [aut, cre],\n  Posit Software, PBC [cph, fnd],\n  R Foundation [ctb] (Copy of R-project homepage cached as example)",
-        "Maintainer": "Jeroen Ooms <jeroenooms@gmail.com>",
+        "Packaged": "2023-12-04 14:50:27 UTC; hadleywickham",
+        "Author": "Hadley Wickham [aut, cre],\n  Jim Hester [aut],\n  Jeroen Ooms [aut],\n  Posit Software, PBC [cph, fnd],\n  R Foundation [ctb] (Copy of R-project homepage cached as example)",
+        "Maintainer": "Hadley Wickham <hadley@posit.co>",
         "Repository": "CRAN",
-        "Date/Publication": "2025-03-14 19:30:02 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-17 00:51:21 UTC; windows",
+        "Date/Publication": "2023-12-04 16:30:02 UTC",
+        "Built": "R 4.4.2; x86_64-w64-mingw32; 2025-01-16 02:47:38 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -4449,7 +4518,7 @@
         "Packaged": "2019-04-21 10:56:51 UTC; dsco036",
         "Author": "David B. Dahl [aut],\n  David Scott [aut, cre],\n  Charles Roosen [aut],\n  Arni Magnusson [aut],\n  Jonathan Swinton [aut],\n  Ajay Shah [ctb],\n  Arne Henningsen [ctb],\n  Benno Puetz [ctb],\n  Bernhard Pfaff [ctb],\n  Claudio Agostinelli [ctb],\n  Claudius Loehnert [ctb],\n  David Mitchell [ctb],\n  David Whiting [ctb],\n  Fernando da Rosa [ctb],\n  Guido Gay [ctb],\n  Guido Schulz [ctb],\n  Ian Fellows [ctb],\n  Jeff Laake [ctb],\n  John Walker [ctb],\n  Jun Yan [ctb],\n  Liviu Andronic [ctb],\n  Markus Loecher [ctb],\n  Martin Gubri [ctb],\n  Matthieu Stigler [ctb],\n  Robert Castelo [ctb],\n  Seth Falcon [ctb],\n  Stefan Edwards [ctb],\n  Sven Garbade [ctb],\n  Uwe Ligges [ctb]",
         "Date/Publication": "2019-04-21 12:20:03 UTC",
-        "Built": "R 4.4.3; ; 2025-03-17 02:22:45 UTC; windows"
+        "Built": "R 4.4.2; ; 2025-01-25 02:07:26 UTC; windows"
       }
     },
     "yaml": {
@@ -4485,16 +4554,10 @@
       "checksum": "b0b7d43a9b96f712d77b1152ec2b1060"
     },
     "app.R": {
-      "checksum": "93bb39ae3df5dce2d51a29c109773463"
+      "checksum": "deb4609ac8a1dfa666a1afca20801eb3"
     },
     "app/scree.rdata": {
       "checksum": "e232e14d9d108cd9c37b397b5bb61b0b"
-    },
-    "bsui.R": {
-      "checksum": "39e08f819c5f7ba8889596dee52fff6e"
-    },
-    "code.R": {
-      "checksum": "81051bcc2cf1bedf378224b0a93e2877"
     },
     "data/db/epsilon260.csv": {
       "checksum": "fb5c9dc666bfa16d8e918afec3483bff"
@@ -4511,17 +4574,11 @@
     "factormap.rdata": {
       "checksum": "caf1862b177905ace649d87808926232"
     },
-    "fluidui.R": {
-      "checksum": "afd976affa84b8ff608e60fb6ada9d65"
-    },
     "Investigate.html": {
       "checksum": "358644b7461a60505b43821112fbc046"
     },
     "LICENSE": {
       "checksum": "0d9ea047f610ea4d66a86886ca0f7a17"
-    },
-    "R/buffer.R": {
-      "checksum": "7b3d995d4899c844b615a61733178e17"
     },
     "R/functions.R": {
       "checksum": "aee4ebbb7f31f3a8f4acfa1ee821cd06"
@@ -4536,10 +4593,10 @@
       "checksum": "41f9d2b71fd2efeb3fe2285de0e06e50"
     },
     "server.R": {
-      "checksum": "6cb53879caae01325ad72e17167b6c40"
+      "checksum": "08ab008b19dc8db5c61112dfc9645d65"
     },
     "ui.R": {
-      "checksum": "1a6989dddcf98ca3c585ce251bdd70f7"
+      "checksum": "3e2ec9ef92a59e43903204959c0f2865"
     },
     "user_cd.xlsx": {
       "checksum": "085728c84c0aa82063a0d3af8312ae60"
