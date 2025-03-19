@@ -45,6 +45,8 @@ link_template_user <- tags$a(
   download = NA # Optional, allows browsers to download instead of opening
 )
 
+bootstrapLib(bs_theme())
+
 ui <- page_navbar(
   title = 'Eps2Fold',
   id = "nav",
