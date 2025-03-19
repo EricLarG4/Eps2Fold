@@ -5,14 +5,7 @@ library(bslib)
 library(bsicons)
 library(DT)
 
-# thematic::thematic_shiny(font = "auto")
-
-# thematic::thematic_on()
-
-# thematic_rmd(
-#   bg = '#292c33', fg = '#EEE8D5', accent = 'auto',
-#   sequential = hcl.colors(n = 42, palette = 'viridis')
-# )
+shiny::bootstrapLib(bslib::bs_theme())
 
 link_git <- tags$a(
   shiny::icon("github"),
@@ -62,6 +55,8 @@ ui <- bslib::page_navbar(
     # accent = "#292c33",
     # text = "#EEE8D5"
   ),
+  # Ensure bs_themer() is included early
+  bslib::bs_themer(),
   #Ensure that all accordions are open on page load, on all pages
   tags$head(
     tags$script(HTML(
