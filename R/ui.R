@@ -46,12 +46,6 @@ ui <- bslib::page_navbar(
   theme = bslib::bs_theme(
     preset = 'superhero',
     font_scale = 0.9
-    # bg = "#292c33",
-    # fg = "#EEE8D5",
-    # primary = "#292c33",
-    # secondary = "#292c33",
-    # accent = "#292c33",
-    # text = "#EEE8D5"
   ),
   #Ensure that all accordions are open on page load, on all pages
   tags$head(
@@ -103,16 +97,16 @@ ui <- bslib::page_navbar(
           icon = icon('filter'),
           open = TRUE,
           multiple = TRUE,
-          uiOutput("ref.seq.topo.0"),
-          uiOutput("ref.seq.gba.0"),
-          uiOutput("ref.seq.tetrad.0"),
-          uiOutput("ref.seq.tetrad.id.0"),
-          uiOutput("ref.seq.loop.0"),
-          uiOutput("ref.seq.plus.minus.0"),
-          uiOutput("ref.seq.groove.0"),
-          uiOutput("ref.seq.cation.0"),
-          uiOutput("ref.seq.oligo.0"),
-          uiOutput("user.seq.oligo.0")
+          uiOutput("ref.seq.topo.0_ui"),
+          uiOutput("ref.seq.gba.0_ui"),
+          uiOutput("ref.seq.tetrad.0_ui"),
+          uiOutput("ref.seq.tetrad.id.0_ui"),
+          uiOutput("ref.seq.loop.0_ui"),
+          uiOutput("ref.seq.plus.minus.0_ui"),
+          uiOutput("ref.seq.groove.0_ui"),
+          uiOutput("ref.seq.cation.0_ui"),
+          uiOutput("ref.seq.oligo.0_ui"),
+          uiOutput("user.seq.oligo.0_ui")
         )
       ),
       conditionalPanel(
@@ -175,22 +169,22 @@ ui <- bslib::page_navbar(
           icon = icon('filter'),
           open = TRUE,
           multiple = TRUE,
-          uiOutput("ref.seq.topo"),
-          uiOutput("ref.seq.gba"),
-          uiOutput("ref.seq.tetrad"),
-          uiOutput("ref.seq.tetrad.id"),
-          uiOutput("ref.seq.loop"),
-          uiOutput("ref.seq.plus.minus"),
-          uiOutput("ref.seq.groove"),
-          uiOutput("ref.seq.cation"),
-          uiOutput("ref.seq.oligo")
+          uiOutput("ref.seq.topo_ui"),
+          uiOutput("ref.seq.gba_ui"),
+          uiOutput("ref.seq.tetrad_ui"),
+          uiOutput("ref.seq.tetrad.id_ui"),
+          uiOutput("ref.seq.loop_ui"),
+          uiOutput("ref.seq.plus.minus_ui"),
+          uiOutput("ref.seq.groove_ui"),
+          uiOutput("ref.seq.cation_ui"),
+          uiOutput("ref.seq.oligo_ui")
         ),
         accordion_panel(
           title = 'User data',
           icon = icon('user-friends'),
           open = TRUE,
           multiple = TRUE,
-          uiOutput("user.seq.oligo"),
+          uiOutput("user.seq.oligo_ui"),
           selectInput(
             inputId = "user.panel",
             label = "Layout",
@@ -860,6 +854,35 @@ ui <- bslib::page_navbar(
       )
     )
   ),
+  nav_menu(
+    title = "Theming",
+
+    nav_item(div(
+      style = "display: flex; flex-direction: column; align-items: center; width: 100%; padding: 10px;",
+      selectizeInput(
+        "theme_select",
+        label = "Theme:",
+        choices = c(
+          "default", "cerulean", "cosmo", "cyborg", "darkly", "flatly", "journal", "litera", "lumen", 
+            "lux", "materia", "minty", "morph", "pulse", "quartz", "sandstone", "simplex", "sketchy", 
+            "slate", "solar", "spacelab", "superhero", "united", "vapor", "yeti", "zephyr"
+        ),
+        selected = "superhero",
+        multiple = FALSE,
+        width = "75%"
+      ),
+      #slider for font size
+      sliderInput(
+        inputId = "font_size",
+        label = "Font size:",
+        min = 0.1,
+        max = 2,
+        value = 0.9,
+        step = 0.1,
+        width = "100%"
+      )
+    ))
+  ),
   nav_spacer(),
   nav_menu(
     title = "Links",
@@ -868,43 +891,5 @@ ui <- bslib::page_navbar(
     nav_item(link_wiki),
     nav_item(link_template_ref),
     nav_item(link_template_user)
-  )
-)
-
-
-# server--------
-
-# operators----
-`%notin%` <- Negate(`%in%`)
-
-# theme----
-custom.theme <- theme(
-  panel.background = element_blank(),
-  strip.background = element_blank(),
-  legend.position = 'bottom',
-  legend.background = element_blank(),
-  legend.box.background = element_blank(),
-  legend.key = element_blank(),
-  legend.text = element_text(
-    size = 18,
-  ),
-  legend.title = element_text(
-    size = 22
-  ),
-  axis.text = element_text(
-    size = 18
-  ),
-  axis.title.x = element_text(
-    size = 22
-  ),
-  axis.title.y = element_text(size = 22, angle = 90),
-  strip.text = element_text(
-    size = 20
-  ),
-  axis.line = element_line(
-    size = 0.75
-  ),
-  axis.ticks = element_line(
-    size = 0.75
   )
 )

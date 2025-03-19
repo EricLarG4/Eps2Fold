@@ -34,6 +34,7 @@ library('FactoInvestigate')
 # sources----
 source('R/functions.R')
 source('R/theoretical spectra.R')
+
 source('R/ui.R')
 source('R/server.R')
 
@@ -42,6 +43,8 @@ source('R/server.R')
 # Set options to suppress warnings in the app
 options(warn = -1)
 # also see 'error message management' in UI
+
+
 
 
 # App----
