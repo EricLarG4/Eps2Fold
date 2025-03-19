@@ -1,45 +1,3 @@
-library('DT')
-
-# operators----
-`%notin%` <- Negate(`%in%`)
-
-# theme----
-custom.theme <- theme(
-  panel.background = element_blank(),
-  strip.background = element_blank(),
-  legend.position = 'bottom',
-  legend.background = element_blank(),
-  legend.box.background = element_blank(),
-  legend.key = element_blank(),
-  legend.text = element_text(
-    size = 18,
-  ),
-  legend.title = element_text(
-    size = 22
-  ),
-  axis.text = element_text(
-    size = 18
-  ),
-  axis.title.x = element_text(
-    size = 22
-  ),
-  axis.title.y = element_text(size = 22, angle = 90),
-  strip.text = element_text(
-    size = 20
-  ),
-  axis.line = element_line(
-    size = 0.75
-  ),
-  axis.ticks = element_line(
-    size = 0.75
-  )
-)
-
-# thematic_rmd(
-#   bg = '#292c33', fg = '#EEE8D5', accent = 'auto',
-#   sequential = hcl.colors(n = 42, palette = 'viridis')
-# )
-
 #server----
 server <- shinyServer(function(input, output) {
   bslib::bs_themer()
@@ -60,12 +18,9 @@ server <- shinyServer(function(input, output) {
 
   input.file <- reactive({
     if (isFALSE(input$data_source) && !is.null(input$ref.data)) {
-      return(input$ref.data)
+      return(input$ref.data$datapath)
     } else if (isTRUE(input$data_source)) {
-      url <- "https://github.com/EricLarG4/G4_IDS/raw/refs/heads/main/data/Reference_data.xlsx"
-      temp_file <- tempfile(fileext = ".xlsx")
-      download.file(url, temp_file, mode = "wb")
-      return(temp_file)
+      "data/Reference_data.xlsx"
     } else {
       return(NULL)
     }
@@ -88,7 +43,7 @@ server <- shinyServer(function(input, output) {
   ### Reference set----
   ref.set <- reactive({
     if (isFALSE(input$data_source)) {
-      ref.set <- read_excel(input.file()$datapath)
+      ref.set <- read_excel(input.file())
     } else {
       ref.set <- read_excel(input.file())
     }
@@ -168,252 +123,189 @@ server <- shinyServer(function(input, output) {
   #### Picker inputs: filtering source----
   output$ref.seq.topo.0 <- renderUI({
     if (file.toggle() == 'no') {
-      pickerInput(
+      selectizeInput(
         "ref.seq.topo.0",
         label = "Topology",
         choices = "upload data first",
-        multiple = T,
-        options = pickerOptions(
-          noneSelectedText = 'upload data first'
-        )
+        multiple = T
       )
     } else {
       choices <- sort(unique(ref.seq()$topo))
 
-      pickerInput(
+      selectizeInput(
         "ref.seq.topo.0",
         label = "Topology",
         choices = choices,
         selected = choices,
-        multiple = T,
-        options = pickerOptions(
-          actionsBox = T,
-          liveSearch = T
-        )
+        multiple = T
       )
     }
   })
 
   output$ref.seq.gba.0 <- renderUI({
     if (file.toggle() == 'no') {
-      pickerInput(
+      selectizeInput(
         "ref.seq.gba.0",
         label = "GBA",
         choices = "upload data first",
-        multiple = T,
-        options = pickerOptions(
-          noneSelectedText = 'upload data first'
-        )
+        multiple = T
       )
     } else {
       choices <- sort(unique(ref.seq()$gba))
 
-      pickerInput(
+      selectizeInput(
         "ref.seq.gba.0",
         label = "GBA",
         choices = choices,
         selected = choices,
-        multiple = T,
-        options = pickerOptions(
-          actionsBox = T,
-          liveSearch = T
-        )
+        multiple = T
       )
     }
   })
 
   output$ref.seq.tetrad.0 <- renderUI({
     if (file.toggle() == 'no') {
-      pickerInput(
+      selectizeInput(
         "ref.seq.tetrad.0",
         label = "Tetrads",
         choices = "upload data first",
-        multiple = T,
-        options = pickerOptions(
-          noneSelectedText = 'upload data first'
-        )
+        multiple = T
       )
     } else {
       choices <- sort(unique(ref.seq()$tetrad))
 
-      pickerInput(
+      selectizeInput(
         "ref.seq.tetrad.0",
         label = "Tetrads",
         choices = choices,
         selected = choices,
-        multiple = T,
-        options = pickerOptions(
-          actionsBox = T,
-          liveSearch = T
-        )
+        multiple = T
       )
     }
   })
 
   output$ref.seq.tetrad.id.0 <- renderUI({
     if (file.toggle() == 'no') {
-      pickerInput(
+      selectizeInput(
         "ref.seq.tetrad.id.0",
         label = "Tetrad combination",
         choices = "upload data first",
-        multiple = T,
-        options = pickerOptions(
-          noneSelectedText = 'upload data first'
-        )
+        multiple = T
       )
     } else {
       choices <- sort(unique(ref.seq()$tetrad.id))
 
-      pickerInput(
+      selectizeInput(
         "ref.seq.tetrad.id.0",
         label = "Tetrad combination",
         choices = choices,
         selected = choices,
-        multiple = T,
-        options = pickerOptions(
-          actionsBox = T,
-          liveSearch = T
-        )
+        multiple = T
       )
     }
   })
 
   output$ref.seq.loop.0 <- renderUI({
     if (file.toggle() == 'no') {
-      pickerInput(
+      selectizeInput(
         "ref.seq.loop.0",
         label = "Loop progression",
         choices = "upload data first",
-        multiple = T,
-        options = pickerOptions(
-          noneSelectedText = 'upload data first'
-        )
+        multiple = T
       )
     } else {
       choices <- sort(unique(ref.seq()$loop))
 
-      pickerInput(
+      selectizeInput(
         "ref.seq.loop.0",
         label = "Loop progression",
         choices = choices,
         selected = choices,
-        multiple = T,
-        options = pickerOptions(
-          actionsBox = T,
-          liveSearch = T
-        )
+        multiple = T
       )
     }
   })
 
   output$ref.seq.plus.minus.0 <- renderUI({
     if (file.toggle() == 'no') {
-      pickerInput(
+      selectizeInput(
         "ref.seq.plus.minus.0",
         label = "Tetrad handedness",
         choices = "upload data first",
-        multiple = T,
-        options = pickerOptions(
-          noneSelectedText = 'upload data first'
-        )
+        multiple = T
       )
     } else {
       choices <- sort(unique(ref.seq()$plus.minus))
 
-      pickerInput(
+      selectizeInput(
         "ref.seq.plus.minus.0",
         label = "Tetrad handedness",
         choices = choices,
         selected = choices,
-        multiple = T,
-        options = pickerOptions(
-          actionsBox = T,
-          liveSearch = T
-        )
+        multiple = T
       )
     }
   })
 
   output$ref.seq.groove.0 <- renderUI({
     if (file.toggle() == 'no') {
-      pickerInput(
+      selectizeInput(
         "ref.seq.groove.0",
         label = "Grooves",
         choices = "upload data first",
-        multiple = T,
-        options = pickerOptions(
-          noneSelectedText = 'upload data first'
-        )
+        multiple = T
       )
     } else {
       choices <- sort(unique(ref.seq()$groove))
 
-      pickerInput(
+      selectizeInput(
         "ref.seq.groove.0",
         label = "Grooves",
         choices = choices,
         selected = choices,
-        multiple = T,
-        options = pickerOptions(
-          actionsBox = T,
-          liveSearch = T
-        )
+        multiple = T
       )
     }
   })
 
   output$ref.seq.cation.0 <- renderUI({
     if (file.toggle() == 'no') {
-      pickerInput(
+      selectizeInput(
         "ref.seq.cation.0",
         label = "Cation",
         choices = "upload data first",
-        multiple = T,
-        options = pickerOptions(
-          noneSelectedText = 'upload data first'
-        )
+        multiple = T
       )
     } else {
       choices <- sort(unique(ref.seq()$salt))
 
-      pickerInput(
+      selectizeInput(
         "ref.seq.cation.0",
         label = "Cation",
         choices = choices,
         selected = choices,
-        multiple = T,
-        options = pickerOptions(
-          actionsBox = T,
-          liveSearch = T
-        )
+        multiple = T
       )
     }
   })
 
   output$ref.seq.oligo.0 <- renderUI({
     if (file.toggle() == 'no') {
-      pickerInput(
+      selectizeInput(
         "ref.seq.oligo.0",
         label = "Oligonucleotide",
         choices = "upload data first",
-        multiple = T,
-        options = pickerOptions(
-          noneSelectedText = 'upload data first'
-        )
+        multiple = T
       )
     } else {
       choices <- sort(unique(ref.seq()$oligo))
 
-      pickerInput(
+      selectizeInput(
         "ref.seq.oligo.0",
         label = "Oligonucleotide",
         choices = choices,
         selected = choices,
-        multiple = T,
-        options = pickerOptions(
-          actionsBox = T,
-          liveSearch = T
-        )
+        multiple = T
       )
     }
   })
@@ -421,248 +313,185 @@ server <- shinyServer(function(input, output) {
   #### Picker inputs: filtering plots----
   output$ref.seq.topo <- renderUI({
     if (file.toggle() == 'no') {
-      pickerInput(
+      selectizeInput(
         "ref.seq.topo",
         label = "Topology",
         choices = "upload data first",
-        multiple = T,
-        options = pickerOptions(
-          noneSelectedText = 'upload data first'
-        )
+        multiple = T
       )
     } else {
       choices <- unique(input$ref.seq.topo.0)
 
-      pickerInput(
+      selectizeInput(
         "ref.seq.topo",
         label = "Topology",
         choices = choices,
         selected = choices,
-        multiple = T,
-        options = pickerOptions(
-          actionsBox = T,
-          liveSearch = T
-        )
+        multiple = T
       )
     }
   })
 
   output$ref.seq.gba <- renderUI({
     if (file.toggle() == 'no') {
-      pickerInput(
+      selectizeInput(
         "ref.seq.gba",
         label = "GBA",
         choices = "upload data first",
-        multiple = T,
-        options = pickerOptions(
-          noneSelectedText = 'upload data first'
-        )
+        multiple = T
       )
     } else {
       choices <- unique(input$ref.seq.gba.0)
 
-      pickerInput(
+      selectizeInput(
         "ref.seq.gba",
         label = "GBA",
         choices = choices,
         selected = choices,
-        multiple = T,
-        options = pickerOptions(
-          actionsBox = T,
-          liveSearch = T
-        )
+        multiple = T
       )
     }
   })
 
   output$ref.seq.tetrad <- renderUI({
     if (file.toggle() == 'no') {
-      pickerInput(
+      selectizeInput(
         "ref.seq.tetrad",
         label = "Tetrads",
         choices = "upload data first",
-        multiple = T,
-        options = pickerOptions(
-          noneSelectedText = 'upload data first'
-        )
+        multiple = T
       )
     } else {
       choices <- unique(input$ref.seq.tetrad.0)
 
-      pickerInput(
+      selectizeInput(
         "ref.seq.tetrad",
         label = "Tetrads",
         choices = choices,
         selected = choices,
-        multiple = T,
-        options = pickerOptions(
-          actionsBox = T,
-          liveSearch = T
-        )
+        multiple = T
       )
     }
   })
 
   output$ref.seq.tetrad.id <- renderUI({
     if (file.toggle() == 'no') {
-      pickerInput(
+      selectizeInput(
         "ref.seq.tetrad.id",
         label = "Tetrad combination",
         choices = "upload data first",
-        multiple = T,
-        options = pickerOptions(
-          noneSelectedText = 'upload data first'
-        )
+        multiple = T
       )
     } else {
       choices <- unique(input$ref.seq.tetrad.id.0)
 
-      pickerInput(
+      selectizeInput(
         "ref.seq.tetrad.id",
         label = "Tetrad combination",
         choices = choices,
         selected = choices,
-        multiple = T,
-        options = pickerOptions(
-          actionsBox = T,
-          liveSearch = T
-        )
+        multiple = T
       )
     }
   })
 
   output$ref.seq.loop <- renderUI({
     if (file.toggle() == 'no') {
-      pickerInput(
+      selectizeInput(
         "ref.seq.loop",
         label = "Loop progression",
         choices = "upload data first",
-        multiple = T,
-        options = pickerOptions(
-          noneSelectedText = 'upload data first'
-        )
+        multiple = T
       )
     } else {
       choices <- unique(input$ref.seq.loop.0)
 
-      pickerInput(
+      selectizeInput(
         "ref.seq.loop",
         label = "Loop progression",
         choices = choices,
         selected = choices,
-        multiple = T,
-        options = pickerOptions(
-          actionsBox = T,
-          liveSearch = T
-        )
+        multiple = T
       )
     }
   })
 
   output$ref.seq.plus.minus <- renderUI({
     if (file.toggle() == 'no') {
-      pickerInput(
+      selectizeInput(
         "ref.seq.plus.minus",
         label = "Tetrad handedness",
         choices = "upload data first",
-        multiple = T,
-        options = pickerOptions(
-          noneSelectedText = 'upload data first'
-        )
+        multiple = T
       )
     } else {
       choices <- unique(input$ref.seq.plus.minus.0)
 
-      pickerInput(
+      selectizeInput(
         "ref.seq.plus.minus",
         label = "Tetrad handedness",
         choices = choices,
         selected = choices,
-        multiple = T,
-        options = pickerOptions(
-          actionsBox = T,
-          liveSearch = T
-        )
+        multiple = T
       )
     }
   })
 
   output$ref.seq.groove <- renderUI({
     if (file.toggle() == 'no') {
-      pickerInput(
+      selectizeInput(
         "ref.seq.groove",
         label = "Grooves",
         choices = "upload data first",
-        multiple = T,
-        options = pickerOptions(
-          noneSelectedText = 'upload data first'
-        )
+        multiple = T
       )
     } else {
       choices <- unique(input$ref.seq.groove.0)
 
-      pickerInput(
+      selectizeInput(
         "ref.seq.groove",
         label = "Grooves",
         choices = choices,
         selected = choices,
-        multiple = T,
-        options = pickerOptions(
-          actionsBox = T,
-          liveSearch = T
-        )
+        multiple = T
       )
     }
   })
 
   output$ref.seq.cation <- renderUI({
     if (file.toggle() == 'no') {
-      pickerInput(
+      selectizeInput(
         "ref.seq.cation",
         label = "Cation",
         choices = "upload data first",
-        multiple = T,
-        options = pickerOptions(
-          noneSelectedText = 'upload data first'
-        )
+        multiple = T
       )
     } else {
-      pickerInput(
+      selectizeInput(
         "ref.seq.cation",
         label = "Cation",
         choices = unique(input$ref.seq.cation.0),
         selected = unique(input$ref.seq.cation.0),
-        multiple = T,
-        options = pickerOptions(
-          actionsBox = T,
-          liveSearch = T
-        )
+        multiple = T
       )
     }
   })
 
   output$ref.seq.oligo <- renderUI({
     if (file.toggle() == 'no') {
-      pickerInput(
+      selectizeInput(
         "ref.seq.oligo",
         label = "Oligonucleotide",
         choices = "upload data first",
-        multiple = T,
-        options = pickerOptions(
-          noneSelectedText = 'upload data first'
-        )
+        multiple = T
       )
     } else {
-      pickerInput(
+      selectizeInput(
         "ref.seq.oligo",
         label = "Oligonucleotide",
         choices = unique(input$ref.seq.oligo.0),
         selected = unique(input$ref.seq.oligo.0),
-        multiple = T,
-        options = pickerOptions(
-          actionsBox = T,
-          liveSearch = T
-        )
+        multiple = T
       )
     }
   })
@@ -3434,28 +3263,21 @@ server <- shinyServer(function(input, output) {
   ###### source----
   output$user.seq.oligo.0 <- renderUI({
     if (file.toggle.user() == 'no') {
-      pickerInput(
+      selectizeInput(
         "user.seq.oligo.0",
         label = "User oligonucleotide",
         choices = "upload data first",
-        multiple = T,
-        options = pickerOptions(
-          noneSelectedText = 'upload data first'
-        )
+        multiple = T
       )
     } else {
       choices <- sort(unique(user.seq()$oligo))
 
-      pickerInput(
+      selectizeInput(
         "user.seq.oligo.0",
         label = "User oligonucleotide",
         choices = choices,
         selected = choices,
-        multiple = T,
-        options = pickerOptions(
-          actionsBox = T,
-          liveSearch = T
-        )
+        multiple = T
       )
     }
   })
@@ -3463,26 +3285,19 @@ server <- shinyServer(function(input, output) {
   #######plot-----
   output$user.seq.oligo <- renderUI({
     if (file.toggle.user() == 'no') {
-      pickerInput(
+      selectizeInput(
         "user.seq.oligo",
         label = "Oligonucleotide",
         choices = "upload data first",
-        multiple = T,
-        options = pickerOptions(
-          noneSelectedText = 'upload data first'
-        )
+        multiple = T
       )
     } else {
-      pickerInput(
+      selectizeInput(
         "user.seq.oligo",
         label = "Oligonucleotide",
         choices = unique(input$user.seq.oligo.0),
         selected = unique(input$user.seq.oligo.0),
-        multiple = T,
-        options = pickerOptions(
-          actionsBox = T,
-          liveSearch = T
-        )
+        multiple = T
       )
     }
   })

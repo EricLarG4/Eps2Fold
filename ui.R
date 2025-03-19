@@ -875,3 +875,41 @@ ui <- page_navbar(
     nav_item(link_template_user)
   )
 )
+
+
+# server--------
+
+# operators----
+`%notin%` <- Negate(`%in%`)
+
+# theme----
+custom.theme <- theme(
+  panel.background = element_blank(),
+  strip.background = element_blank(),
+  legend.position = 'bottom',
+  legend.background = element_blank(),
+  legend.box.background = element_blank(),
+  legend.key = element_blank(),
+  legend.text = element_text(
+    size = 18,
+  ),
+  legend.title = element_text(
+    size = 22
+  ),
+  axis.text = element_text(
+    size = 18
+  ),
+  axis.title.x = element_text(
+    size = 22
+  ),
+  axis.title.y = element_text(size = 22, angle = 90),
+  strip.text = element_text(
+    size = 20
+  ),
+  axis.line = element_line(
+    size = 0.75
+  ),
+  axis.ticks = element_line(
+    size = 0.75
+  )
+)

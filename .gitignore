@@ -55,7 +55,3 @@ bsui.R
 fluidui.R
 Investigate.html
 scree.rdata
-
-# archiving
-ui.R
-server.R
