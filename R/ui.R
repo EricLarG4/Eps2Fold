@@ -1,5 +1,3 @@
-source('server.R')
-
 library(shiny)
 library(bslib)
 library(bsicons)
@@ -55,8 +53,6 @@ ui <- bslib::page_navbar(
     # accent = "#292c33",
     # text = "#EEE8D5"
   ),
-  # Ensure bs_themer() is included early
-  bslib::bs_themer(),
   #Ensure that all accordions are open on page load, on all pages
   tags$head(
     tags$script(HTML(

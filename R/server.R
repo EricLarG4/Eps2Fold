@@ -3,7 +3,7 @@ shiny::bootstrapLib(bslib::bs_theme())
 #server----
 server <- shinyServer(function(input, output) {
   
-  bslib::bs_themer()
+  # bslib::bs_themer()
 
   # Enable thematic
   thematic::thematic_shiny(font = "auto")
