@@ -45,9 +45,9 @@ link_template_user <- tags$a(
   download = NA # Optional, allows browsers to download instead of opening
 )
 
-bootstrapLib(bs_theme())
+bootstrapLib()  # Ensure Bootstrap resources are included
 
-ui <- page_navbar(
+ui <- bslib::page_navbar(
   title = 'Eps2Fold',
   id = "nav",
   window_title = "Eps2Fold - a Shiny app for Eps2Fold analysis",
