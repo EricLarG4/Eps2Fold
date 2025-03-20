@@ -10,18 +10,14 @@ library('magrittr')
 library('shiny')
 library('bslib')
 library('bsicons')
-# library('shinydashboard')
-# library('shinydashboardPlus')
-# library('shinyWidgets')
 
 ## Theming----
 library('thematic')
-# library('fresh')
 
 ## data display----
 library('ggrepel')
-# library('ggdark')
 library('ggthemes')
+library('ggtext')
 library('patchwork')
 library('plotly')
 library('DT')
