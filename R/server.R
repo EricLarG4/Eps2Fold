@@ -6,52 +6,53 @@ shiny::bootstrapLib(bslib::bs_theme())
 #server----
 server <- shinyServer(function(input, output, session) {
   # bslib::bs_themer()
-# Theme handling
-observe({
-  # Update the theme when the selector changes
-  session$setCurrentTheme(
-    bslib::bs_theme(
-      preset = input$theme_select,
-      font_scale = input$font_size
+  # Theme handling
+  observe({
+    # Update the theme when the selector changes
+    session$setCurrentTheme(
+      bslib::bs_theme(
+        preset = input$theme_select,
+        font_scale = input$font_size
+      )
     )
-  )
-})
-  
+  })
+
   # Enable thematic
   thematic::thematic_shiny(font = "auto")
   thematic::thematic_rmd(font = "auto")
 
   # theme----
-custom.theme <- ggplot2::theme(
-  panel.background = element_blank(),
-  strip.background = element_blank(),
-  legend.position = 'bottom',
-  legend.background = element_blank(),
-  legend.box.background = element_blank(),
-  legend.key = element_blank(),
-  legend.text = element_text(
-    size = 18,
-  ),
-  legend.title = element_text(
-    size = 22
-  ),
-  axis.text = element_text(
-    size = 18
-  ),
-  axis.title.x = element_text(
-    size = 22
-  ),
-  axis.title.y = element_text(size = 22, angle = 90),
-  strip.text = element_text(
-    size = 20
-  ),
-  axis.line = element_line(
-    size = 0.75
-  ),
-  axis.ticks = element_line(
-    size = 0.75
+  custom.theme <- ggplot2::theme(
+    panel.background = element_blank(),
+    strip.background = element_blank(),
+    legend.position = 'bottom',
+    legend.background = element_blank(),
+    legend.box.background = element_blank(),
+    legend.key = element_blank(),
+    legend.text = element_text(
+      size = 18,
+    ),
+    legend.title = element_text(
+      size = 22
+    ),
+    axis.text = element_text(
+      size = 18
+    ),
+    axis.title.x = element_text(
+      size = 22
+    ),
+    axis.title.y = element_text(size = 22, angle = 90),
+    strip.text = element_text(
+      size = 20
+    ),
+    axis.line = element_line(
+      size = 0.75
+    ),
+    axis.ticks = element_line(
+      size = 0.75
+    )
   )
-)
+
 
   # Change ggplot2's default "gray" theme
   theme_set(custom.theme)
@@ -153,8 +154,10 @@ custom.theme <- ggplot2::theme(
           "eps",
           "salt",
           "topo",
+          "conformer",
           "feature",
           "gba",
+          "gba.stacks",
           "tetrad",
           "tetrad.id",
           "loop",
@@ -189,6 +192,27 @@ custom.theme <- ggplot2::theme(
     }
   })
 
+  output$ref.seq.confomer.0_ui <- renderUI({
+    if (file.toggle() == 'no') {
+      selectizeInput(
+        "ref.seq.conformer.0",
+        label = "Conformer",
+        choices = "upload data first",
+        multiple = T
+      )
+    } else {
+      choices <- sort(unique(ref.seq()$conformer))
+
+      selectizeInput(
+        "ref.seq.conformer.0",
+        label = "Conformer",
+        choices = choices,
+        selected = choices,
+        multiple = T
+      )
+    }
+  })
+
   output$ref.seq.gba.0_ui <- renderUI({
     if (file.toggle() == 'no') {
       selectizeInput(
@@ -203,6 +227,27 @@ custom.theme <- ggplot2::theme(
       selectizeInput(
         "ref.seq.gba.0",
         label = "GBA",
+        choices = choices,
+        selected = choices,
+        multiple = T
+      )
+    }
+  })
+
+  output$ref.seq.gba.stacks.0_ui <- renderUI({
+    if (file.toggle() == 'no') {
+      selectizeInput(
+        "ref.seq.gba.stacks.0",
+        label = "GBA stacks",
+        choices = "upload data first",
+        multiple = T
+      )
+    } else {
+      choices <- sort(unique(ref.seq()$gba.stacks))
+
+      selectizeInput(
+        "ref.seq.gba.stacks.0",
+        label = "GBA stacks",
         choices = choices,
         selected = choices,
         multiple = T
@@ -379,6 +424,27 @@ custom.theme <- ggplot2::theme(
     }
   })
 
+  output$ref.seq.conformer_ui <- renderUI({
+    if (file.toggle() == 'no') {
+      selectizeInput(
+        "ref.seq.conformer",
+        label = "Conformer",
+        choices = "upload data first",
+        multiple = T
+      )
+    } else {
+      choices <- unique(input$ref.seq.conformer.0)
+
+      selectizeInput(
+        "ref.seq.conformer",
+        label = "Conformer",
+        choices = choices,
+        selected = choices,
+        multiple = T
+      )
+    }
+  })
+
   output$ref.seq.gba_ui <- renderUI({
     if (file.toggle() == 'no') {
       selectizeInput(
@@ -393,6 +459,27 @@ custom.theme <- ggplot2::theme(
       selectizeInput(
         "ref.seq.gba",
         label = "GBA",
+        choices = choices,
+        selected = choices,
+        multiple = T
+      )
+    }
+  })
+
+  output$ref.seq.gba.stacks_ui <- renderUI({
+    if (file.toggle() == 'no') {
+      selectizeInput(
+        "ref.seq.gba.stacks",
+        label = "GBA stacks",
+        choices = "upload data first",
+        multiple = T
+      )
+    } else {
+      choices <- unique(input$ref.seq.gba.stacks.0)
+
+      selectizeInput(
+        "ref.seq.gba.stacks",
+        label = "GBA stacks",
         choices = choices,
         selected = choices,
         multiple = T
@@ -554,7 +641,9 @@ custom.theme <- ggplot2::theme(
         filter(
           salt %in% input$ref.seq.cation.0,
           topo %in% input$ref.seq.topo.0,
+          conformer %in% input$ref.seq.conformer.0,
           gba %in% input$ref.seq.gba.0,
+          gba.stacks %in% input$ref.seq.gba.stacks.0,
           oligo %in% input$ref.seq.oligo.0,
           tetrad %in% input$ref.seq.tetrad.0,
           tetrad.id %in% input$ref.seq.tetrad.id.0,
@@ -575,9 +664,11 @@ custom.theme <- ggplot2::theme(
             "Sequence" = "sequence",
             "Number of nucleotides" = "nt",
             "Topology" = "topo",
+            "Conformer" = "conformer",
             "Other feature" = "feature",
             "Description" = "description",
             "GBA" = "gba",
+            "GBA stacks" = "gba.stacks",
             "Tetrads" = "tetrad",
             "Tetrad combination" = "tetrad.id",
             "Loop progression" = "loop",
@@ -606,14 +697,9 @@ custom.theme <- ggplot2::theme(
               list(extend = 'colvis')
             ),
             title = NULL,
-            columnDefs = list(list(visible = FALSE, targets = c(0, 5, 6, 15)))
+            columnDefs = list(list(visible = FALSE, targets = c(0, 5, 6, 17)))
           )
         )
-      # formatStyle(
-      #   columns = 0:15,
-      #   target = "cell",
-      #   backgroundColor = "#272c30"
-      # )
     }
   })
 
@@ -636,8 +722,10 @@ custom.theme <- ggplot2::theme(
           "eps",
           "salt",
           "topo",
+          "conformer",
           "feature",
           "gba",
+          "gba.stacks",
           "tetrad",
           "tetrad.id",
           "loop",
@@ -663,9 +751,11 @@ custom.theme <- ggplot2::theme(
             "Sequence" = "sequence",
             "Number of nucleotides" = "nt",
             "Topology" = "topo",
+            "Conformer" = "conformer",
             "Other feature" = "feature",
             "Description" = "description",
             "GBA" = "gba",
+            "GBA stacks" = "gba.stacks",
             "Tetrads" = "tetrad",
             "Loop progression" = "loop",
             "Tetrad combination" = "tetrad.id",
@@ -691,7 +781,7 @@ custom.theme <- ggplot2::theme(
               list(extend = 'colvis')
             ),
             title = NULL,
-            columnDefs = list(list(visible = FALSE, targets = c(2:6, 8, 15)))
+            columnDefs = list(list(visible = FALSE, targets = c(2:6, 9, 17)))
           )
         )
       # formatStyle(
@@ -711,7 +801,9 @@ custom.theme <- ggplot2::theme(
       ref.set() %>%
         filter(
           topo %in% input$ref.seq.topo,
+          conformer %in% input$ref.seq.conformer,
           gba %in% input$ref.seq.gba,
+          gba.stacks %in% input$ref.seq.gba.stacks,
           salt %in% c(input$ref.seq.cation, "none"),
           oligo %in% input$ref.seq.oligo,
           tetrad %in% input$ref.seq.tetrad,
@@ -747,7 +839,7 @@ custom.theme <- ggplot2::theme(
     }
   })
 
-  ### Reference IDS----
+  ### Reference CD/IDS tables----
   output$ref.ids <- renderDT(server = FALSE, {
     if (file.toggle() == 'no') {
       return(NULL)
@@ -756,8 +848,8 @@ custom.theme <- ggplot2::theme(
         ungroup() %>%
         filter(
           salt != 'none',
-          !is.na(delta.eps.ids),
-          !is.na(delta.eps.ids.th)
+          !is.na(delta.eps.ids)
+          # !is.na(delta.eps.ids.th)
         ) %>%
         mutate(
           conc = round(conc, 2),
@@ -772,8 +864,10 @@ custom.theme <- ggplot2::theme(
           "eps",
           "salt",
           "topo",
+          "conformer",
           "feature",
           "gba",
+          "gba.stacks",
           "tetrad",
           "loop",
           "conc",
@@ -796,9 +890,11 @@ custom.theme <- ggplot2::theme(
             "Sequence" = "sequence",
             "Number of nucleotides" = "nt",
             "Topology" = "topo",
+            "Conformer" = "conformer",
             "Other feature" = "feature",
             "Description" = "description",
             "GBA" = "gba",
+            "GBA stacks" = "gba.stacks",
             "Tetrads" = "tetrad",
             "Loop progression" = "loop"
           ),
@@ -822,146 +918,14 @@ custom.theme <- ggplot2::theme(
             title = NULL,
             columnDefs = list(list(
               visible = FALSE,
-              targets = c(2:6, 8, 12, 15)
+              targets = c(2:6, 9, 14, 17)
             ))
           )
         )
-      # formatStyle(
-      #   columns = 0:15,
-      #   target = "cell",
-      #   backgroundColor = "#272c30"
-      # )
     }
   })
 
-  output$p.ref.ids <- renderPlot({
-    ref.ids <- ref.set() %>%
-      ungroup() %>%
-      filter(salt != 'none') %>%
-      filter(
-        topo %in% input$ref.seq.topo,
-        gba %in% input$ref.seq.gba,
-        salt %in% c(input$ref.seq.cation, "none"),
-        oligo %in% input$ref.seq.oligo,
-        tetrad %in% input$ref.seq.tetrad,
-        tetrad.id %in% input$ref.seq.tetrad.id,
-        loop %in% input$ref.seq.loop,
-        plus.minus %in% input$ref.seq.plus.minus,
-        groove %in% input$ref.seq.groove
-      ) %>%
-      add_column(
-        # y=NA,
-        color = NA,
-        sd.y = NA
-      )
-
-    if (input$ids.norm == "Δε") {
-      ref.ids$y <- ref.ids$delta.eps.ids
-      axis.label <- bquote(Delta * epsilon ~ (M^-1 * cm^-1))
-    } else {
-      ref.ids$y <- ref.ids$norm.ids
-      axis.label <- "Normalized IDS"
-    }
-
-    #coloring
-    if (input$ref.color == "Topology") {
-      ref.ids$color <- ref.ids$topo
-    } else if (input$ref.color == "GBA") {
-      ref.ids$color <- ref.ids$gba
-    } else if (input$ref.color == "Tetrads") {
-      ref.ids$color <- factor(ref.ids$tetrad)
-    } else if (input$ref.color == "Tetrad combination") {
-      ref.ids$color <- ref.ids$tetrad.id
-    } else if (input$ref.color == "Loop progression") {
-      ref.ids$color <- ref.ids$loop
-    } else if (input$ref.color == "Tetrad handedness") {
-      ref.ids$color <- ref.ids$plus.minus
-    } else if (input$ref.color == "Grooves") {
-      ref.ids$color <- ref.ids$groove
-    } else {
-      ref.ids$color <- ref.ids$salt
-    }
-
-    if (input$ref.panel == "Mean") {
-      ref.ids <- ref.ids %>%
-        group_by(color, wl) %>%
-        mutate(
-          sd.y = sd(y),
-          y = mean(y)
-        )
-    }
-
-    if (file.toggle() == 'no') {
-      ggplot() 
-        # dark_mode(theme_pander(base_size = 18)) +
-        # custom.theme
-    } else {
-      p.ref.ids <- ref.ids %>%
-        ggplot(
-          aes(
-            x = wl,
-            y = y,
-            color = color
-          )
-        ) +
-        geom_vline(
-          xintercept = 295,
-          linetype = 'dashed'
-        ) +
-        geom_vline(
-          xintercept = 275,
-          linetype = 'dashed'
-        ) +
-        geom_vline(
-          xintercept = 262,
-          linetype = 'dashed'
-        ) +
-        geom_vline(
-          xintercept = 245,
-          linetype = 'dashed'
-        ) +
-        geom_hline(
-          yintercept = 0
-        ) +
-        geom_line(
-          aes(group = oligo),
-          size = 1,
-          show.legend = TRUE
-        ) +
-        geom_ribbon(
-          aes(
-            ymin = y - sd.y,
-            ymax = y + sd.y,
-            fill = color
-          ),
-          alpha = 0.5,
-          show.legend = FALSE
-        ) +
-        labs(
-          x = bquote(lambda ~ (nm)),
-          y = axis.label,
-          color = input$ref.color,
-          fill = input$ref.color
-        ) +
-        custom.theme +
-        scale_y_continuous(n.breaks = 3) +
-        scale_x_continuous(expand = c(0, 0))
-    }
-
-    if (input$ref.panel == "Panels") {
-      p.ref.ids <- p.ref.ids +
-        facet_wrap(
-          ~oligo
-          # ncol = 4
-        )
-
-      return(p.ref.ids)
-    } else {
-      return(p.ref.ids)
-    }
-  })
-
-  ### Reference CD----
+  
   output$ref.cd <- renderDT(server = FALSE, {
     if (file.toggle() == 'no') {
       return(NULL)
@@ -981,8 +945,10 @@ custom.theme <- ggplot2::theme(
           "eps",
           "salt",
           "topo",
+          "conformer",
           "feature",
           "gba",
+          "gba.stacks",
           "tetrad",
           "loop",
           "conc",
@@ -1004,9 +970,11 @@ custom.theme <- ggplot2::theme(
             "Sequence" = "sequence",
             "Number of nucleotides" = "nt",
             "Topology" = "topo",
+            "Conformer" = "conformer",
             "Other feature" = "feature",
             "Description" = "description",
             "GBA" = "gba",
+            "GBA stacks" = "gba.stacks",
             "Tetrads" = "tetrad",
             "Loop progression" = "loop",
             "Normalized CD" = "norm.cd"
@@ -1029,22 +997,48 @@ custom.theme <- ggplot2::theme(
               list(extend = 'colvis')
             ),
             title = NULL,
-            columnDefs = list(list(visible = FALSE, targets = c(2:6, 12, 16)))
+            columnDefs = list(list(
+              visible = FALSE,
+              targets = c(2:6, 9, 14, 17)
+            ))
           )
         )
-      # formatStyle(
-      #   columns = 0:16,
-      #   target = "cell",
-      #   backgroundColor = "#272c30"
-      # )
     }
   })
 
+### Reference CD/IDS plots----
+
+  output$p.ref.ids <- renderPlot({
+    ref.ids <- ref.set() %>%
+      ungroup() %>%
+      filter(salt != 'none') %>%
+      filter(
+        topo %in% input$ref.seq.topo,
+        conformer %in% input$ref.seq.conformer,
+        gba %in% input$ref.seq.gba,
+        gba.stacks %in% input$ref.seq.gba.stacks,
+        salt %in% c(input$ref.seq.cation, "none"),
+        oligo %in% input$ref.seq.oligo,
+        tetrad %in% input$ref.seq.tetrad,
+        tetrad.id %in% input$ref.seq.tetrad.id,
+        loop %in% input$ref.seq.loop,
+        plus.minus %in% input$ref.seq.plus.minus,
+        groove %in% input$ref.seq.groove
+      )
+  
+    norm_col <- if (input$ids.norm == "Δε") "delta.eps.ids" else "norm.ids"
+    axis_label_text <- if (input$ids.norm == "Δε") "&Delta;&epsilon; (M<sup>-1</sup>cm<sup>-1</sup>)" else "Normalized IDS"
+  
+    render_ref_plot(ref.ids, input, norm_col, axis_label_text)
+  })
+  
   output$p.ref.cd <- renderPlot({
     ref.cd <- ref.set() %>%
       filter(
         topo %in% input$ref.seq.topo,
+        conformer %in% input$ref.seq.conformer,
         gba %in% input$ref.seq.gba,
+        gba.stacks %in% input$ref.seq.gba.stacks,
         salt %in% input$ref.seq.cation,
         oligo %in% input$ref.seq.oligo,
         tetrad %in% input$ref.seq.tetrad,
@@ -1052,113 +1046,14 @@ custom.theme <- ggplot2::theme(
         loop %in% input$ref.seq.loop,
         plus.minus %in% input$ref.seq.plus.minus,
         groove %in% input$ref.seq.groove
-      ) %>%
-      add_column(
-        color = NA,
-        sd.y = NA
       )
-
-    if (input$cd.norm == "Δε") {
-      ref.cd$y <- ref.cd$delta.eps.cd
-      axis.label <- bquote(Delta * epsilon ~ (M^-1 * cm^-1))
-    } else {
-      ref.cd$y <- ref.cd$norm.cd
-      axis.label <- "Normalized CD"
-    }
-
-    #coloring
-    if (input$ref.color == "Topology") {
-      ref.cd$color <- ref.cd$topo
-    } else if (input$ref.color == "GBA") {
-      ref.cd$color <- ref.cd$gba
-    } else if (input$ref.color == "Tetrads") {
-      ref.cd$color <- factor(ref.cd$tetrad)
-    } else if (input$ref.color == "Tetrad combination") {
-      ref.cd$color <- ref.cd$tetrad.id
-    } else if (input$ref.color == "Loop progression") {
-      ref.cd$color <- ref.cd$loop
-    } else if (input$ref.color == "Tetrad handedness") {
-      ref.cd$color <- ref.cd$plus.minus
-    } else if (input$ref.color == "Grooves") {
-      ref.cd$color <- ref.cd$groove
-    } else {
-      ref.cd$color <- ref.cd$salt
-    }
-
-    if (input$ref.panel == "Mean") {
-      ref.cd <- ref.cd %>%
-        group_by(color, wl) %>%
-        mutate(
-          sd.y = sd(y),
-          y = mean(y),
-        )
-    }
-
-    if (file.toggle() == 'no') {
-      ggplot() 
-        # dark_mode(theme_pander(base_size = 18)) +
-        # custom.theme
-    } else {
-      p.ref.cd <- ref.cd %>%
-        ggplot(
-          aes(
-            x = wl,
-            y = y,
-            color = color
-          )
-        ) +
-        geom_hline(
-          yintercept = 0
-        ) +
-        geom_vline(
-          xintercept = 290,
-          linetype = 'dashed'
-        ) +
-        geom_vline(
-          xintercept = 260,
-          linetype = 'dashed'
-        ) +
-        geom_vline(
-          xintercept = 240,
-          linetype = 'dashed'
-        ) +
-        geom_line(
-          aes(group = oligo),
-          size = 1,
-          show.legend = T
-        ) +
-        geom_ribbon(
-          aes(
-            ymin = y - sd.y,
-            ymax = y + sd.y,
-            fill = color
-          ),
-          alpha = 0.5,
-          show.legend = FALSE
-        ) +
-        labs(
-          x = bquote(lambda ~ (nm)),
-          y = axis.label,
-          color = input$ref.color,
-          fill = input$ref.color
-        ) +
-        custom.theme +
-        scale_y_continuous(n.breaks = 4) +
-        scale_x_continuous(expand = c(0, 0))
-    }
-
-    if (input$ref.panel == "Panels") {
-      p.ref.cd <- p.ref.cd +
-        facet_wrap(
-          ~oligo
-          # ncol = 4
-        )
-
-      return(p.ref.cd)
-    } else {
-      return(p.ref.cd)
-    }
+  
+    norm_col <- if (input$cd.norm == "Δε") "delta.eps.cd" else "norm.cd"
+    axis_label_text <- if (input$cd.norm == "Δε") "&Delta;&epsilon; (M<sup>-1</sup>cm<sup>-1</sup>)" else "Normalized CD"
+  
+    render_ref_plot(ref.cd, input, norm_col, axis_label_text)
   })
+  
 
   # PCA----
 
@@ -2504,7 +2399,6 @@ custom.theme <- ggplot2::theme(
       )
   })
 
-
   ### Investigations----
 
   #### CD----
@@ -2630,7 +2524,7 @@ custom.theme <- ggplot2::theme(
   })
 
   #######plot-----
-  output$user.seq.oligo_ui  <- renderUI({
+  output$user.seq.oligo_ui <- renderUI({
     if (file.toggle.user() == 'no') {
       selectizeInput(
         "user.seq.oligo",
@@ -2906,9 +2800,9 @@ custom.theme <- ggplot2::theme(
     }
 
     if (file.toggle.user() == 'no') {
-      ggplot() 
-        # dark_mode(theme_pander(base_size = 18)) +
-        # custom.theme
+      ggplot()
+      # dark_mode(theme_pander(base_size = 18)) +
+      # custom.theme
     } else {
       p.user.cd <- user.cd %>%
         ggplot(
@@ -3005,9 +2899,9 @@ custom.theme <- ggplot2::theme(
 
   output$p.user.uv <- renderPlot({
     if (file.toggle.user() == 'no') {
-      ggplot() 
-        # dark_mode(theme_pander(base_size = 18)) +
-        # custom.theme
+      ggplot()
+      # dark_mode(theme_pander(base_size = 18)) +
+      # custom.theme
     } else {
       user.uv.input() %>%
         filter(oligo %in% input$user.seq.oligo) %>%
@@ -3115,9 +3009,9 @@ custom.theme <- ggplot2::theme(
     }
 
     if (file.toggle.user() == 'no') {
-      ggplot() 
-        # dark_mode(theme_pander(base_size = 18)) +
-        # custom.theme
+      ggplot()
+      # dark_mode(theme_pander(base_size = 18)) +
+      # custom.theme
     } else {
       p.user.ids <- user.ids %>%
         ggplot(
