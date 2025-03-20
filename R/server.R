@@ -3749,6 +3749,12 @@ server <- shinyServer(function(input, output, session) {
         show.legend = FALSE
       ) +
       geom_line(linewidth = 0.8) +
+      geom_point(
+        data = . %>% 
+          filter(wl == input$calc_wavelength),
+        size = 5,
+        show.legend = FALSE
+      ) +
       labs(
         x = "&lambda; (nm)",
         y = "&epsilon; (M<sup>-1</sup>cm<sup>-1</sup>)",
@@ -3757,8 +3763,14 @@ server <- shinyServer(function(input, output, session) {
       custom.theme.markdown +
       scale_x_continuous(
         limits = c(220, 310),
-        breaks = c(220, 240, 260, 280, 300, 310, input$calc_wavelength),
+        breaks = c(220, 240, 260, 280, 300, input$calc_wavelength),
         expand = c(0, 0)
-      )
+      ) +
+      scale_y_continuous(
+        limits = c(0, NA),
+        expand = c(0, 0),
+        labels = function(x) format(x, scientific = TRUE)
+      ) +
+        coord_cartesian(clip = 'off')
   })
 })
