@@ -22,27 +22,27 @@ server <- shinyServer(function(input, output, session) {
   thematic::thematic_rmd(font = "auto")
 
   # theme----
-  custom.theme <- ggplot2::theme(
+  custom.theme.markdown <- ggplot2::theme(
     panel.background = element_blank(),
     strip.background = element_blank(),
     legend.position = 'bottom',
     legend.background = element_blank(),
     legend.box.background = element_blank(),
     legend.key = element_blank(),
-    legend.text = element_text(
+    legend.text = element_markdown(
       size = 18,
     ),
-    legend.title = element_text(
+    legend.title = element_markdown(
       size = 22
     ),
-    axis.text = element_text(
+    axis.text = element_markdown(
       size = 18
     ),
-    axis.title.x = element_text(
+    axis.title.x = element_markdown(
       size = 22
     ),
-    axis.title.y = element_text(size = 22, angle = 90),
-    strip.text = element_text(
+    axis.title.y = element_markdown(size = 22, angle = 90),
+    strip.text = element_markdown(
       size = 20
     ),
     axis.line = element_line(
@@ -54,7 +54,7 @@ server <- shinyServer(function(input, output, session) {
   )
 
   # Change ggplot2's default "gray" theme
-  theme_set(custom.theme)
+  theme_set(custom.theme.markdown)
 
   # Reference input----
 
@@ -707,8 +707,6 @@ server <- shinyServer(function(input, output, session) {
   output$p.ref.uv <- renderPlot({
     if (file.toggle() == 'no') {
       ggplot()
-      # dark_mode(theme_pander(base_size = 18)) +
-      # custom.theme
     } else {
       ref.set() %>%
         filter(
@@ -741,11 +739,11 @@ server <- shinyServer(function(input, output, session) {
           # ncol = 4
         ) +
         labs(
-          x = bquote(lambda ~ (nm)),
-          y = bquote(epsilon ~ (M^-1 * cm^-1)),
+          x = "&lambda; (nm)",
+          y = "&epsilon; (M<sup>-1</sup>cm<sup>-1</sup>)",
           color = "Cation"
         ) +
-        # custom.theme +
+        custom.theme.markdown +
         scale_y_continuous(n.breaks = 3) +
         scale_x_continuous(expand = c(0, 0))
     }
@@ -1249,7 +1247,7 @@ server <- shinyServer(function(input, output, session) {
         x = "clusters",
         y = "total within sum of square"
       ) +
-      custom.theme
+      custom.theme.markdown
   })
 
   output$pca.cd.twss <- renderPlot({
@@ -1292,7 +1290,7 @@ server <- shinyServer(function(input, output, session) {
         x = "clusters",
         y = "gap statistic"
       ) +
-      custom.theme
+      custom.theme.markdown
   })
 
   output$pca.cd.gap <- renderPlot({
@@ -1344,7 +1342,7 @@ server <- shinyServer(function(input, output, session) {
         ),
         size = 1
       ) +
-      custom.theme +
+      custom.theme.markdown +
       scale_x_continuous(expand = c(0, 0), limits = c(0, NA)) +
       scale_y_continuous(expand = c(0, NA), limits = c(0, 105)) +
       labs(
@@ -1396,11 +1394,11 @@ server <- shinyServer(function(input, output, session) {
         y = 'Variable',
         x = 'Dimension'
       ) +
-      custom.theme +
+      custom.theme.markdown +
       scale_size_continuous(
         limits = c(0, 1),
         range = c(0, 25),
-        name = bquote(cos^2)
+        name = "cos<sup>2</sup>"
       )
 
     #diagnostics
@@ -1468,11 +1466,11 @@ server <- shinyServer(function(input, output, session) {
         y = input$dim.cd[2],
         x = input$dim.cd[1]
       ) +
-      custom.theme +
+      custom.theme.markdown +
       scale_color_continuous(
         type = 'viridis',
         limits = c(0, 1),
-        name = bquote(sum ~ cos^2),
+        name = "sum cos<sup>2</sup>",
         guide = guide_colorbar(barwidth = 15)
       )
   })
@@ -1523,11 +1521,11 @@ server <- shinyServer(function(input, output, session) {
         size = 5,
         fontface = 'bold'
       ) +
-      custom.theme +
+      custom.theme.markdown +
       scale_color_continuous(
         type = 'viridis',
         limits = c(0, 1),
-        name = bquote(sum ~ cos^2),
+        name = "sum cos<sup>2</sup>",
         guide = guide_colorbar(barwidth = 15)
       ) +
       labs(
@@ -1855,7 +1853,7 @@ server <- shinyServer(function(input, output, session) {
         x = "clusters",
         y = "total within sum of square"
       ) +
-      custom.theme
+      custom.theme.markdown
   })
 
   output$pca.ids.twss <- renderPlot({
@@ -1898,7 +1896,7 @@ server <- shinyServer(function(input, output, session) {
         x = "clusters",
         y = "gap statistic"
       ) +
-      custom.theme
+      custom.theme.markdown
   })
 
   output$pca.ids.gap <- renderPlot({
@@ -1949,7 +1947,7 @@ server <- shinyServer(function(input, output, session) {
         ),
         size = 1
       ) +
-      custom.theme +
+      custom.theme.markdown +
       scale_x_continuous(expand = c(0, 0), limits = c(0, NA)) +
       scale_y_continuous(expand = c(0, NA), limits = c(0, 105)) +
       labs(
@@ -2001,11 +1999,11 @@ server <- shinyServer(function(input, output, session) {
         y = 'Variable',
         x = 'Dimension'
       ) +
-      custom.theme +
+      custom.theme.markdown +
       scale_size_continuous(
         limits = c(0, 1),
         range = c(0, 25),
-        name = bquote(cos^2)
+        name = "cos<sup>2</sup>",
       )
 
     #diagnostics
@@ -2070,11 +2068,11 @@ server <- shinyServer(function(input, output, session) {
         y = input$dim.ids[2],
         x = input$dim.ids[1]
       ) +
-      custom.theme +
+      custom.theme.markdown +
       scale_color_continuous(
         type = 'viridis',
         limits = c(0, 1),
-        name = bquote(sum ~ cos^2),
+        name = "sum cos<sup>2</sup>",
         guide = guide_colorbar(barwidth = 15)
       )
   })
@@ -2127,7 +2125,7 @@ server <- shinyServer(function(input, output, session) {
         size = 5,
         fontface = 'bold'
       ) +
-      custom.theme +
+      custom.theme.markdown +
       labs(
         y = input$dim.ids[2],
         x = input$dim.ids[1]
@@ -2135,7 +2133,7 @@ server <- shinyServer(function(input, output, session) {
       scale_color_continuous(
         type = 'viridis',
         limits = c(0, 1),
-        name = bquote(sum ~ cos^2),
+        name = "sum cos<sup>2</sup>",
         guide = guide_colorbar(barwidth = 15)
       )
   })
@@ -2809,7 +2807,7 @@ server <- shinyServer(function(input, output, session) {
 
     if (input$cd.norm == "Δε") {
       user.cd$y <- user.cd$delta.eps
-      axis.label <- bquote(Delta * epsilon ~ (M^-1 * cm^-1))
+      axis.label <- "&Delta;&eps; (M<sup>-1</sup> cm<sup>-1</sup>)"
     } else {
       user.cd$y <- user.cd$norm.cd
       axis.label <- "Normalized CD"
@@ -2817,8 +2815,6 @@ server <- shinyServer(function(input, output, session) {
 
     if (file.toggle.user() == 'no') {
       ggplot()
-      # dark_mode(theme_pander(base_size = 18)) +
-      # custom.theme
     } else {
       p.user.cd <- user.cd %>%
         ggplot(
@@ -2838,12 +2834,12 @@ server <- shinyServer(function(input, output, session) {
           show.legend = T
         ) +
         labs(
-          x = bquote(lambda ~ (nm)),
+          x = "&lambda; (nm)",
           y = axis.label
           # color = input$user.color,
           # fill = input$user.color
         ) +
-        custom.theme +
+        custom.theme.markdown + 
         scale_y_continuous(n.breaks = 4) +
         scale_x_continuous(expand = c(0, 0))
     }
@@ -2916,8 +2912,6 @@ server <- shinyServer(function(input, output, session) {
   output$p.user.uv <- renderPlot({
     if (file.toggle.user() == 'no') {
       ggplot()
-      # dark_mode(theme_pander(base_size = 18)) +
-      # custom.theme
     } else {
       user.uv.input() %>%
         filter(oligo %in% input$user.seq.oligo) %>%
@@ -2938,11 +2932,11 @@ server <- shinyServer(function(input, output, session) {
           ncol = 4
         ) +
         labs(
-          x = bquote(lambda ~ (nm)),
-          y = bquote(epsilon ~ (M^-1 * cm^-1)),
+          x = "&lambda; (nm)",
+          y = "&epsilon; (M<sup>-1</sup> cm<sup>-1</sup>)",
           color = "Cation"
         ) +
-        custom.theme +
+          custom.theme.markdown +
         scale_y_continuous(n.breaks = 3) +
         scale_x_continuous(expand = c(0, 0))
     }
@@ -3018,7 +3012,7 @@ server <- shinyServer(function(input, output, session) {
 
     if (input$ids.norm == "Δε") {
       user.ids$y <- user.ids$delta.eps
-      axis.label <- bquote(Delta * epsilon ~ (M^-1 * cm^-1))
+      axis.label <- "&Delta;&epsilon; (M<sup>-1</sup> cm<sup>-1</sup>)"
     } else {
       user.ids$y <- user.ids$norm.ids
       axis.label <- "Normalized IDS"
@@ -3026,8 +3020,6 @@ server <- shinyServer(function(input, output, session) {
 
     if (file.toggle.user() == 'no') {
       ggplot()
-      # dark_mode(theme_pander(base_size = 18)) +
-      # custom.theme
     } else {
       p.user.ids <- user.ids %>%
         ggplot(
@@ -3067,12 +3059,12 @@ server <- shinyServer(function(input, output, session) {
           show.legend = TRUE
         ) +
         labs(
-          x = bquote(lambda ~ (nm)),
+          x = "&lambda; (nm)",
           y = axis.label
           # color = input$user.color,
           # fill = input$user.color
         ) +
-        custom.theme +
+          custom.theme.markdown +
         scale_y_continuous(n.breaks = 3) +
         scale_x_continuous(expand = c(0, 0))
     }
@@ -3750,8 +3742,8 @@ server <- shinyServer(function(input, output, session) {
       ) +
       geom_line(linewidth = 0.8) +
       labs(
-        x = bquote(lambda ~ (nm)),
-        y = bquote(epsilon ~ (M^-1 * cm^-1)),
+        x = "&lambda; (nm)",
+        y = "&epsilon; (M<sup>-1</sup>cm<sup>-1</sup>)",
         color = "Oligonucleotide"
       )
   })
