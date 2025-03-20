@@ -1557,8 +1557,10 @@ server <- shinyServer(function(input, output, session) {
             select(
               oligo,
               topo,
+              conformer,
               feature,
               gba,
+              gba.stacks,
               tetrad,
               tetrad.id,
               loop,
@@ -1572,8 +1574,10 @@ server <- shinyServer(function(input, output, session) {
           c(
             'oligo',
             'topo',
+            'conformer',
             'feature',
             'gba',
+            'gba.stacks',
             'tetrad',
             'tetrad.id',
             'loop',
@@ -1590,8 +1594,10 @@ server <- shinyServer(function(input, output, session) {
             "Name" = "oligo",
             "Cation" = "salt",
             "Topology" = "topo",
+            "Conformer" = "conformer",
             "Other feature" = "feature",
             "GBA" = "gba",
+            "GBA stacks" = "gba.stacks",
             "Tetrads" = "tetrad",
             "Tetrad combination" = "tetrad.id",
             "Loop progression" = "loop",
@@ -1617,10 +1623,10 @@ server <- shinyServer(function(input, output, session) {
               list(extend = 'colvis')
             ),
             title = NULL,
-            columnDefs = list(list(visible = FALSE, targets = c(2:9)))
+            columnDefs = list(list(visible = FALSE, targets = c(2:11)))
           )
         ) %>%
-        formatSignif(columns = 11:(11 + input$ncp), digits = 5)
+        formatSignif(columns = 13:(13 + input$ncp), digits = 5)
     }
   })
 
@@ -2155,8 +2161,10 @@ server <- shinyServer(function(input, output, session) {
             select(
               oligo,
               topo,
+              conformer,
               feature,
               gba,
+              gba.stacks,
               tetrad,
               tetrad.id,
               loop,
@@ -2169,8 +2177,10 @@ server <- shinyServer(function(input, output, session) {
         setcolorder(c(
           'oligo',
           'topo',
+          'conformer',
           'feature',
           'gba',
+          'gba.stacks',
           'tetrad',
           'tetrad.id',
           'loop',
@@ -2186,8 +2196,10 @@ server <- shinyServer(function(input, output, session) {
             "Name" = "oligo",
             "Cation" = "salt",
             "Topology" = "topo",
+            "Conformer" = "conformer",
             "Other feature" = "feature",
             "GBA" = "gba",
+            "GBA stacks" = "gba.stacks",
             "Tetrads" = "tetrad",
             "Tetrad combination" = "tetrad.id",
             "Loop progression" = "loop",
@@ -2213,15 +2225,10 @@ server <- shinyServer(function(input, output, session) {
               list(extend = 'colvis')
             ),
             title = NULL,
-            columnDefs = list(list(visible = FALSE, targets = c(2:9)))
+            columnDefs = list(list(visible = FALSE, targets = c(2:11)))
           )
         ) %>%
-        # formatStyle(
-        #   columns = 0:(11 + input$ncp),
-        #   target = "cell",
-        #   backgroundColor = "#272c30"
-        # ) %>%
-        formatRound(columns = 11:(11 + input$ncp), digits = 2)
+        formatRound(columns = 13:(13 + input$ncp), digits = 2)
     }
   })
 
@@ -3175,7 +3182,7 @@ server <- shinyServer(function(input, output, session) {
       magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
       cbind(user.cd()) %>%
       cbind(km = km.predict) %>%
-      mutate(topo = "user", gba = "user", salt = "user")
+      mutate(topo = "User", gba = "User", salt = "User")
 
     return(cd.predict)
   })
@@ -3203,7 +3210,7 @@ server <- shinyServer(function(input, output, session) {
       magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
       cbind(user.cd()) %>%
       cbind(km = km.predict) %>%
-      mutate(topo = "user", gba = "user", salt = "user")
+      mutate(topo = "User", gba = "User", salt = "User")
 
     return(cd.predict)
   })
@@ -3234,12 +3241,12 @@ server <- shinyServer(function(input, output, session) {
           by = "oligo"
         ) %>%
         mutate(
-          topo = if_else(is.na(topo), "user", topo),
-          tetrad = if_else(is.na(tetrad), "user", as.character(tetrad)),
-          tetrad.id = if_else(is.na(tetrad.id), "user", tetrad.id),
-          loop = if_else(is.na(loop), "user", loop),
-          plus.minus = if_else(is.na(plus.minus), "user", plus.minus),
-          groove = if_else(is.na(groove), "user", groove)
+          topo = if_else(is.na(topo), "User", topo),
+          tetrad = if_else(is.na(tetrad), "User", as.character(tetrad)),
+          tetrad.id = if_else(is.na(tetrad.id), "User", tetrad.id),
+          loop = if_else(is.na(loop), "User", loop),
+          plus.minus = if_else(is.na(plus.minus), "User", plus.minus),
+          groove = if_else(is.na(groove), "User", groove)
         ) %>%
         datatable(
           style = "bootstrap",
@@ -3310,17 +3317,19 @@ server <- shinyServer(function(input, output, session) {
       left_join(
         ref.seq() %>%
           ungroup() %>%
-          select(oligo, tetrad, tetrad.id, loop, plus.minus, groove),
+          select(oligo, tetrad, tetrad.id, loop, plus.minus, groove, conformer, gba.stacks),
         by = "oligo"
       ) %>%
       mutate(
-        topo = if_else(is.na(topo), "user", topo),
-        tetrad = if_else(is.na(tetrad), "user", as.character(tetrad)),
-        tetrad.id = if_else(is.na(tetrad.id), "user", tetrad.id),
-        loop = if_else(is.na(loop), "user", loop),
-        plus.minus = if_else(is.na(plus.minus), "user", plus.minus),
-        groove = if_else(is.na(groove), "user", groove),
-        salt = if_else(is.na(salt), 'user', groove) # added
+        topo = if_else(is.na(topo), "User", topo),
+        conformer = if_else(is.na(conformer), "User", conformer),
+        gba.stacks = if_else(is.na(gba.stacks), "User", gba.stacks),
+        tetrad = if_else(is.na(tetrad), "User", as.character(tetrad)),
+        tetrad.id = if_else(is.na(tetrad.id), "User", tetrad.id),
+        loop = if_else(is.na(loop), "User", loop),
+        plus.minus = if_else(is.na(plus.minus), "User", plus.minus),
+        groove = if_else(is.na(groove), "User", groove),
+        salt = if_else(is.na(salt), "User", groove) # added
       )
 
     pca.cd.coord %>%
@@ -3366,17 +3375,19 @@ server <- shinyServer(function(input, output, session) {
       left_join(
         ref.seq() %>%
           ungroup() %>%
-          select(oligo, tetrad, tetrad.id, loop, plus.minus, groove),
+          select(oligo, tetrad, tetrad.id, loop, plus.minus, groove, conformer, gba.stacks),
         by = "oligo"
       ) %>%
       mutate(
-        topo = if_else(is.na(topo), "user", topo),
-        tetrad = if_else(is.na(tetrad), "user", as.character(tetrad)),
-        tetrad.id = if_else(is.na(tetrad.id), "user", tetrad.id),
-        loop = if_else(is.na(loop), "user", loop),
-        plus.minus = if_else(is.na(plus.minus), "user", plus.minus),
-        groove = if_else(is.na(groove), "user", groove),
-        salt = if_else(is.na(salt), 'user', groove) # added
+        topo = if_else(is.na(topo), "User", topo),
+        conformer = if_else(is.na(conformer), "User", conformer),
+        gba.stacks = if_else(is.na(gba.stacks), "User", gba.stacks),
+        tetrad = if_else(is.na(tetrad), "User", as.character(tetrad)),
+        tetrad.id = if_else(is.na(tetrad.id), "User", tetrad.id),
+        loop = if_else(is.na(loop), "User", loop),
+        plus.minus = if_else(is.na(plus.minus), "User", plus.minus),
+        groove = if_else(is.na(groove), "User", groove),
+        salt = if_else(is.na(salt), "User", groove) # added
       )
 
     pca.cd.coord %>%
@@ -3487,7 +3498,7 @@ server <- shinyServer(function(input, output, session) {
       magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
       cbind(user.ids()) %>%
       cbind(km = km.predict) %>%
-      mutate(topo = "user", gba = "user", salt = "user")
+      mutate(topo = "User", gba = "User", salt = "User")
 
     return(ids.predict)
   })
@@ -3515,7 +3526,7 @@ server <- shinyServer(function(input, output, session) {
       magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
       cbind(user.ids()) %>%
       cbind(km = km.predict) %>%
-      mutate(topo = "user", gba = "user", salt = "user")
+      mutate(topo = "User", gba = "User", salt = "User")
 
     return(ids.predict)
   })
@@ -3540,17 +3551,19 @@ server <- shinyServer(function(input, output, session) {
       left_join(
         ref.seq() %>%
           ungroup() %>%
-          select(oligo, tetrad, tetrad.id, loop, plus.minus, groove),
+          select(oligo, tetrad, tetrad.id, loop, plus.minus, groove, conformer, gba.stacks),
         by = "oligo"
       ) %>%
       mutate(
-        topo = if_else(is.na(topo), "user", topo),
-        tetrad = if_else(is.na(tetrad), "user", as.character(tetrad)),
-        tetrad.id = if_else(is.na(tetrad.id), "user", tetrad.id),
-        loop = if_else(is.na(loop), "user", loop),
-        plus.minus = if_else(is.na(plus.minus), "user", plus.minus),
-        groove = if_else(is.na(groove), "user", groove),
-        salt = if_else(is.na(salt), 'user', groove) # added
+        topo = if_else(is.na(topo), "User", topo),
+        conformer = if_else(is.na(conformer), "User", conformer),
+        gba_stacks = if_else(is.na(gba.stacks), "User", gba.stacks),
+        tetrad = if_else(is.na(tetrad), "User", as.character(tetrad)),
+        tetrad.id = if_else(is.na(tetrad.id), "User", tetrad.id),
+        loop = if_else(is.na(loop), "User", loop),
+        plus.minus = if_else(is.na(plus.minus), "User", plus.minus),
+        groove = if_else(is.na(groove), "User", groove),
+        salt = if_else(is.na(salt), "User", groove) # added
       )
 
     pca.ids.coord %>%
@@ -3596,17 +3609,19 @@ server <- shinyServer(function(input, output, session) {
       left_join(
         ref.seq() %>%
           ungroup() %>%
-          select(oligo, tetrad, tetrad.id, loop, plus.minus, groove),
+          select(oligo, tetrad, tetrad.id, loop, plus.minus, groove, conformer, gba.stacks),
         by = "oligo"
       ) %>%
       mutate(
-        topo = if_else(is.na(topo), "user", topo),
-        tetrad = if_else(is.na(tetrad), "user", as.character(tetrad)),
-        tetrad.id = if_else(is.na(tetrad.id), "user", tetrad.id),
-        loop = if_else(is.na(loop), "user", loop),
-        plus.minus = if_else(is.na(plus.minus), "user", plus.minus),
-        groove = if_else(is.na(groove), "user", groove),
-        salt = if_else(is.na(salt), 'user', groove) # added
+        topo = if_else(is.na(topo), "User", topo),
+        conformer = if_else(is.na(conformer), "User", conformer),
+        gba_stacks = if_else(is.na(gba.stacks), "User", gba.stacks),
+        tetrad = if_else(is.na(tetrad), "User", as.character(tetrad)),
+        tetrad.id = if_else(is.na(tetrad.id), "User", tetrad.id),
+        loop = if_else(is.na(loop), "User", loop),
+        plus.minus = if_else(is.na(plus.minus), "User", plus.minus),
+        groove = if_else(is.na(groove), "User", groove),
+        salt = if_else(is.na(salt), "User", groove) # added
       )
 
     pca.ids.coord %>%
@@ -3634,364 +3649,9 @@ server <- shinyServer(function(input, output, session) {
     )
   })
 
-  #### CD+IDS----
+  # UV calculator------
 
-  ##### prep----
-
-  user.cd.ids <- reactive({
-    user.cd() %>%
-      left_join(
-        user.ids(),
-        by = "oligo"
-      )
-  })
-
-  output$user.cd.ids <- renderDT(server = FALSE, {
-    if (file.toggle.user() == 'no') {
-      return(NULL)
-    } else {
-      user.cd.ids() %>%
-        datatable(
-          style = "bootstrap",
-          extensions = c('Buttons', 'Responsive', 'Scroller'),
-          rownames = F,
-          escape = T,
-          filter = 'top',
-          autoHideNavigation = T,
-          options = list(
-            deferRender = TRUE,
-            scrollY = 200,
-            scroller = F,
-            pageLength = 25,
-            autoWidth = F,
-            dom = 'Bfrtip',
-            buttons = list(
-              list(extend = 'copy'),
-              list(extend = 'csv', title = NULL, filename = "user cd-ids"),
-              list(extend = 'excel', title = NULL, filename = "user cd-ids"),
-              list(extend = 'colvis')
-            ),
-            title = NULL
-            # columnDefs = list(list(visible=FALSE, targets=c(0,2:6,9,12)))
-          )
-        )
-      # formatStyle(
-      #   columns = 0:17,
-      #   target = "cell",
-      #   backgroundColor = "#272c30"
-      # )
-    }
-  })
-
-  #####predict----
-
-  cd.ids.predict <- reactive({
-    #prediction
-    cd.ids.predict.0 <- FactoMineR::predict.PCA(
-      pca.cd.ids(),
-      user.cd.ids(),
-      scale.unit = input$scale.unit
-    )$coord
-
-    #cluster assignment
-    km.predict <- apply(
-      cd.ids.predict.0,
-      1,
-      closest.cluster,
-      km.centers = pca.cd.ids.km()$centers
-    )
-
-    #merging
-    cd.ids.predict <- cd.ids.predict.0 %>%
-      as.data.frame() %>%
-      select(input$dim.cd.ids[1], input$dim.cd.ids[2]) %>%
-      magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
-      cbind(user.cd.ids()) %>%
-      cbind(km = km.predict) %>%
-      mutate(topo = "user", gba = "user", salt = "user")
-
-    return(cd.ids.predict)
-  })
-
-  cd.ids.predict.2 <- reactive({
-    #prediction
-    cd.ids.predict.0 <- FactoMineR::predict.PCA(
-      pca.cd.ids(),
-      user.cd.ids(),
-      scale.unit = input$scale.unit
-    )$coord
-
-    #cluster assignment
-    km.predict <- apply(
-      cd.ids.predict.0,
-      1,
-      closest.cluster,
-      km.centers = pca.cd.ids.km()$centers
-    )
-
-    #merging
-    cd.ids.predict <- cd.ids.predict.0 %>%
-      as.data.frame() %>%
-      select(input$dim.cd.ids.2[1], input$dim.cd.ids.2[2]) %>%
-      magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
-      cbind(user.cd.ids()) %>%
-      cbind(km = km.predict) %>%
-      mutate(topo = "user", gba = "user", salt = "user")
-
-    return(cd.ids.predict)
-  })
-
-  #####plots----
-  output$predict.cd.ids.coord <- renderPlot({
-    pca.cd.ids.coord <- cd.ids.predict() %>%
-      rbind(
-        data.frame(pca.cd.ids()$ind$coord) %>%
-          select(input$dim.cd.ids[1], input$dim.cd.ids[2]) %>%
-          magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
-          cbind(training.cd.ids()) %>%
-          add_column(km = pca.cd.ids.km()$cluster) %>%
-          left_join(
-            ref.seq() %>%
-              select(oligo, topo, gba, salt),
-            by = 'oligo'
-          )
-      ) %>%
-      add_column(color = NA, shape = NA) %>%
-      left_join(
-        ref.seq() %>%
-          select(oligo, tetrad, tetrad.id, loop, plus.minus, groove),
-        by = "oligo"
-      ) %>%
-      mutate(
-        topo = if_else(is.na(topo), "user", topo),
-        tetrad = if_else(is.na(tetrad), "user", as.character(tetrad)),
-        tetrad.id = if_else(is.na(tetrad.id), "user", tetrad.id),
-        loop = if_else(is.na(loop), "user", loop),
-        plus.minus = if_else(is.na(plus.minus), "user", plus.minus),
-        groove = if_else(is.na(groove), "user", groove)
-      )
-
-    # coloring
-    if (input$pca.color.cd.ids == "k-means") {
-      pca.cd.ids.coord$color <- factor(pca.cd.ids.coord$km)
-    } else if (input$pca.color.cd.ids == "Topology") {
-      pca.cd.ids.coord$color <- pca.cd.ids.coord$topo
-    } else if (input$pca.color.cd.ids == "GBA") {
-      pca.cd.ids.coord$color <- pca.cd.ids.coord$gba
-    } else if (input$pca.color.cd.ids == "Tetrads") {
-      pca.cd.ids.coord$color <- factor(pca.cd.ids.coord$tetrad)
-    } else if (input$pca.color.cd.ids == "Tetrad combination") {
-      pca.cd.ids.coord$color <- pca.cd.ids.coord$tetrad.id
-    } else if (input$pca.color.cd.ids == "Loop progression") {
-      pca.cd.ids.coord$color <- pca.cd.ids.coord$loop
-    } else if (input$pca.color.cd.ids == "Tetrad handedness") {
-      pca.cd.ids.coord$color <- pca.cd.ids.coord$plus.minus
-    } else if (input$pca.color.cd.ids == "Grooves") {
-      pca.cd.ids.coord$color <- pca.cd.ids.coord$groove
-    } else {
-      pca.cd.ids.coord$color <- pca.cd.ids.coord$salt
-    }
-
-    # shaping
-    if (input$pca.shape.cd.ids == "k-means") {
-      pca.cd.ids.coord$shape <- factor(pca.cd.ids.coord$km)
-    } else if (input$pca.shape.cd.ids == "Topology") {
-      pca.cd.ids.coord$shape <- pca.cd.ids.coord$topo
-    } else if (input$pca.shape.cd.ids == "GBA") {
-      pca.cd.ids.coord$shape <- pca.cd.ids.coord$gba
-    } else if (input$pca.shape.cd.ids == "Tetrads") {
-      pca.cd.ids.coord$shape <- factor(pca.cd.ids.coord$tetrad)
-    } else if (input$pca.shape.cd.ids == "Tetrad combination") {
-      pca.cd.ids.coord$shape <- pca.cd.ids.coord$tetrad.id
-    } else if (input$pca.shape.cd.ids == "Loop progression") {
-      pca.cd.ids.coord$shape <- pca.cd.ids.coord$loop
-    } else if (input$pca.shape.cd.ids == "Tetrad handedness") {
-      pca.cd.ids.coord$shape <- pca.cd.ids.coord$plus.minus
-    } else if (input$pca.shape.cd.ids == "Grooves") {
-      pca.cd.ids.coord$shape <- pca.cd.ids.coord$groove
-    } else {
-      pca.cd.ids.coord$shape <- pca.cd.ids.coord$salt
-    }
-
-    p.pca.cd.ids.coord <- pca.cd.ids.coord %>%
-      ggplot(
-        aes(
-          x = Dim.1,
-          y = Dim.2,
-          color = color,
-          fill = color,
-          shape = shape
-        )
-      ) +
-      scale_shape_manual(values = c(0:15))
-
-    if (isTRUE(input$pca.shape.cd.ids == input$pca.color.cd.ids)) {
-      p.pca.cd.ids.coord <- p.pca.cd.ids.coord +
-        geom_polygon(
-          data = . %>%
-            group_by(color) %>%
-            filter(color != 'user') %>%
-            slice(chull(Dim.1, Dim.2)),
-          alpha = 0.25,
-          show.legend = FALSE
-        )
-    }
-
-    p.pca.cd.ids.coord +
-      geom_point(
-        size = 6,
-        stroke = 1.25,
-        show.legend = TRUE
-      ) +
-      geom_point(
-        inherit.aes = FALSE,
-        data = data.frame(pca.cd.ids.km()$centers),
-        aes(x = Dim.1, y = Dim.2),
-        show.legend = FALSE,
-        color = "white"
-      ) +
-      geom_text_repel(
-        aes(label = oligo),
-        force = 20,
-        size = 8,
-        point.padding = 10,
-        show.legend = FALSE
-      ) +
-      custom.theme +
-      labs(
-        y = input$dim.cd.ids[2],
-        x = input$dim.cd.ids[1],
-        color = input$pca.color.cd.ids,
-        fill = input$pca.color.cd.ids,
-        shape = input$pca.shape.cd.ids
-      )
-  })
-
-  output$predict.cd.ids.coord.2 <- renderPlot({
-    pca.cd.ids.coord <- cd.ids.predict.2() %>%
-      rbind(
-        data.frame(pca.cd.ids()$ind$coord) %>%
-          select(input$dim.cd.ids.2[1], input$dim.cd.ids.2[2]) %>%
-          magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
-          cbind(training.cd.ids()) %>%
-          add_column(km = pca.cd.ids.km()$cluster) %>%
-          left_join(
-            ref.seq() %>%
-              select(oligo, topo, gba, salt),
-            by = 'oligo'
-          )
-      ) %>%
-      add_column(color = NA, shape = NA) %>%
-      left_join(
-        ref.seq() %>%
-          select(oligo, tetrad, tetrad.id, loop, plus.minus, groove),
-        by = "oligo"
-      ) %>%
-      mutate(
-        topo = if_else(is.na(topo), "user", topo),
-        tetrad = if_else(is.na(tetrad), "user", as.character(tetrad)),
-        tetrad.id = if_else(is.na(tetrad.id), "user", tetrad.id),
-        loop = if_else(is.na(loop), "user", loop),
-        plus.minus = if_else(is.na(plus.minus), "user", plus.minus),
-        groove = if_else(is.na(groove), "user", groove)
-      )
-
-    # coloring
-    if (input$pca.color.cd.ids.2 == "k-means") {
-      pca.cd.ids.coord$color <- factor(pca.cd.ids.coord$km)
-    } else if (input$pca.color.cd.ids.2 == "Topology") {
-      pca.cd.ids.coord$color <- pca.cd.ids.coord$topo
-    } else if (input$pca.color.cd.ids.2 == "GBA") {
-      pca.cd.ids.coord$color <- pca.cd.ids.coord$gba
-    } else if (input$pca.color.cd.ids.2 == "Tetrads") {
-      pca.cd.ids.coord$color <- factor(pca.cd.ids.coord$tetrad)
-    } else if (input$pca.color.cd.ids.2 == "Tetrad combination") {
-      pca.cd.ids.coord$color <- pca.cd.ids.coord$tetrad.id
-    } else if (input$pca.color.cd.ids.2 == "Loop progression") {
-      pca.cd.ids.coord$color <- pca.cd.ids.coord$loop
-    } else if (input$pca.color.cd.ids.2 == "Tetrad handedness") {
-      pca.cd.ids.coord$color <- pca.cd.ids.coord$plus.minus
-    } else if (input$pca.color.cd.ids.2 == "Grooves") {
-      pca.cd.ids.coord$color <- pca.cd.ids.coord$groove
-    } else {
-      pca.cd.ids.coord$color <- pca.cd.ids.coord$salt
-    }
-
-    # shaping
-    if (input$pca.shape.cd.ids.2 == "k-means") {
-      pca.cd.ids.coord$shape <- factor(pca.cd.ids.coord$km)
-    } else if (input$pca.shape.cd.ids.2 == "Topology") {
-      pca.cd.ids.coord$shape <- pca.cd.ids.coord$topo
-    } else if (input$pca.shape.cd.ids.2 == "GBA") {
-      pca.cd.ids.coord$shape <- pca.cd.ids.coord$gba
-    } else if (input$pca.shape.cd.ids.2 == "Tetrads") {
-      pca.cd.ids.coord$shape <- factor(pca.cd.ids.coord$tetrad)
-    } else if (input$pca.shape.cd.ids.2 == "Tetrad combination") {
-      pca.cd.ids.coord$shape <- pca.cd.ids.coord$tetrad.id
-    } else if (input$pca.shape.cd.ids.2 == "Loop progression") {
-      pca.cd.ids.coord$shape <- pca.cd.ids.coord$loop
-    } else if (input$pca.shape.cd.ids.2 == "Tetrad handedness") {
-      pca.cd.ids.coord$shape <- pca.cd.ids.coord$plus.minus
-    } else if (input$pca.shape.cd.ids.2 == "Grooves") {
-      pca.cd.ids.coord$shape <- pca.cd.ids.coord$groove
-    } else {
-      pca.cd.ids.coord$shape <- pca.cd.ids.coord$salt
-    }
-
-    p.pca.cd.ids.coord <- pca.cd.ids.coord %>%
-      ggplot(
-        aes(
-          x = Dim.1,
-          y = Dim.2,
-          color = color,
-          fill = color,
-          shape = shape
-        )
-      ) +
-      scale_shape_manual(values = c(0:15))
-
-    if (isTRUE(input$pca.shape.cd.ids.2 == input$pca.color.cd.ids.2)) {
-      p.pca.cd.ids.coord <- p.pca.cd.ids.coord +
-        geom_polygon(
-          data = . %>%
-            group_by(color) %>%
-            filter(color != 'user') %>%
-            slice(chull(Dim.1, Dim.2)),
-          alpha = 0.25,
-          show.legend = FALSE
-        )
-    }
-
-    p.pca.cd.ids.coord +
-      geom_point(
-        size = 6,
-        stroke = 1.25,
-        show.legend = TRUE
-      ) +
-      geom_point(
-        inherit.aes = FALSE,
-        data = data.frame(pca.cd.ids.km()$centers),
-        aes(x = Dim.1, y = Dim.2),
-        show.legend = FALSE,
-        color = "white"
-      ) +
-      geom_text_repel(
-        aes(label = oligo),
-        force = 20,
-        size = 8,
-        point.padding = 10,
-        show.legend = FALSE
-      ) +
-      custom.theme +
-      labs(
-        y = input$dim.cd.ids.2[2],
-        x = input$dim.cd.ids.2[1],
-        color = input$pca.color.cd.ids.2,
-        fill = input$pca.color.cd.ids.2,
-        shape = input$pca.shape.cd.ids.2
-      )
-  })
-
+  ## User oligos----
   user_oligos <- reactiveVal(
     data.frame(
       oligo = "Oligo 1",
@@ -4009,7 +3669,7 @@ server <- shinyServer(function(input, output, session) {
       )
   )
 
-  # Render editable DataTable
+  ## Render editable DataTable----
   output$spectra_user_input <- renderDT({
     datatable(
       user_oligos() %>%
@@ -4030,7 +3690,7 @@ server <- shinyServer(function(input, output, session) {
     )
   })
 
-  # Track user edits and update reactiveVal
+  ### Track user edits and update reactiveVal----
   observeEvent(input$spectra_user_input_cell_edit, {
     info <- input$spectra_user_input_cell_edit
     new_data <- user_oligos()
@@ -4038,7 +3698,7 @@ server <- shinyServer(function(input, output, session) {
     user_oligos(new_data) # Update reactiveVal
   })
 
-  # Add a new row when button is clicked
+  ### Add a new row when button is clicked
   observeEvent(input$add_row, {
     new_data <- user_oligos()
     row_number <- nrow(new_data) + 1
@@ -4059,7 +3719,7 @@ server <- shinyServer(function(input, output, session) {
     user_oligos(rbind(new_data, new_row)) # Append new row
   })
 
-  # Perform calculations based on updated data
+  ## Perform calculations based on updated data----
   user_oligos_calc <- reactive({
     as.data.table(user_oligos()) %>%
       group_by(oligo, seq) %>%
@@ -4070,7 +3730,7 @@ server <- shinyServer(function(input, output, session) {
       )
   })
 
-  # Render updated plot
+  ## Render updated plot----
   output$p_user_oligos_calc <- renderPlot({
     user_oligos_calc() %>%
       ggplot(aes(x = wl, y = eps, color = oligo)) +
