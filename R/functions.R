@@ -131,10 +131,11 @@ custom.theme.markdown <- ggplot2::theme(
 
 ## Plotting function----
 render_ref_plot <- function(df, input, norm_col, axis_label_text) {
+  # Initialize color and sd columns
   df <- df %>%
     add_column(color = NA, sd.y = NA)
 
-  # Assign y values and axis label
+  # Assign y values based on normalization method
   df$y <- df[[norm_col]]
 
   # Define color mapping
@@ -152,6 +153,7 @@ render_ref_plot <- function(df, input, norm_col, axis_label_text) {
   )
   df$color <- color_map[[input$ref.color]]
 
+  #Initialize plot
   p <- df %>%
     ggplot(aes(x = wl, y = y, color = color)) +
     geom_hline(yintercept = 0) +
@@ -166,33 +168,33 @@ render_ref_plot <- function(df, input, norm_col, axis_label_text) {
     scale_y_continuous(n.breaks = 3) +
     scale_x_continuous(expand = c(0, 0))
 
+  # If panel mode is "Mean", add geom_ribbon and geom_line of mean
   if (input$ref.panel == "Mean") {
+
+    # Calculate mean
+    df_mean <- df %>%
+      group_by(color, wl) %>%
+      summarise(
+        sd.y = sd(y, na.rm = TRUE),
+        y = mean(y, na.rm = TRUE),
+        .groups = "drop"
+      )
+    
+    # Add geom_ribbon and geom_line
     p <- p +
       geom_ribbon(
-        data = . %>%
-          group_by(color, wl) %>%
-          summarise(
-            sd.y = sd(y, na.rm = TRUE),
-            y = mean(y, na.rm = TRUE),
-            .groups = "drop"
-          ),
+        data = df_mean,
         inherit.aes = FALSE,
         aes(x = wl, y = y, ymin = y - sd.y, ymax = y + sd.y, fill = color),
         alpha = 0.5,
         show.legend = FALSE
       ) +
       geom_line(
-        data = . %>%
-          group_by(color, wl) %>%
-          summarise(
-            sd.y = sd(y, na.rm = TRUE),
-            y = mean(y, na.rm = TRUE),
-            .groups = "drop"
-          ),
+        data = df_mean,
         size = 1,
         show.legend = TRUE
       )
-  } else {
+  } else { #else add lines of individuals
     p <- p +
       geom_line(aes(group = oligo), size = 1, show.legend = TRUE)
   }

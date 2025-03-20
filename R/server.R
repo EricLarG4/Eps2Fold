@@ -53,7 +53,6 @@ server <- shinyServer(function(input, output, session) {
     )
   )
 
-
   # Change ggplot2's default "gray" theme
   theme_set(custom.theme)
 
@@ -704,6 +703,55 @@ server <- shinyServer(function(input, output, session) {
   })
 
   ### Reference UV----
+
+  output$p.ref.uv <- renderPlot({
+    if (file.toggle() == 'no') {
+      ggplot()
+      # dark_mode(theme_pander(base_size = 18)) +
+      # custom.theme
+    } else {
+      ref.set() %>%
+        filter(
+          topo %in% input$ref.seq.topo,
+          conformer %in% input$ref.seq.conformer,
+          gba %in% input$ref.seq.gba,
+          gba.stacks %in% input$ref.seq.gba.stacks,
+          salt %in% c(input$ref.seq.cation, "none"),
+          oligo %in% input$ref.seq.oligo,
+          tetrad %in% input$ref.seq.tetrad,
+          tetrad.id %in% input$ref.seq.tetrad.id,
+          loop %in% input$ref.seq.loop,
+          plus.minus %in% input$ref.seq.plus.minus,
+          groove %in% input$ref.seq.groove
+        ) %>%
+        ggplot(
+          aes(
+            x = wl,
+            y = uv.eps,
+            color = salt,
+            group = salt
+          )
+        ) +
+        geom_line(
+          size = 1,
+          show.legend = T
+        ) +
+        facet_wrap(
+          ~oligo
+          # ncol = 4
+        ) +
+        labs(
+          x = bquote(lambda ~ (nm)),
+          y = bquote(epsilon ~ (M^-1 * cm^-1)),
+          color = "Cation"
+        ) +
+        # custom.theme +
+        scale_y_continuous(n.breaks = 3) +
+        scale_x_continuous(expand = c(0, 0))
+    }
+  })
+
+  ### Reference UV/CD/IDS tables----
   output$ref.uv <- renderDT(server = FALSE, {
     if (file.toggle() == 'no') {
       return(NULL)
@@ -784,62 +832,9 @@ server <- shinyServer(function(input, output, session) {
             columnDefs = list(list(visible = FALSE, targets = c(2:6, 9, 17)))
           )
         )
-      # formatStyle(
-      #   columns = 0:18,
-      #   target = "cell",
-      #   backgroundColor = "#272c30"
-      # )
     }
   })
 
-  output$p.ref.uv <- renderPlot({
-    if (file.toggle() == 'no') {
-      ggplot()
-      # dark_mode(theme_pander(base_size = 18)) +
-      # custom.theme
-    } else {
-      ref.set() %>%
-        filter(
-          topo %in% input$ref.seq.topo,
-          conformer %in% input$ref.seq.conformer,
-          gba %in% input$ref.seq.gba,
-          gba.stacks %in% input$ref.seq.gba.stacks,
-          salt %in% c(input$ref.seq.cation, "none"),
-          oligo %in% input$ref.seq.oligo,
-          tetrad %in% input$ref.seq.tetrad,
-          tetrad.id %in% input$ref.seq.tetrad.id,
-          loop %in% input$ref.seq.loop,
-          plus.minus %in% input$ref.seq.plus.minus,
-          groove %in% input$ref.seq.groove
-        ) %>%
-        ggplot(
-          aes(
-            x = wl,
-            y = uv.eps,
-            color = salt,
-            group = salt
-          )
-        ) +
-        geom_line(
-          size = 1,
-          show.legend = T
-        ) +
-        facet_wrap(
-          ~oligo
-          # ncol = 4
-        ) +
-        labs(
-          x = bquote(lambda ~ (nm)),
-          y = bquote(epsilon ~ (M^-1 * cm^-1)),
-          color = "Cation"
-        ) +
-        # custom.theme +
-        scale_y_continuous(n.breaks = 3) +
-        scale_x_continuous(expand = c(0, 0))
-    }
-  })
-
-  ### Reference CD/IDS tables----
   output$ref.ids <- renderDT(server = FALSE, {
     if (file.toggle() == 'no') {
       return(NULL)
@@ -925,7 +920,6 @@ server <- shinyServer(function(input, output, session) {
     }
   })
 
-  
   output$ref.cd <- renderDT(server = FALSE, {
     if (file.toggle() == 'no') {
       return(NULL)
@@ -1006,7 +1000,7 @@ server <- shinyServer(function(input, output, session) {
     }
   })
 
-### Reference CD/IDS plots----
+  ### Reference CD/IDS plots----
 
   output$p.ref.ids <- renderPlot({
     ref.ids <- ref.set() %>%
@@ -1025,13 +1019,14 @@ server <- shinyServer(function(input, output, session) {
         plus.minus %in% input$ref.seq.plus.minus,
         groove %in% input$ref.seq.groove
       )
-  
+
     norm_col <- if (input$ids.norm == "Δε") "delta.eps.ids" else "norm.ids"
-    axis_label_text <- if (input$ids.norm == "Δε") "&Delta;&epsilon; (M<sup>-1</sup>cm<sup>-1</sup>)" else "Normalized IDS"
-  
+    axis_label_text <- if (input$ids.norm == "Δε")
+      "&Delta;&epsilon; (M<sup>-1</sup>cm<sup>-1</sup>)" else "Normalized IDS"
+
     render_ref_plot(ref.ids, input, norm_col, axis_label_text)
   })
-  
+
   output$p.ref.cd <- renderPlot({
     ref.cd <- ref.set() %>%
       filter(
@@ -1047,13 +1042,13 @@ server <- shinyServer(function(input, output, session) {
         plus.minus %in% input$ref.seq.plus.minus,
         groove %in% input$ref.seq.groove
       )
-  
+
     norm_col <- if (input$cd.norm == "Δε") "delta.eps.cd" else "norm.cd"
-    axis_label_text <- if (input$cd.norm == "Δε") "&Delta;&epsilon; (M<sup>-1</sup>cm<sup>-1</sup>)" else "Normalized CD"
-  
+    axis_label_text <- if (input$cd.norm == "Δε")
+      "&Delta;&epsilon; (M<sup>-1</sup>cm<sup>-1</sup>)" else "Normalized CD"
+
     render_ref_plot(ref.cd, input, norm_col, axis_label_text)
   })
-  
 
   # PCA----
 
