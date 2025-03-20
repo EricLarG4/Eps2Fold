@@ -1,3 +1,39 @@
+## Dependencies----
+library(tidyverse)
+library(ggtext)
+
+## Theme----
+custom.theme.markdown <- ggplot2::theme(
+  panel.background = element_blank(),
+  strip.background = element_blank(),
+  legend.position = 'bottom',
+  legend.background = element_blank(),
+  legend.box.background = element_blank(),
+  legend.key = element_blank(),
+  legend.text = element_markdown(
+    size = 18,
+  ),
+  legend.title = element_markdown(
+    size = 22
+  ),
+  axis.text = element_markdown(
+    size = 18
+  ),
+  axis.title.x = element_markdown(
+    size = 22
+  ),
+  axis.title.y = element_markdown(size = 22, angle = 90),
+  strip.text = element_markdown(
+    size = 20
+  ),
+  axis.line = element_line(
+    size = 0.75
+  ),
+  axis.ticks = element_line(
+    size = 0.75
+  )
+)
+
 #PCA plotter----
 pca.plotR <- function(
   pca.data,
@@ -22,7 +58,9 @@ pca.plotR <- function(
     rename(
       'k-means' = km,
       'Topology' = topo,
+      'Conformer' = conformer,
       'GBA' = gba,
+      'GBA stacks' = gba.stacks,	
       'Tetrads' = tetrad,
       'Tetrad combination' = tetrad.id,
       'Loop progression' = loop,
@@ -67,11 +105,11 @@ pca.plotR <- function(
       legend.background = element_blank(),
       legend.box.background = element_blank(),
       legend.key = element_blank(),
-      legend.text = element_text(size = 18),
-      legend.title = element_text(size = 22),
-      axis.text = element_text(size = 18),
-      axis.title = element_text(size = 22),
-      strip.text = element_text(size = 20),
+      legend.text = element_markdown(size = 18),
+      legend.title = element_markdown(size = 22),
+      axis.text = element_markdown(size = 18),
+      axis.title = element_markdown(size = 22),
+      strip.text = element_markdown(size = 20),
       axis.line = element_line(size = 0.75),
       axis.ticks = element_line(size = 0.75)
     ) +
@@ -91,43 +129,6 @@ circleFun <- function(center = c(0, 0), diameter = 1, npoints = 100) {
 }
 
 # CD and IDS plots----
-
-## Dependencies----
-library(tidyverse)
-library(ggtext)
-
-## Theme----
-custom.theme.markdown <- ggplot2::theme(
-  panel.background = element_blank(),
-  strip.background = element_blank(),
-  legend.position = 'bottom',
-  legend.background = element_blank(),
-  legend.box.background = element_blank(),
-  legend.key = element_blank(),
-  legend.text = element_markdown(
-    size = 18,
-  ),
-  legend.title = element_markdown(
-    size = 22
-  ),
-  axis.text = element_markdown(
-    size = 18
-  ),
-  axis.title.x = element_markdown(
-    size = 22
-  ),
-  axis.title.y = element_markdown(size = 22, angle = 90),
-  strip.text = element_markdown(
-    size = 20
-  ),
-  axis.line = element_line(
-    size = 0.75
-  ),
-  axis.ticks = element_line(
-    size = 0.75
-  )
-)
-
 
 ## Plotting function----
 render_ref_plot <- function(df, input, norm_col, axis_label_text) {

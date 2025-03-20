@@ -434,7 +434,9 @@ ui <- bslib::page_navbar(
                   choices = c(
                     "k-means",
                     "Topology",
+                    "Conformer",
                     "GBA",
+                    "GBA stacks",
                     "Tetrads",
                     "Tetrad combination",
                     "Loop progression",
@@ -451,7 +453,9 @@ ui <- bslib::page_navbar(
                   choices = c(
                     "k-means",
                     "Topology",
+                    "Conformer",
                     "GBA",
+                    "GBA stacks",
                     "Tetrads",
                     "Tetrad combination",
                     "Loop progression",
@@ -495,7 +499,9 @@ ui <- bslib::page_navbar(
                   choices = c(
                     "k-means",
                     "Topology",
+                    "Conformer",
                     "GBA",
+                    "GBA stacks",
                     "Tetrads",
                     "Tetrad combination",
                     "Loop progression",
@@ -512,7 +518,9 @@ ui <- bslib::page_navbar(
                   choices = c(
                     "k-means",
                     "Topology",
+                    "Conformer",
                     "GBA",
+                    "GBA stacks",
                     "Tetrads",
                     "Tetrad combination",
                     "Loop progression",
@@ -649,7 +657,9 @@ ui <- bslib::page_navbar(
                   choices = c(
                     "k-means",
                     "Topology",
+                    "Conformer",
                     "GBA",
+                    "GBA stacks",
                     "Tetrads",
                     "Tetrad combination",
                     "Loop progression",
@@ -666,7 +676,9 @@ ui <- bslib::page_navbar(
                   choices = c(
                     "k-means",
                     "Topology",
+                    "Conformer",
                     "GBA",
+                    "GBA stacks",
                     "Tetrads",
                     "Tetrad combination",
                     "Loop progression",
@@ -710,7 +722,9 @@ ui <- bslib::page_navbar(
                   choices = c(
                     "k-means",
                     "Topology",
+                    "Conformer",
                     "GBA",
+                    "GBA stacks",
                     "Tetrads",
                     "Tetrad combination",
                     "Loop progression",
@@ -727,7 +741,9 @@ ui <- bslib::page_navbar(
                   choices = c(
                     "k-means",
                     "Topology",
+                    "Conformer",
                     "GBA",
+                    "GBA stacks",
                     "Tetrads",
                     "Tetrad combination",
                     "Loop progression",
