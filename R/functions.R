@@ -1,11 +1,15 @@
-
 #PCA plotter----
-pca.plotR <- function(pca.data, dim.1 = input$dim.cd[1], dim.2 = input$dim.cd[1], color = 'GBA', shape = 'GBA'){
-  
+pca.plotR <- function(
+  pca.data,
+  dim.1 = input$dim.cd[1],
+  dim.2 = input$dim.cd[1],
+  color = 'GBA',
+  shape = 'GBA'
+) {
   dim.1.cap <- gsub('Dim.', 'Dimension ', dim.1)
   dim.2.cap <- gsub('Dim.', 'Dimension ', dim.2)
-  
-  pca.data %>% 
+
+  pca.data %>%
     mutate(
       km = factor(km),
       tetrad = factor(tetrad),
@@ -14,23 +18,25 @@ pca.plotR <- function(pca.data, dim.1 = input$dim.cd[1], dim.2 = input$dim.cd[1]
         paste0(tetrad, loop),
         loop
       )
-    ) %>% 
+    ) %>%
     rename(
       'k-means' = km,
-      'Topology' = topo, 
-      'GBA' = gba, 
-      'Tetrads' = tetrad, 
-      'Tetrad combination' = tetrad.id, 
-      'Loop progression' = loop, 
+      'Topology' = topo,
+      'GBA' = gba,
+      'Tetrads' = tetrad,
+      'Tetrad combination' = tetrad.id,
+      'Loop progression' = loop,
       'Tetrads x Loops' = tetrad.loop,
-      'Tetrad handedness' = plus.minus, 
-      'Grooves' = groove, 
+      'Tetrad handedness' = plus.minus,
+      'Grooves' = groove,
       'Cation' = salt
-    ) %>% 
+    ) %>%
     ggplot(
       aes(
-        x = .data[[dim.1]], y = .data[[dim.2]], 
-        color = .data[[color]], fill = .data[[color]],
+        x = .data[[dim.1]],
+        y = .data[[dim.2]],
+        color = .data[[color]],
+        fill = .data[[color]],
         shape = .data[[shape]]
       )
     ) +
@@ -68,18 +74,133 @@ pca.plotR <- function(pca.data, dim.1 = input$dim.cd[1], dim.2 = input$dim.cd[1]
       strip.text = element_text(size = 20),
       axis.line = element_line(size = 0.75),
       axis.ticks = element_line(size = 0.75)
-    )  +
+    ) +
     labs(
       y = dim.2.cap,
       x = dim.1.cap
-    ) 
+    )
 }
 
 #correlation circle----
-circleFun <- function(center = c(0,0),diameter = 1, npoints = 100){
+circleFun <- function(center = c(0, 0), diameter = 1, npoints = 100) {
   r = diameter / 2
-  tt <- seq(0,2*pi,length.out = npoints)
+  tt <- seq(0, 2 * pi, length.out = npoints)
   xx <- center[1] + r * cos(tt)
   yy <- center[2] + r * sin(tt)
   return(data.frame(cir.x = xx, cir.y = yy))
+}
+
+# CD and IDS plots----
+
+## Dependencies----
+library(tidyverse)
+library(ggtext)
+
+## Theme----
+custom.theme.markdown <- ggplot2::theme(
+  panel.background = element_blank(),
+  strip.background = element_blank(),
+  legend.position = 'bottom',
+  legend.background = element_blank(),
+  legend.box.background = element_blank(),
+  legend.key = element_blank(),
+  legend.text = element_markdown(
+    size = 18,
+  ),
+  legend.title = element_markdown(
+    size = 22
+  ),
+  axis.text = element_markdown(
+    size = 18
+  ),
+  axis.title.x = element_markdown(
+    size = 22
+  ),
+  axis.title.y = element_markdown(size = 22, angle = 90),
+  strip.text = element_markdown(
+    size = 20
+  ),
+  axis.line = element_line(
+    size = 0.75
+  ),
+  axis.ticks = element_line(
+    size = 0.75
+  )
+)
+
+
+## Plotting function----
+render_ref_plot <- function(df, input, norm_col, axis_label_text) {
+  df <- df %>%
+    add_column(color = NA, sd.y = NA)
+
+  # Assign y values and axis label
+  df$y <- df[[norm_col]]
+
+  # Define color mapping
+  color_map <- list(
+    "Topology" = df$topo,
+    "Conformer" = df$conformer,
+    "GBA" = df$gba,
+    "GBA stacks" = df$gba.stacks,
+    "Tetrads" = factor(df$tetrad),
+    "Tetrad combination" = df$tetrad.id,
+    "Loop progression" = df$loop,
+    "Tetrad handedness" = df$plus.minus,
+    "Grooves" = df$groove,
+    "Salt" = df$salt
+  )
+  df$color <- color_map[[input$ref.color]]
+
+  p <- df %>%
+    ggplot(aes(x = wl, y = y, color = color)) +
+    geom_hline(yintercept = 0) +
+    geom_vline(xintercept = c(295, 275, 262, 245), linetype = 'dashed') +
+    labs(
+      x = "&lambda; (nm)",
+      y = axis_label_text,
+      color = input$ref.color,
+      fill = input$ref.color
+    ) +
+    custom.theme.markdown +
+    scale_y_continuous(n.breaks = 3) +
+    scale_x_continuous(expand = c(0, 0))
+
+  if (input$ref.panel == "Mean") {
+    p <- p +
+      geom_ribbon(
+        data = . %>%
+          group_by(color, wl) %>%
+          summarise(
+            sd.y = sd(y, na.rm = TRUE),
+            y = mean(y, na.rm = TRUE),
+            .groups = "drop"
+          ),
+        inherit.aes = FALSE,
+        aes(x = wl, y = y, ymin = y - sd.y, ymax = y + sd.y, fill = color),
+        alpha = 0.5,
+        show.legend = FALSE
+      ) +
+      geom_line(
+        data = . %>%
+          group_by(color, wl) %>%
+          summarise(
+            sd.y = sd(y, na.rm = TRUE),
+            y = mean(y, na.rm = TRUE),
+            .groups = "drop"
+          ),
+        size = 1,
+        show.legend = TRUE
+      )
+  } else {
+    p <- p +
+      geom_line(aes(group = oligo), size = 1, show.legend = TRUE)
+  }
+
+  # If panel mode is "Panels", add facet_wrap
+  if (input$ref.panel == "Panels") {
+    p <- p + facet_wrap(~oligo)
+  }
+
+  return(p)
 }
