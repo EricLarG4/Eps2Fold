@@ -44,7 +44,7 @@ ui <- bslib::page_navbar(
   id = "nav",
   window_title = "Eps2Fold - a Shiny app for Eps2Fold analysis",
   theme = bslib::bs_theme(
-    preset = 'superhero',
+    preset = 'zephyr',
     font_scale = 0.9
   ),
   #Ensure that all accordions are open on page load, on all pages
@@ -65,6 +65,54 @@ ui <- bslib::page_navbar(
   ##sidebar------
   sidebar = sidebar(
     accordion(
+      accordion_panel(
+        title = "Theming",
+        selectInput(
+          "theme_select",
+          label = "Theme:",
+          choices = c(
+            "default",
+            "cerulean",
+            "cosmo",
+            "cyborg",
+            "darkly",
+            "flatly",
+            "journal",
+            "litera",
+            "lumen",
+            "lux",
+            "materia",
+            "minty",
+            "morph",
+            "pulse",
+            "quartz",
+            "sandstone",
+            "simplex",
+            "sketchy",
+            "slate",
+            "solar",
+            "spacelab",
+            "superhero",
+            "united",
+            "vapor",
+            "yeti",
+            "zephyr"
+          ),
+          selected = "zephyr",
+          multiple = FALSE,
+          width = "100%"
+        ),
+        #slider for font size
+        sliderInput(
+          inputId = "font_size",
+          label = "Font size:",
+          min = 0.1,
+          max = 2,
+          value = 0.9,
+          step = 0.1,
+          width = "100%"
+        )
+      ),
       conditionalPanel(
         condition = "input.nav === 'Data'",
         accordion_panel(
@@ -875,35 +923,6 @@ ui <- bslib::page_navbar(
         plotOutput("p_user_oligos_calc"),
       )
     )
-  ),
-  nav_menu(
-    title = "Theming",
-
-    nav_item(div(
-      style = "display: flex; flex-direction: column; align-items: center; width: 100%; padding: 10px;",
-      selectizeInput(
-        "theme_select",
-        label = "Theme:",
-        choices = c(
-          "default", "cerulean", "cosmo", "cyborg", "darkly", "flatly", "journal", "litera", "lumen", 
-            "lux", "materia", "minty", "morph", "pulse", "quartz", "sandstone", "simplex", "sketchy", 
-            "slate", "solar", "spacelab", "superhero", "united", "vapor", "yeti", "zephyr"
-        ),
-        selected = "superhero",
-        multiple = FALSE,
-        width = "75%"
-      ),
-      #slider for font size
-      sliderInput(
-        inputId = "font_size",
-        label = "Font size:",
-        min = 0.1,
-        max = 2,
-        value = 0.9,
-        step = 0.1,
-        width = "100%"
-      )
-    ))
   ),
   nav_spacer(),
   nav_menu(

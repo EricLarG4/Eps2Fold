@@ -5,7 +5,6 @@ shiny::bootstrapLib(bslib::bs_theme())
 
 #server----
 server <- shinyServer(function(input, output, session) {
-  # bslib::bs_themer()
   # Theme handling
   observe({
     # Update the theme when the selector changes
@@ -15,6 +14,12 @@ server <- shinyServer(function(input, output, session) {
         font_scale = input$font_size
       )
     )
+  })
+
+  # Extraction of primary theme color for discrete ggplot theming
+  current_primary <- reactive({
+    theme <- session$getCurrentTheme()
+    bslib::bs_get_variables(theme, "primary")
   })
 
   # Enable thematic
@@ -2839,7 +2844,7 @@ server <- shinyServer(function(input, output, session) {
           # color = input$user.color,
           # fill = input$user.color
         ) +
-        custom.theme.markdown + 
+        custom.theme.markdown +
         scale_y_continuous(n.breaks = 4) +
         scale_x_continuous(expand = c(0, 0))
     }
@@ -2936,7 +2941,7 @@ server <- shinyServer(function(input, output, session) {
           y = "&epsilon; (M<sup>-1</sup> cm<sup>-1</sup>)",
           color = "Cation"
         ) +
-          custom.theme.markdown +
+        custom.theme.markdown +
         scale_y_continuous(n.breaks = 3) +
         scale_x_continuous(expand = c(0, 0))
     }
@@ -3064,7 +3069,7 @@ server <- shinyServer(function(input, output, session) {
           # color = input$user.color,
           # fill = input$user.color
         ) +
-          custom.theme.markdown +
+        custom.theme.markdown +
         scale_y_continuous(n.breaks = 3) +
         scale_x_continuous(expand = c(0, 0))
     }
@@ -3309,7 +3314,16 @@ server <- shinyServer(function(input, output, session) {
       left_join(
         ref.seq() %>%
           ungroup() %>%
-          select(oligo, tetrad, tetrad.id, loop, plus.minus, groove, conformer, gba.stacks),
+          select(
+            oligo,
+            tetrad,
+            tetrad.id,
+            loop,
+            plus.minus,
+            groove,
+            conformer,
+            gba.stacks
+          ),
         by = "oligo"
       ) %>%
       mutate(
@@ -3367,7 +3381,16 @@ server <- shinyServer(function(input, output, session) {
       left_join(
         ref.seq() %>%
           ungroup() %>%
-          select(oligo, tetrad, tetrad.id, loop, plus.minus, groove, conformer, gba.stacks),
+          select(
+            oligo,
+            tetrad,
+            tetrad.id,
+            loop,
+            plus.minus,
+            groove,
+            conformer,
+            gba.stacks
+          ),
         by = "oligo"
       ) %>%
       mutate(
@@ -3543,7 +3566,16 @@ server <- shinyServer(function(input, output, session) {
       left_join(
         ref.seq() %>%
           ungroup() %>%
-          select(oligo, tetrad, tetrad.id, loop, plus.minus, groove, conformer, gba.stacks),
+          select(
+            oligo,
+            tetrad,
+            tetrad.id,
+            loop,
+            plus.minus,
+            groove,
+            conformer,
+            gba.stacks
+          ),
         by = "oligo"
       ) %>%
       mutate(
@@ -3601,7 +3633,16 @@ server <- shinyServer(function(input, output, session) {
       left_join(
         ref.seq() %>%
           ungroup() %>%
-          select(oligo, tetrad, tetrad.id, loop, plus.minus, groove, conformer, gba.stacks),
+          select(
+            oligo,
+            tetrad,
+            tetrad.id,
+            loop,
+            plus.minus,
+            groove,
+            conformer,
+            gba.stacks
+          ),
         by = "oligo"
       ) %>%
       mutate(
@@ -3728,7 +3769,7 @@ server <- shinyServer(function(input, output, session) {
       ggplot(aes(x = wl, y = eps, color = oligo)) +
       geom_vline(
         xintercept = input$calc_wavelength,
-        color = 'pink',
+        color = current_primary(),
         linewidth = 0.75,
         linetype = 'dashed',
         inherit.aes = FALSE
@@ -3745,6 +3786,12 @@ server <- shinyServer(function(input, output, session) {
         x = "&lambda; (nm)",
         y = "&epsilon; (M<sup>-1</sup>cm<sup>-1</sup>)",
         color = "Oligonucleotide"
+      ) +
+      custom.theme.markdown +
+      scale_x_continuous(
+        limits = c(220, 310),
+        breaks = c(220, 240, 260, 280, 300, 310, input$calc_wavelength),
+        expand = c(0, 0)
       )
   })
 })
