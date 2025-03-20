@@ -22,7 +22,7 @@ link_wiki <- tags$a(
 link_template_ref <- tags$a(
   shiny::icon("download"),
   href = "https://github.com/EricLarG4/G4_IDS/raw/refs/heads/main/data/Reference_data.xlsx",
-  "Download Reference Data",
+  "Reference Data",
   target = "_blank",
   # style = "font-size: 14px; color: coral; text-decoration: underline;",
   download = NA # Optional, allows browsers to download instead of opening
@@ -31,7 +31,7 @@ link_template_ref <- tags$a(
 link_template_user <- tags$a(
   shiny::icon("download"),
   href = "https://github.com/EricLarG4/G4_IDS/raw/refs/heads/main/data/User%20data.xlsx",
-  "Download User Data Template",
+  "User Data Template",
   target = "_blank",
   # style = "font-size: 14px; color: coral; text-decoration: underline;",
   download = NA # Optional, allows browsers to download instead of opening
@@ -139,6 +139,8 @@ ui <- bslib::page_navbar(
             multiple = FALSE,
             accept = c(".xlsx", ".xls")
           ),
+          link_template_ref,
+          link_template_user
         ),
         accordion_panel(
           title = 'Data filters',
@@ -182,7 +184,7 @@ ui <- bslib::page_navbar(
           ),
           selectInput(
             inputId = "ids.norm",
-            label = "IDS normalization",
+            label = "Eps2Fold normalization",
             choices = c("Δε", "-1/+1"),
             selected = "Δε"
           ),
@@ -290,7 +292,7 @@ ui <- bslib::page_navbar(
           ),
           actionButton(
             inputId = "button.ids.invest",
-            label = "Investigate IDS",
+            label = "Investigate Eps2Fold",
             icon = icon("magnifying-glass-plus"),
           )
         )
@@ -335,19 +337,19 @@ ui <- bslib::page_navbar(
             DTOutput("seq", height = "1200px")
           ),
           nav_panel(
-            title = "UV/vis data",
+            title = "UV",
             DTOutput("ref.uv", height = "1200px")
           ),
           nav_panel(
-            title = "IDS data",
+            title = "Eps2Fold",
             DTOutput("ref.ids", height = "1200px")
           ),
           nav_panel(
-            title = "CD data",
+            title = "CD",
             DTOutput("ref.cd", height = "1200px")
           ),
           nav_panel(
-            title = "training IDS",
+            title = "training Eps2Fold",
             DTOutput("training.ids", height = "1200px")
           ),
           nav_panel(
@@ -361,19 +363,19 @@ ui <- bslib::page_navbar(
         icon = icon('user-plus'),
         navset_card_tab(
           nav_panel(
-            title = "UV data",
+            title = "UV",
             DTOutput("user.uv.input")
           ),
           nav_panel(
-            title = "IDS data",
+            title = "Eps2Fold",
             DTOutput("user.ids.input")
           ),
           nav_panel(
-            title = "CD data",
+            title = "CD",
             DTOutput("user.cd.input")
           ),
           nav_panel(
-            title = "IDS set for PCA",
+            title = "Eps2Fold set for PCA",
             DTOutput("user.ids")
           ),
           nav_panel(
@@ -393,14 +395,14 @@ ui <- bslib::page_navbar(
         icon = icon("table-cells-row-lock"),
         navset_card_tab(
           nav_panel(
-            title = "UV/vis plots",
+            title = "UV",
             plotOutput(
               "p.ref.uv",
               height = "1200px"
             )
           ),
           nav_panel(
-            title = "IDS plots",
+            title = "Eps2Fold",
             plotOutput(
               "p.ref.ids",
               height = "1200px"
@@ -420,14 +422,14 @@ ui <- bslib::page_navbar(
         icon = icon('user-plus'),
         navset_card_tab(
           nav_panel(
-            title = "UV/vis plots",
+            title = "UV",
             plotOutput(
               "p.user.uv",
               height = "1200px"
             )
           ),
           nav_panel(
-            title = "IDS plots",
+            title = "Eps2Fold",
             plotOutput(
               "p.user.ids",
               height = "1200px"

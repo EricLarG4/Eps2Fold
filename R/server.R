@@ -244,7 +244,7 @@ server <- shinyServer(function(input, output, session) {
         "ref.seq.gba.stacks.0",
         label = "GBA stacks",
         choices = "upload data first",
-        multiple = T
+        multiple = TRUE
       )
     } else {
       choices <- sort(unique(ref.seq()$gba.stacks))
@@ -254,7 +254,18 @@ server <- shinyServer(function(input, output, session) {
         label = "GBA stacks",
         choices = choices,
         selected = choices,
-        multiple = T
+        multiple = TRUE,
+        #add option to render HTML
+        options = list(
+          render = I(
+            "
+          {
+            item:   function(item, escape) { return '<div>' + item.label + '</div>'; },
+            option: function(item, escape) { return '<div>' + item.label + '</div>'; }
+          }
+        "
+          )
+        )
       )
     }
   })
@@ -486,7 +497,18 @@ server <- shinyServer(function(input, output, session) {
         label = "GBA stacks",
         choices = choices,
         selected = choices,
-        multiple = T
+        multiple = TRUE,
+        #add option to render HTML
+        options = list(
+          render = I(
+            "
+          {
+            item:   function(item, escape) { return '<div>' + item.label + '</div>'; },
+            option: function(item, escape) { return '<div>' + item.label + '</div>'; }
+          }
+        "
+          )
+        )
       )
     }
   })
@@ -2423,8 +2445,6 @@ server <- shinyServer(function(input, output, session) {
   #### CD----
 
   pca.cd.invest <- observeEvent(input$button.cd.invest, {
-    # thematic::thematic_off()
-
     withProgress(
       message = 'Investigating CD data',
       detail = 'Please wait',
@@ -2437,14 +2457,10 @@ server <- shinyServer(function(input, output, session) {
         incProgress(amount = 2 / 2)
       }
     )
-
-    # thematic::thematic_on()
   })
 
   #### IDS----
   pca.ids.invest <- observeEvent(input$button.ids.invest, {
-    # thematic::thematic_off()
-
     withProgress(
       message = 'Investigating IDS data',
       detail = 'Please wait',
@@ -2457,13 +2473,9 @@ server <- shinyServer(function(input, output, session) {
         incProgress(amount = 2 / 2)
       }
     )
-
-    # thematic::thematic_on()
   })
 
   pca.cd.ids.invest <- observeEvent(input$button.cd.ids.invest, {
-    # thematic::thematic_off()
-
     withProgress(
       message = 'Investigating CD+IDS data',
       detail = 'Please wait',
@@ -2476,8 +2488,6 @@ server <- shinyServer(function(input, output, session) {
         incProgress(amount = 2 / 2)
       }
     )
-
-    # thematic::thematic_on()
   })
 
   # User prediction----
@@ -2579,7 +2589,10 @@ server <- shinyServer(function(input, output, session) {
         by = "oligo"
       ) %>%
       filter(wl %% 1 == 0) %>% #removing non integer wl to have the same number of data points than in IDS
-      group_by(oligo)
+      group_by(oligo) %>%
+      mutate(
+        cd = cd - mean(cd[wl > 320])
+      )
 
     # writexl::write_xlsx(
     #   user_cd_input,
@@ -2829,10 +2842,7 @@ server <- shinyServer(function(input, output, session) {
             color = oligo
           )
         ) +
-        geom_hline(
-          yintercept = 0,
-          color = "white"
-        ) +
+        geom_hline(yintercept = 0) +
         geom_line(
           aes(group = oligo),
           size = 1,
@@ -3000,11 +3010,6 @@ server <- shinyServer(function(input, output, session) {
             # columnDefs = list(list(visible=FALSE, targets=c(0,2:6,9,12)))
           )
         )
-      # formatStyle(
-      #   columns = 0:15,
-      #   target = "cell",
-      #   backgroundColor = "#272c30"
-      # )
     }
   })
 
@@ -3034,30 +3039,7 @@ server <- shinyServer(function(input, output, session) {
             color = oligo
           )
         ) +
-        geom_vline(
-          xintercept = 295,
-          linetype = 'dashed',
-          color = "white"
-        ) +
-        geom_vline(
-          xintercept = 275,
-          linetype = 'dashed',
-          color = "white"
-        ) +
-        geom_vline(
-          xintercept = 262,
-          linetype = 'dashed',
-          color = "white"
-        ) +
-        geom_vline(
-          xintercept = 245,
-          linetype = 'dashed',
-          color = "white"
-        ) +
-        geom_hline(
-          yintercept = 0,
-          color = "white"
-        ) +
+        geom_hline(yintercept = 0) +
         geom_line(
           aes(group = oligo),
           size = 1,
