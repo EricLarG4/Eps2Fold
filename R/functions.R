@@ -81,6 +81,7 @@ pca.plotR <- function(
     scale_shape_manual(values = c(0:15)) +
     geom_polygon(
       data = . %>%
+        filter(.data[[color]] != "User") %>%
         slice(chull(.data[[dim.1]], .data[[dim.2]]), .by = color),
       alpha = 0.25,
       show.legend = FALSE
