@@ -60,7 +60,7 @@ pca.plotR <- function(
       'Topology' = topo,
       'Conformer' = conformer,
       'GBA' = gba,
-      'GBA stacks' = gba.stacks,	
+      'GBA stacks' = gba.stacks,
       'Tetrads' = tetrad,
       'Tetrad combination' = tetrad.id,
       'Loop progression' = loop,
@@ -172,7 +172,6 @@ render_ref_plot <- function(df, input, norm_col, axis_label_text) {
 
   # If panel mode is "Mean", add geom_ribbon and geom_line of mean
   if (input$ref.panel == "Mean") {
-
     # Calculate mean
     df_mean <- df %>%
       group_by(color, wl) %>%
@@ -181,7 +180,7 @@ render_ref_plot <- function(df, input, norm_col, axis_label_text) {
         y = mean(y, na.rm = TRUE),
         .groups = "drop"
       )
-    
+
     # Add geom_ribbon and geom_line
     p <- p +
       geom_ribbon(
@@ -196,7 +195,8 @@ render_ref_plot <- function(df, input, norm_col, axis_label_text) {
         size = 1,
         show.legend = TRUE
       )
-  } else { #else add lines of individuals
+  } else {
+    #else add lines of individuals
     p <- p +
       geom_line(aes(group = oligo), size = 1, show.legend = TRUE)
   }

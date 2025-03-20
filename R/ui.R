@@ -363,6 +363,10 @@ ui <- bslib::page_navbar(
         icon = icon('user-plus'),
         navset_card_tab(
           nav_panel(
+            title = 'Oligonucleotides',
+            DTOutput("user.seq", height = "1200px")
+          ),
+          nav_panel(
             title = "UV",
             DTOutput("user.uv.input")
           ),

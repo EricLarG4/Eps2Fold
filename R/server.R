@@ -2529,6 +2529,15 @@ server <- shinyServer(function(input, output, session) {
     )
   })
 
+  output$user.seq <- renderDT(server = FALSE, {
+    if (file.toggle.user() == 'no') {
+      return(NULL)
+    } else {
+      user.seq() %>%
+        mutate(Concentration = round(Concentration, 2))
+    }
+  })
+
   #####picker inputs----
   ###### source----
   output$user.seq.oligo.0_ui <- renderUI({
@@ -2577,7 +2586,8 @@ server <- shinyServer(function(input, output, session) {
   user.cd.input <- reactive({
     user_cd_input <- read_excel(
       input.file.user()$datapath,
-      sheet = "CD"
+      sheet = "CD",
+      col_types = "numeric"
     ) %>%
       pivot_longer(
         cols = 2:(ncol(.)),
@@ -2588,18 +2598,11 @@ server <- shinyServer(function(input, output, session) {
         user.seq(),
         by = "oligo"
       ) %>%
-      filter(wl %% 1 == 0) %>% #removing non integer wl to have the same number of data points than in IDS
+      filter(
+        wl %% 1 == 0, #removing non integer wl to have the same number of data points than in IDS
+        !is.na(cd)
+      ) %>%
       group_by(oligo) %>%
-      mutate(
-        cd = cd - mean(cd[wl > 320])
-      )
-
-    # writexl::write_xlsx(
-    #   user_cd_input,
-    #   path = "user_cd.xlsx"
-    # )
-
-    user_cd_input %>%
       left_join(
         user.uv.input() %>%
           filter(cation == "none") %>%
@@ -2609,7 +2612,7 @@ server <- shinyServer(function(input, output, session) {
         by = c("oligo", "wl")
       ) %>%
       mutate(
-        cd = cd - mean(cd[wl > 320]),
+        cd = cd - mean(cd[wl > 320], na.rm = TRUE),
         delta.eps = cd / (32980 * l * Concentration / 1E6)
       ) %>%
       mutate(
@@ -2639,7 +2642,8 @@ server <- shinyServer(function(input, output, session) {
   user.uv.input.cation <- reactive({
     read_excel(
       input.file.user()$datapath,
-      sheet = "UV"
+      sheet = "UV",
+      col_types = "numeric"
     ) %>%
       add_column(cation = 'cation') %>%
       arrange(wl)
@@ -2649,14 +2653,14 @@ server <- shinyServer(function(input, output, session) {
   user.uv.input.no.cation <- reactive({
     read_excel(
       input.file.user()$datapath,
-      sheet = "UV - no cation"
+      sheet = "UV - no cation",
+      col_types = "numeric"
     ) %>%
       add_column(cation = 'no cation')
   })
 
   #merge data
   user.uv.input <- reactive({
-    #data rbinding
     user.uv.input.cation() %>%
       pivot_longer(
         cols = 2:(ncol(.) - 1),
@@ -2677,7 +2681,7 @@ server <- shinyServer(function(input, output, session) {
       ) %>%
       group_by(oligo, cation) %>%
       mutate(
-        abs = abs - mean(abs[wl > 320]),
+        abs = abs - mean(abs[wl > 320], na.rm = TRUE),
         eps = abs / (1 * Concentration / 1E6)
       ) %>%
       ungroup() %>%
@@ -2685,29 +2689,10 @@ server <- shinyServer(function(input, output, session) {
         wl <= max(input$wl),
         wl >= min(input$wl),
         wl %% 1 == 0,
+        !is.na(abs),
         oligo %in% input$user.seq.oligo.0
       )
   })
-
-  # user.uv.th <- reactive({
-  #   read_excel(
-  #     input.file.user()$datapath,
-  #     sheet = "th.spectra"
-  #   )
-  # })
-
-  # user.uv.th <- reactive({
-  #   user.uv.input() %>%
-  #     filter(cation == 'no cation') %>%
-  #     group_by(oligo) %>%
-  #     select(oligo, wl) %>%
-  #     unique() %>%
-  #     left_join(
-  #       user.seq() %>%
-  #         select(oligo, seq)
-  #     )
-  # })
-  #
 
   ##### IDS----
 
