@@ -23,3 +23,5 @@ EXPOSE 3838
 
 # Start the Shiny app
 CMD ["/usr/bin/shiny-server"]
+
+#end
