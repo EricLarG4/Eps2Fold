@@ -1,5 +1,36 @@
 # libraries----
 
+# Define required packages
+required_packages <- c(
+    "tidyverse", "readxl", "data.table", "magrittr",
+    
+    # Shiny
+    "shiny", "bslib", "bsicons",
+    
+    # Theming
+    "thematic",
+    
+    # Data display
+    "ggrepel", "ggthemes", "ggtext", "patchwork", "plotly", "DT",
+    
+    # PCA
+    "FactoMineR", "cluster", "FactoInvestigate"
+  )
+  
+  # Function to install missing packages
+  install_if_missing <- function(pkg) {
+    if (!requireNamespace(pkg, quietly = TRUE)) {
+      install.packages(pkg, dependencies = TRUE)
+    }
+  }
+  
+  # Install missing packages
+  invisible(lapply(required_packages, install_if_missing))
+  
+  # Load all packages
+  lapply(required_packages, library, character.only = TRUE)
+  
+
 ## data manipulation----
 library('tidyverse')
 library('readxl')
@@ -17,8 +48,6 @@ library('thematic')
 ## data display----
 library('ggrepel')
 library('ggthemes')
-#to solve text not rendering with shinylive. Not necesarry for connect.posit.cloud deployement
-webr::install("ggtext")
 library('ggtext')
 library('patchwork')
 library('plotly')

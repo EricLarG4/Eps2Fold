@@ -4690,7 +4690,7 @@
       "checksum": "87ea1a829872a421170c93a82fa13ec7"
     },
     "app.R": {
-      "checksum": "a823903a9807c92091eea6e384fc2350"
+      "checksum": "ae96983a1eff786c17ff9ab4f357cbc4"
     },
     "app/scree.rdata": {
       "checksum": "e232e14d9d108cd9c37b397b5bb61b0b"
@@ -4708,7 +4708,7 @@
       "checksum": "95ab3d42a5992a9d4fa8c3f707338c63"
     },
     "data/User data.xlsx": {
-      "checksum": "b92dd595d9ecbdca54bb62304441f747"
+      "checksum": "8dcdd84c8edab28c74a4bef5d6d4ea4d"
     },
     "Investigate.html": {
       "checksum": "358644b7461a60505b43821112fbc046"
@@ -4717,22 +4717,22 @@
       "checksum": "0d9ea047f610ea4d66a86886ca0f7a17"
     },
     "R/functions.R": {
-      "checksum": "abe9baf4603a42703c93d4f5d5d248d3"
+      "checksum": "a7a03121c51e48bde1bb2e46eab4a260"
     },
     "R/ref_cleanup.R": {
       "checksum": "d86daaeb57dd29f765f054bf50d6e469"
     },
     "R/server.R": {
-      "checksum": "5682a16a4e7fc56427b0c2c4eaa426c1"
+      "checksum": "0d8d7bfa53b67a461d21f1293618c27e"
     },
     "R/theoretical spectra.R": {
       "checksum": "c41b048d37ab7005d2e1716d36f84762"
     },
     "R/ui.R": {
-      "checksum": "6729405c3961c0e121f6f668cd7130d0"
+      "checksum": "2cb4454231be303ddfe1a8e02381c2c0"
     },
     "README.md": {
-      "checksum": "7cc0b47098f5514768d894a3e7a8ee7d"
+      "checksum": "08bb003cd089df71eb1f215957d708eb"
     },
     "user_cd.xlsx": {
       "checksum": "085728c84c0aa82063a0d3af8312ae60"
