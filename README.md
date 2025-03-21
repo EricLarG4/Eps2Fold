@@ -1,100 +1,81 @@
-# G4_IDS
+# &epsilon;2Fold
 
-## Lauching the app
+## Launching the app
 
-The app can be used natively in R, or in a Docker container. Either way, there is no need to install extra software/packages/dependencies appart from R or Docker themselves.
+The app can be used on a web server (go to section 1), or run locally through: 
 
-It is also possible to test the app in the cloud wihtout installing anything. It only requires a Docker account.
+* your own web browser (not install required; section 2)
+* an R interpreter (R install necessary, GUI optional; section 3)
+* in a Docker container. (docker install necessary, GUI optional; section 4).
+
+All dependencies will be installed automatically where necessary.
 
 ### 1. Run the app online
 
-A web app is available on [Posit Connect Cloud](https://EricLarG4-epsilon-2-fold.share.connect.posit.cloud))
+Acess the web app on the [Connect Posit Cloud server](https://ericlarg4-eps2fold.share.connect.posit.cloud/).
 
-### 2. Run the app directly in R
+### 2. Run the app locally in your web browser
 
-*Requires to have R installed: https://www.r-project.org/* 
+Launch the app in your browser by opening the following web page: [https://ericlarg4.github.io/Eps2Fold/](https://ericlarg4.github.io/Eps2Fold/).
 
-*A GUI like Rstudio is not necessary but can be used.*
+This method is slower, particularly in Firefox - [for some reason](https://github.com/posit-dev/shinylive/issues/191).
 
-Clone/download the repository (the Docker folder is not necessary) then proceeds through the R console or a GUI.
+### 3. Run the app directly in R
 
-#### 1.1. GUI
+*Requires to have R installed: [https://www.r-project.org/](https://www.r-project.org/)*
 
-In RStudio open ui.R and/or server.R then click on Run App.
+*The use of a GUI like [Rstudio](https://posit.co/download/rstudio-desktop/) or [Positron](https://positron.posit.co/) is advised.*
 
-#### 1.2. R Console
+Clone/download the repository then launch `app.R` through the R console or a GUI (see below)
 
-- Launch the R console.
+On first use, dependencies will automatically be installed, which may take some time.
 
-*Windows users: R.exe is located somewhere like: `C:\Program Files\R\R-4.0.5\bin`*
+#### 3.1. GUI
 
-- Set the working directory to where the repository has been saved: `setwd("Path_to_IDS_folder")`, where `Path_to_IDS_folder` is the path to the repository.
+Open `app.R` then click on "Run App" or "Run Shiny App".
 
-*Windows users: make sure to use / and not \ in the folder path*
+#### 3.2. Terminal
 
-- Load and run the app with:
+The following instructions work for Windows users. Other OS may need adjustments.
 
-```
-source("ui.R")
-source("server.R")
-shiny::shinyApp(ui, server)
-```
-or open app.R in RStudio and click on the Run button.
+1. If R was not added in PATH, locate the installation path, typically `& "C:\Program Files\R\R-X.Y.Z\"`, where X.Y.Z is the R version number.
+2. Navigate to the app directory, i.e. Eps2Fold if it was cloned from GitHub
+3. Launch the app in your default web browser with: `& "R_PATH\bin\x64\Rscript.exe" -e "shiny::runApp(launch.browser = TRUE)"`, where `R_PATH` is the path determined at step 1.  For instance: `& "C:\Program Files\R\R-4.4.3\bin\x64\Rscript.exe" -e "shiny::runApp(launch.browser = TRUE)"`.
 
-### 3. Run the app in a Docker container
+### 4. Run the app in a Docker container
 
-*Does not require to have R installed*
+*Requires to have installed Docker: [https://docs.docker.com/get-docker/](https://docs.docker.com/get-docker/).*
 
-*Requires to have installed Docker: https://docs.docker.com/get-docker/*
+*Docker desktop may be installed, but this is not required.*
 
-For the first use or to update the app, pull the image, otherwise proceed directly to 2.2.
+*Does not require to have R installed.*
 
-#### 3.1 Pulling the image
+For the first use or to update the app, pull the image, otherwise proceed directly to 4.2.
 
-In a terminal, pull the Docker image: `docker pull ericlarg4/shiny-ids-app:release` 
+#### 4.1 Pulling the image
 
-#### 3.2 Running the app
+In a terminal, pull the Docker image: `docker pull ghcr.io/ericlarg4/eps2fold:main`
 
-Proceed to either 2.2.1 or 2.2.2 if you prefer to use a GUI.
+#### 4.2 Running the app
 
-##### 3.2.1 Terminal
+Proceed to either 2.2.1 or 2.2.2 if you prefer to use docker desktop.
 
-- Launch the app: `docker run --rm -p 3838:3838 ericlarg4/shiny-ids-app:release`
+##### 4.2.1 Terminal
 
-- Open your browser and go to `http://localhost:3838/`
+1. Launch the app: `docker run --rm -p 3838:3838 ghcr.io/ericlarg4/eps2fold:main`
+2. Open your browser and go to [http://localhost:3838/](http://localhost:3838/)
+3. To stop and remove the process, simply type ctrl+C from the terminal.
 
-If you want to stop and remove the container once you are done with the app, use:
+##### 4.2.2 Docker desktop program
 
-`docker ps -q --filter ancestor=ericlarg4/shiny-ids-app:release | xargs docker stop`
-
-##### 3.2.2 Docker desktop program
-
-- In the image tab, run the image using 3838 as Local Host in the optional settings.
-
-- In the Containers/Apps tab, click on the `Open in browser` icon.
+1. In the "Images" tab, run the image by clicking on the "play" button, then indicate *3838* as *Host port* in the optional settings.
+2. In the Containers/Apps tab, click on the `Open in browser` icon.
+3. Open your browser and go to [http://localhost:3838/](http://localhost:3838/)
+4. To stop the process, click on the stop button
+5. Optionally, to remove the container (the image will remained available), click on the trash button.
 
 If you want to stop and remove the container once you're done with the app, click on the remove icon.
-
-### 4. Test the app in a Docker playground
-
-*Requires a free Docker account: https://hub.docker.com/signup*
-
-- Go to https://labs.play-with-docker.com/.
-
-- Click on start then login.
-
-- Add a new instance.
-
-- Pull the image with: `docker pull ericlarg4/shiny-ids-app:release`.
-
-- Run the image with: `docker run -p 3838:3838 ericlarg4/shiny-ids-app:release`
-
-- At the top of the screen, click on the 3838 button (next to open port).
 
 ## Use of the app
 
 See the wiki.
-
-
-
-
