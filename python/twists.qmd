@@ -1,0 +1,234 @@
+---
+title: "Twists"
+format: html
+---
+
+```{r}
+#| label: R dependencies
+librarian::shelf(tidyverse, data.table, DT, flextable, officer, reticulate)
+```
+
+```{python}
+#| label: python_dependencies
+import python.dihedral_twist as dt
+import pandas as pd
+
+```
+
+```{python}
+#| label: single_stack_test
+# test_1 = dt.twist_calc_fetch('6GZ6', 'A', 3, 4)
+# test_2 = dt.twist_calc_fetch("6GZ6", "A", 4, 21)
+```
+
+```{r}
+# print(py$test_1)
+# print(py$test_2)
+```
+
+```{python}
+#| label: 6GZ6
+
+stack_pairs = [
+    (3, 4), (4, 21), (21, 20),
+    (6, 7),
+    (7, 18),
+    (18, 17),
+    (9, 10),
+    (10, 15),
+    (15, 26),
+    (12, 1),
+    (1, 24),
+    (24, 23)
+]
+
+angle_6gz6 = pd.DataFrame(
+    dt.twist_calc_iterate("6GZ6", "A", stack_pairs)
+)
+```
+
+```{python}
+#| label: twist_calc
+
+stack_pairs_dict = {
+    "2LK7": [(3, 4), (4, 5), (7, 8), (8, 9), (11, 12), (12, 13), (15, 16), (16, 17)],
+    "2M4P": [(3, 5), (5, 6), (8, 9), (9, 10), (12, 13), (13, 14), (16, 17), (17, 18)],
+    "2O3M": [(2, 3), (3, 4), (6, 7), (7, 8), (10, 21), (21, 22), (13, 14), (14, 15)],
+    "1XAV": [(4, 5), (5, 6), (8, 9), (9, 10), (13, 14), (14, 15), (17, 18), (18, 19)],
+    "2LPW": [(3, 4), (4, 5), (7, 8), (8, 9), (19, 20), (20, 21), (23, 24), (24, 25)],
+    "2KYP": [(2, 3), (3, 4), (6, 7), (7, 8),  (14, 15), (15, 16), (18, 19), (19, 20)],
+    "2LEE": [(3, 4), (4, 5), (7, 8), (8, 9), (11, 12), (12, 13), (15, 16), (16, 17)],
+    "2LXQ": [(3, 4), (4, 5), (7, 8), (8, 9), (12, 13), (13, 14), (16, 17), (17, 18)],
+    "2M27": [(3, 4), (4, 5), (7, 8), (8, 9), (14, 15), (15, 16), (18, 19), (19, 20)],
+    "5J4W": [(1, 2), (6, 7), (12, 13), (16, 17)],
+    "5J4P": [(1, 2), (6, 7), (12, 13), (17, 18)],
+    "2M6V": [(1, 2), (7, 8), (13, 14), (17, 18)],
+    "201D": [(1, 2), (2, 3), (3, 4), (9, 10), (10, 11), (11, 12), (17, 18), (18, 19), (19, 20), (25, 26), (26, 27), (27, 28)],
+    "2M6W": [(1, 2), (2, 3), (3, 4), (7, 8), (8, 9), (9, 10), (15, 16), (16, 17), (17, 18), (21, 22), (22, 23), (23, 24)],
+    "5J6U": [(1, 2), (2, 3), (3, 4), (8, 9), (9, 10), (10, 11), (16, 17), (17, 18), (18, 19), (22, 23), (23, 24), (24, 25)],
+    "143D": [(2, 3), (3, 4), (8, 9), (9, 10), (14, 15), (15, 16), (20, 21), (21, 22)],
+    "6GZN": [(1, 2), (6, 7), (13, 14), (18, 19)],
+    "2MFT": [(1, 2), (2, 3), (8, 9), (9, 10), (12, 13), (13, 14), (19, 20), (20, 21)],
+    "5J05": [(1, 2), (2, 3), (7, 8), (8, 9), (14, 15), (15, 16), (18, 19), (19, 20)],
+    "148D": [(1, 2), (5, 6), (10, 11), (14, 15)],
+    "2KM3": [(3, 4), (9, 10), (15, 16), (21, 22)],
+    "2MFU": [(3, 4), (9, 10), (14, 15), (19, 20)],
+    "5YEY": [(1, 2), (2, 3), (7, 8), (8, 9), (13, 14), (14, 15), (19, 20), (20, 21)],
+    "6AC7": [(3, 4), (4, 5), (11, 12), (15, 16), (21, 22)],
+    "7ALU": [(2, 3), (3, 4), (16, 17), (17, 18), (20, 21), (21, 22)],
+    "2JSL": [(3, 4), (4, 5), (9, 10), (10, 11), (15, 16), (16, 17), (21, 22), (22, 23)],
+    "186D": [(3, 4), (4, 5), (10, 11), (11, 12), (16, 17), (17, 18), (21, 22), (22, 23)],
+    "2GKU": [(3, 4), (4, 5), (9, 10), (10, 11), (15, 16), (16, 17), (21, 22), (22, 23)]
+}
+
+twist_values = {pdb: pd.DataFrame(dt.twist_calc_iterate(pdb, "A", stack_pairs)) for pdb, stack_pairs in stack_pairs_dict.items()}
+
+```
+
+```{r}
+#| label: results_righthanded
+
+topo.list <- list(
+  "parallel" = c(
+    "2LK7",
+    "2M4P",
+    "2O3M",
+    "1XAV",
+    "2LPW",
+    "2KYP",
+    "2LEE",
+    "2LXQ",
+    "2M27"
+  ),
+  "antiparallel" = c(
+    "5J4W",
+    "5J4P",
+    "2M6V",
+    "201D",
+    "2M6W",
+    "5J6U",
+    "143D",
+    "6GZN",
+    "2MFT",
+    "5J05",
+    "148D",
+    "2KM3"
+  ),
+  "hybrid" = c("2MFU", "5YEY", "6AC7", "7ALU", "2JSL", "186D", "2GKU")
+)
+
+twist.values <- rbindlist(py$twist_values) %>%
+  left_join(
+    stack(topo.list) %>%
+      rename("topo" = "ind", "pdb" = "values")
+  ) %>% 
+    select(topo, pdb, stack_name, twist_angle, gba_angle_1, gba_angle_2, gba) 
+  #manual corrections to borderline gba values
+  # mutate(
+  #   gba = case_when(
+  #     pdb %in% c("2M4P", "1XAV", "2LEE") ~ 'aa',
+  #     pdb == '5J4W' & stack_name == '6-7' ~ 'sa',
+  #     TRUE ~ gba
+  #   )
+  # )
+
+DT::datatable(twist.values)
+
+twist.pdb.summary <- twist.values %>%
+  summarise(
+    sd.angle = signif(sd(twist_angle, na.rm = TRUE), 1),
+    mean.angle = if_else(
+      is.na(sd.angle),
+      mean(twist_angle),
+      round(mean(twist_angle, na.rm = TRUE), max(0, -floor(log10(sd.angle))))
+    ),
+    n = n(),
+    .by = c(pdb, gba)
+  ) %>%
+  select(1, 2, 4, 3, 5) %>% 
+  ungroup() %>% 
+  arrange(sd.angle)
+
+twist.pdb.summary
+
+
+twist.pdb.righthanded <- twist.values %>%
+  left_join(
+    stack(topo.list) %>%
+      rename("topo" = "ind", "pdb" = "values")
+  ) %>%
+  group_by(topo, gba) %>%
+  summarise(
+    sd.angle = signif(sd(twist_angle, na.rm = TRUE), 1),
+    mean.angle = round(
+      mean(twist_angle, na.rm = TRUE),
+      max(0, -floor(log10(sd.angle)))
+    ),
+    n = n()
+  ) %>%
+  select(topo, gba, mean.angle, sd.angle, n)
+
+```
+
+```{r}
+#| label: results_lefthanded
+# Z G4
+
+# angle_objects <- grep("^angle_[A-Za-z0-9]{4}$", names(py), value = TRUE)
+
+twist.pdb.zg4 <- py$angle_6gz6 %>%
+  mutate(
+    type = if_else(
+      grepl("3|6|9|12|17|20|23|26", stack_name), 'aa [core]', 'aa [interface]'
+    )
+  ) %>%
+  summarise(
+    sd.angle = sd(twist_angle) %>% signif(., 1),
+    mean.angle = mean(twist_angle, na.rm = TRUE) %>%
+      round(
+        .,
+        max(
+          0,
+          -floor(log10(sd.angle))
+        )
+      ),
+    n = n(),
+    .by = c(pdb, type)
+  ) %>%
+  mutate(topo = "Z-G4") %>%
+  rename("gba" = "type") %>%
+  select(topo, gba, mean.angle, sd.angle, n)
+
+twist.pdb.zg4
+```
+
+```{r}
+#| label: tbl_summary
+table_summary <- rbindlist(list(twist.pdb.righthanded, twist.pdb.zg4)) %>%
+  mutate(twist = glue::glue("{mean.angle} ± {sd.angle}")) %>%
+  select(gba, topo, twist, n) %>%
+  arrange(gba, -n)
+
+table_summary %>%
+  DT::datatable(
+    #rename columns
+    colnames = c(
+      "Topology" = "topo",
+      "GBA" = "gba",
+      "Twist" = "twist",
+      "n" = "n"
+    )
+  )
+
+# Convert to flextable
+ft <- flextable(table_summary) %>%
+  merge_v(j = ~gba) %>% # Merge identical values in 'gba'
+  theme_vanilla() %>%
+  autofit()
+
+# Export to Word
+doc <- read_docx() %>%
+  body_add_flextable(ft) %>%
+  print(target = "images/twist_table_output.docx")
+
+```
