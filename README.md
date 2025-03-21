@@ -1,6 +1,7 @@
 
 [![R](https://img.shields.io/badge/-script-276DC3.svg?style=flat&logo=R)](https://cran.r-project.org)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/ericlarg4/eps2fold/docker-publish.yml)
+![GitHub last commit](https://img.shields.io/github/last-commit/ericlarg4/eps2fold)
 
 
 # &epsilon;2Fold
