@@ -1,3 +1,6 @@
+
+[![R](https://img.shields.io/badge/-script-276DC3.svg?style=flat&logo=R)](https://cran.r-project.org)
+
 # &epsilon;2Fold
 
 ## Launching the app
