@@ -17,6 +17,8 @@ library('thematic')
 ## data display----
 library('ggrepel')
 library('ggthemes')
+#to solve text not rendering with shinylive. Not necesarry for connect.posit.cloud deployement
+webr::install("ggtext")
 library('ggtext')
 library('patchwork')
 library('plotly')
@@ -39,9 +41,6 @@ source('R/server.R')
 # Set options to suppress warnings in the app
 options(warn = -1)
 # also see 'error message management' in UI
-
-
-
 
 # App----
 
