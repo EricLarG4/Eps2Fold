@@ -1648,7 +1648,7 @@ server <- shinyServer(function(input, output, session) {
               list(extend = 'colvis')
             ),
             title = NULL,
-            columnDefs = list(list(visible = FALSE, targets = 2:11)
+            columnDefs = list(list(visible = FALSE, targets = 2:11))
           )
         ) %>%
         formatSignif(columns = 13:(13 + input$ncp), digits = 5)
