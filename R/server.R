@@ -1346,7 +1346,7 @@ server <- shinyServer(function(input, output, session) {
 
   pca.cd.scree <- reactive({
     pca.cd.scree <- data.frame(pca.cd()$eig) %>%
-      mutate(dim = 1:nrow(data.frame(pca.cd()$eig))) %>%
+      mutate(dim = seq_along(data.frame(pca.cd()$eig))) %>%
       # mutate(dim.cum.sum = cumsum(dim)) %>%
       filter(dim <= 10) %>%
       ggplot(aes(x = dim, y = percentage.of.variance)) +
@@ -1399,7 +1399,7 @@ server <- shinyServer(function(input, output, session) {
         var = as.numeric(substr(rownames(data.frame(pca.cd()$var$cos2)), 4, 6))
       ) %>%
       pivot_longer(
-        cols = 1:length(input$dim.cd),
+        cols = seq_along(input$dim.cd),
         names_to = 'dim',
         values_to = 'cos2'
       ) %>%
@@ -1648,7 +1648,7 @@ server <- shinyServer(function(input, output, session) {
               list(extend = 'colvis')
             ),
             title = NULL,
-            columnDefs = list(list(visible = FALSE, targets = c(2:11)))
+            columnDefs = list(list(visible = FALSE, targets = 2:11)
           )
         ) %>%
         formatSignif(columns = 13:(13 + input$ncp), digits = 5)
@@ -1809,7 +1809,7 @@ server <- shinyServer(function(input, output, session) {
 
     max.length <- max(sapply(combined_list, length))
 
-    for (i in 1:length(combined_list)) {
+    for (i in seq_along(combined_list)) {
       length(combined_list[[i]]) <- max.length
     }
 
@@ -1835,7 +1835,7 @@ server <- shinyServer(function(input, output, session) {
             list(extend = 'colvis')
           ),
           title = NULL,
-          columnDefs = list(list(visible = FALSE, targets = c(0:8)))
+          columnDefs = list(list(visible = FALSE, targets = 0:8))
         )
       )
   })
@@ -1952,7 +1952,7 @@ server <- shinyServer(function(input, output, session) {
   ##### Scree----
   pca.ids.scree <- reactive({
     pca.ids.scree <- data.frame(pca.ids()$eig) %>%
-      mutate(dim = 1:nrow(data.frame(pca.ids()$eig))) %>%
+      mutate(dim = seq_along(data.frame(pca.ids()$eig))) %>%
       filter(dim <= 10) %>%
       ggplot(aes(x = dim, y = percentage.of.variance)) +
       geom_bar(
@@ -2004,7 +2004,7 @@ server <- shinyServer(function(input, output, session) {
         var = as.numeric(substr(rownames(data.frame(pca.ids()$var$cos2)), 5, 7))
       ) %>%
       pivot_longer(
-        cols = 1:length(input$dim.ids),
+        cols = seq_along(input$dim.ids),
         names_to = 'dim',
         values_to = 'cos2'
       ) %>%
@@ -2250,7 +2250,7 @@ server <- shinyServer(function(input, output, session) {
               list(extend = 'colvis')
             ),
             title = NULL,
-            columnDefs = list(list(visible = FALSE, targets = c(2:11)))
+            columnDefs = list(list(visible = FALSE, targets = 2:11))
           )
         ) %>%
         formatRound(columns = 13:(13 + input$ncp), digits = 2)
@@ -2409,7 +2409,7 @@ server <- shinyServer(function(input, output, session) {
 
     max.length <- max(sapply(combined_list, length))
 
-    for (i in 1:length(combined_list)) {
+    for (i in seq_along(combined_list)) {
       length(combined_list[[i]]) <- max.length
     }
 
@@ -2435,7 +2435,7 @@ server <- shinyServer(function(input, output, session) {
             list(extend = 'colvis')
           ),
           title = NULL,
-          columnDefs = list(list(visible = FALSE, targets = c(0:8)))
+          columnDefs = list(list(visible = FALSE, targets = 0:8))
         )
       )
   })
@@ -3060,7 +3060,7 @@ server <- shinyServer(function(input, output, session) {
       1,
       function(y) sqrt(sum((user.data - y)^2))
     )
-    return(which.min(cluster.dist)[1])
+    which.min(cluster.dist)
   }
 
   ### CD----

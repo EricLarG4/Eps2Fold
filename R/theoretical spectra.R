@@ -41,7 +41,7 @@ dt.contributR <- function(input.seq){
   #association of each nt pair with its 260 nm parameter from db
   epsilon.calc[nn.260, on = 'nn', contrib := epsij*1000]
   
-  return(epsilon.calc)
+  epsilon.calc
 }
 
 

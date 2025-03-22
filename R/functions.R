@@ -78,7 +78,7 @@ pca.plotR <- function(
         shape = .data[[shape]]
       )
     ) +
-    scale_shape_manual(values = c(0:15)) +
+    scale_shape_manual(values = 0:15) +
     geom_polygon(
       data = . %>%
         filter(.data[[color]] != "User") %>%
@@ -126,7 +126,7 @@ circleFun <- function(center = c(0, 0), diameter = 1, npoints = 100) {
   tt <- seq(0, 2 * pi, length.out = npoints)
   xx <- center[1] + r * cos(tt)
   yy <- center[2] + r * sin(tt)
-  return(data.frame(cir.x = xx, cir.y = yy))
+  data.frame(cir.x = xx, cir.y = yy)
 }
 
 # CD and IDS plots----
@@ -206,5 +206,5 @@ render_ref_plot <- function(df, input, norm_col, axis_label_text) {
     p <- p + facet_wrap(~oligo)
   }
 
-  return(p)
+  p
 }
