@@ -1,7 +1,7 @@
 ![R](https://img.shields.io/badge/r-%23276DC3.svg?style=for-the-badge&logo=r&logoColor=white)
 ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
 
-
+![CodeFactor Grade](https://img.shields.io/codefactor/grade/github/ericlarg4/eps2fold?style=for-the-badge)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/ericlarg4/eps2fold/docker-publish.yml?style=for-the-badge)
 ![GitHub last commit](https://img.shields.io/github/last-commit/ericlarg4/eps2fold?style=for-the-badge)
 
