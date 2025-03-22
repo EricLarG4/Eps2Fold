@@ -1,17 +1,17 @@
+`![R](https://img.shields.io/badge/r-%23276DC3.svg?style=for-the-badge&logo=r&logoColor=white)`
 
-[![R](https://img.shields.io/badge/-script-276DC3.svg?style=flat&logo=R)](https://cran.r-project.org)
+`![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)`
+
+
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/ericlarg4/eps2fold/docker-publish.yml)
 ![GitHub last commit](https://img.shields.io/github/last-commit/ericlarg4/eps2fold)
 ![GitHub License](https://img.shields.io/github/license/ericlarg4/eps2fold)
-
-
-
 
 # &epsilon;2Fold
 
 ## Launching the app
 
-The app can be used on a web server (go to section 1), or run locally through: 
+The app can be used on a web server (go to section 1), or run locally through:
 
 * your own web browser (not install required; section 2)
 * an R interpreter (R install necessary, GUI optional; section 3)
