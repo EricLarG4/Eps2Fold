@@ -5,7 +5,6 @@
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/ericlarg4/eps2fold/docker-publish.yml?style=for-the-badge)
 ![GitHub last commit](https://img.shields.io/github/last-commit/ericlarg4/eps2fold?style=for-the-badge)
 
-
 ![GitHub License](https://img.shields.io/github/license/ericlarg4/eps2fold?style=for-the-badge)
 
 # &epsilon;2Fold
