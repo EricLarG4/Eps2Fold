@@ -50,7 +50,17 @@ The following instructions work for Windows users. Other OS may need adjustments
 
 1. If R was not added in PATH, locate the installation path, typically `& "C:\Program Files\R\R-X.Y.Z\"`, where X.Y.Z is the R version number.
 2. Navigate to the app directory, i.e. Eps2Fold if it was cloned from GitHub
-3. Launch the app in your default web browser with: `& "R_PATH\bin\x64\Rscript.exe" -e "shiny::runApp(launch.browser = TRUE)"`, where `R_PATH` is the path determined at step 1.  For instance: `& "C:\Program Files\R\R-4.4.3\bin\x64\Rscript.exe" -e "shiny::runApp(launch.browser = TRUE)"`.
+3. Launch the app in your default web browser with:
+
+```PowerShell
+& "R_PATH\bin\x64\Rscript.exe" -e "shiny::runApp(launch.browser = TRUE)"
+```
+
+where `R_PATH` is the path determined at step 1. For example:
+
+```PowerShell
+& "C:\Program Files\R\R-4.4.3\bin\x64\Rscript.exe" -e "shiny::runApp(launch.browser = TRUE)"
+```
 
 ### 4. Run the app in a Docker container
 
@@ -64,7 +74,11 @@ For the first use or to update the app, pull the image, otherwise proceed direct
 
 #### 4.1 Pulling the image
 
-In a terminal, pull the Docker image: `docker pull ghcr.io/ericlarg4/eps2fold:main`
+In a terminal, pull the Docker image:
+
+```PowerShell
+docker pull ghcr.io/ericlarg4/eps2fold:main
+```
 
 #### 4.2 Running the app
 
@@ -72,7 +86,12 @@ Proceed to either 2.2.1 or 2.2.2 if you prefer to use docker desktop.
 
 ##### 4.2.1 Terminal
 
-1. Launch the app: `docker run --rm -p 3838:3838 ghcr.io/ericlarg4/eps2fold:main`
+1. Launch the app:
+
+```PowerShell
+docker run --rm -p 3838:3838 ghcr.io/ericlarg4/eps2fold:main
+```
+  
 2. Open your browser and go to [http://localhost:3838/](http://localhost:3838/)
 3. To stop and remove the process, simply type ctrl+C from the terminal.
 
