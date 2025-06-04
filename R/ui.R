@@ -894,7 +894,7 @@ ui <- bslib::page_navbar(
               ),
               nav_panel(
                 title = "Predict data table",
-                DTOutput("predict.ids.table")
+                uiOutput("conditional_predict_ids_table")
               )
             )
           )

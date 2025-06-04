@@ -3186,46 +3186,15 @@ server <- shinyServer(function(input, output, session) {
       return(NULL)
     } else {
       cd.predict() %>%
-        rbind(
-          data.frame(pca.cd()$ind$coord) %>%
-            select(input$dim.cd[1], input$dim.cd[2]) %>%
-            magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
-            cbind(training.cd()) %>%
-            add_column(km = pca.cd.km()$cluster) %>%
-            left_join(
-              ref.seq() %>%
-                select(oligo, topo, gba, salt),
-              by = 'oligo'
-            )
-        ) %>%
-        add_column(color = NA, shape = NA) %>%
-        left_join(
-          ref.seq() %>%
-            select(oligo, tetrad, tetrad.id, loop, plus.minus, groove),
-          by = "oligo"
-        ) %>%
-        mutate(
-          topo = if_else(is.na(topo), "User", topo),
-          tetrad = if_else(is.na(tetrad), "User", as.character(tetrad)),
-          tetrad.id = if_else(is.na(tetrad.id), "User", tetrad.id),
-          loop = if_else(is.na(loop), "User", loop),
-          plus.minus = if_else(is.na(plus.minus), "User", plus.minus),
-          groove = if_else(is.na(groove), "User", groove)
-        ) %>%
+        ungroup() %>%
+        select(oligo, Dim.1, Dim.2) %>% 
         datatable(
           style = "bootstrap",
           extensions = c('Buttons', 'Responsive', 'Scroller'),
           colnames = c(
             "Name" = "oligo",
-            "Cation" = "salt",
-            "Topology" = "topo",
-            "GBA" = "gba",
-            "Tetrads" = "tetrad",
-            "Tetrad combination" = "tetrad.id",
-            "Loop progression" = "loop",
-            "Tetrad handedness" = "plus.minus",
-            "Grooves" = "groove",
-            "Cluster" = "km"
+            "Dim 1" = "Dim.1",
+            "Dim 2" = "Dim.2"
           ),
           rownames = F,
           escape = T,
@@ -3245,12 +3214,8 @@ server <- shinyServer(function(input, output, session) {
               list(extend = 'colvis')
             ),
             title = NULL
-            # columnDefs = list(list(visible=FALSE, targets=c(2:9)))
           )
         )
-      # formatStyle(columns = 0:(11+input$ncp),  target = "cell",
-      #             backgroundColor = "#272c30") %>%
-      # formatSignif(columns = 11:(11+input$ncp), digits = 5)
     }
   })
 
@@ -3514,6 +3479,53 @@ server <- shinyServer(function(input, output, session) {
   })
 
   #####plots----
+
+    output$predict.ids.table <- renderDT(server = FALSE, {
+    if (file.toggle.user() == 'no') {
+      return(NULL)
+    } else {
+      ids.predict() %>%
+        ungroup() %>%
+        select(oligo, Dim.1, Dim.2) %>% 
+        datatable(
+          style = "bootstrap",
+          extensions = c('Buttons', 'Responsive', 'Scroller'),
+          colnames = c(
+            "Name" = "oligo",
+            "Dim 1" = "Dim.1",
+            "Dim 2" = "Dim.2"
+          ),
+          rownames = F,
+          escape = T,
+          filter = 'top',
+          autoHideNavigation = T,
+          options = list(
+            deferRender = TRUE,
+            scrollY = 200,
+            scroller = F,
+            pageLength = 25,
+            autoWidth = F,
+            dom = 'Bfrtip',
+            buttons = list(
+              list(extend = 'copy'),
+              list(extend = 'csv', title = NULL, filename = "pca ids"),
+              list(extend = 'excel', title = NULL, filename = "pca ids"),
+              list(extend = 'colvis')
+            ),
+            title = NULL
+          )
+        )
+    }
+  })
+
+  output$conditional_predict_ids_table <- renderUI({
+    if (file.toggle.user() == 'no') {
+      #text output if no file is uploaded
+      h4("No user file uploaded. Please upload file in the Data tab")
+    } else {
+      DTOutput("predict.ids.table")
+    }
+  })
 
   predict.ids.coord <- reactive({
     pca.ids.coord <- ids.predict() %>%
