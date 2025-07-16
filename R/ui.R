@@ -796,66 +796,6 @@ ui <- bslib::page_navbar(
       )
     )
   ),
-  # nav_panel(
-  #   title = "Data plots",
-  #   icon = icon("chart-line"),
-  #   navset_card_tab(
-  #     nav_panel(
-  #       title = 'Reference',
-  #       icon = icon("table-cells-row-lock"),
-  #       navset_card_tab(
-  #         nav_panel(
-  #           title = "UV",
-  #           plotOutput(
-  #             "p.ref.uv",
-  #             height = "1200px"
-  #           )
-  #         ),
-  #         # nav_panel(
-  #         #   title = "Eps2Fold",
-  #         #   plotOutput(
-  #         #     "p.ref.ids",
-  #         #     height = "1200px"
-  #         #   )
-  #         # ),
-  #         nav_panel(
-  #           title = "CD",
-  #           plotOutput(
-  #             "p.ref.cd",
-  #             height = "1200px"
-  #           )
-  #         )
-  #       )
-  #     ),
-  #     nav_panel(
-  #       title = "User",
-  #       icon = icon('user-plus'),
-  #       navset_card_tab(
-  #         nav_panel(
-  #           title = "UV",
-  #           plotOutput(
-  #             "p.user.uv",
-  #             height = "1200px"
-  #           )
-  #         ),
-  #         nav_panel(
-  #           title = "Eps2Fold",
-  #           plotOutput(
-  #             "p.user.ids",
-  #             height = "1200px"
-  #           )
-  #         ),
-  #         nav_panel(
-  #           title = "CD",
-  #           plotOutput(
-  #             "p.user.cd",
-  #             height = "1200px"
-  #           )
-  #         )
-  #       )
-  #     )
-  #   )
-  # ),
   nav_panel(
     title = "PCA explorer",
     icon = icon("circle-nodes"),
@@ -879,13 +819,6 @@ ui <- bslib::page_navbar(
               fillable = TRUE,
               sidebar = sidebar(
                 position = 'right',
-                selectInput(
-                  inputId = "dim.ids.2",
-                  label = "Dimensions",
-                  choices = paste0("Dim.", 1:10),
-                  multiple = TRUE,
-                  selected = c("Dim.1", "Dim.2")
-                ),
                 selectInput(
                   inputId = "pca.color.ids.2",
                   label = "PCA colors",
@@ -923,10 +856,6 @@ ui <- bslib::page_navbar(
                     "Cation"
                   ),
                   selected = "GBA"
-                ),
-                downloadButton(
-                  "dwn.pca.ids.2",
-                  "Download"
                 )
               ),
               #if user input supplied, show prediction, otherwise ref. panel PCA only
@@ -938,13 +867,6 @@ ui <- bslib::page_navbar(
             navset_card_tab(
               selected = 'Variable contributions',
               full_screen = TRUE,
-              nav_panel(
-                title = "Scree",
-                plotOutput(
-                  "pca.ids.scree",
-                  height = "800px"
-                )
-              ),
               nav_panel(
                 title = "Factor map",
                 plotOutput(
@@ -1020,13 +942,6 @@ ui <- bslib::page_navbar(
               sidebar = sidebar(
                 position = 'right',
                 selectInput(
-                  inputId = "dim.cd.2",
-                  label = "Dimensions",
-                  choices = paste0("Dim.", 1:10),
-                  multiple = TRUE,
-                  selected = c("Dim.1", "Dim.2")
-                ),
-                selectInput(
                   inputId = "pca.color.cd.2",
                   label = "PCA colors",
                   choices = c(
@@ -1063,10 +978,6 @@ ui <- bslib::page_navbar(
                     "Cation"
                   ),
                   selected = "GBA"
-                ),
-                downloadButton(
-                  "dwn.pca.cd.2",
-                  "Download"
                 )
               ),
               #if user input supplied, show prediction, otherwise ref. panel PCA only
@@ -1078,13 +989,6 @@ ui <- bslib::page_navbar(
             navset_card_tab(
               selected = 'Variable contributions',
               full_screen = TRUE,
-              nav_panel(
-                title = "Scree",
-                plotOutput(
-                  "pca.cd.scree",
-                  height = "800px"
-                )
-              ),
               nav_panel(
                 title = "Factor map",
                 plotOutput(
