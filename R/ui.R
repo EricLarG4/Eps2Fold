@@ -182,9 +182,9 @@ ui <- bslib::page_navbar(
           ),
           selectInput(
             inputId = "ref.panel",
-            label = "Layout",
-            choices = c("Panels", "Superimposed", "Mean"),
-            selected = "Panels"
+            label = "Data plot layout",
+            choices = c("Group panels", "Oligo panels", "Superimposed", "Mean"),
+            selected = "Group panels"
           ),
           sliderInput(
             inputId = "wl",
