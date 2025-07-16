@@ -2561,6 +2561,16 @@ server <- shinyServer(function(input, output, session) {
     }
   })
 
+  output$p.user.cd.ui <- renderUI({
+    if (file.toggle.user() == "no") {
+      HTML(
+        "Please upload a dataset to view the plot.<br>Use the Select user data file Browse button in the sidebar to navigate to your file."
+      )
+    } else {
+      plotOutput("p.user.cd")
+    }
+  })
+
   output$p.user.cd <- renderPlot({
     user.cd <- user.cd.input() %>%
       filter(oligo %in% input$user.seq.oligo)
@@ -2666,10 +2676,18 @@ server <- shinyServer(function(input, output, session) {
     }
   })
 
-  output$p.user.uv <- renderPlot({
-    if (file.toggle.user() == 'no') {
-      ggplot()
+  output$p.user.uv.ui <- renderUI({
+    if (file.toggle.user() == "no") {
+      HTML(
+        "Please upload a dataset to view the plot.<br>Use the Select user data file Browse button in the sidebar to navigate to your file."
+      )
     } else {
+      plotOutput("p.user.uv")
+    }
+  })
+
+  output$p.user.uv <- renderPlot({
+    req(file.toggle.user() != "no")
       user.uv.input() %>%
         filter(oligo %in% input$user.seq.oligo) %>%
         ggplot(
@@ -2696,7 +2714,6 @@ server <- shinyServer(function(input, output, session) {
         custom.theme.markdown +
         scale_y_continuous(n.breaks = 3) +
         scale_x_continuous(expand = c(0, 0))
-    }
   })
 
   ##### IDS----
@@ -2752,6 +2769,16 @@ server <- shinyServer(function(input, output, session) {
             # columnDefs = list(list(visible=FALSE, targets=c(0,2:6,9,12)))
           )
         )
+    }
+  })
+
+  output$p.user.ids.ui <- renderUI({
+    if (file.toggle.user() == "no") {
+      HTML(
+        "Please upload a dataset to view the plot.<br>Use the Select user data file Browse button in the sidebar to navigate to your file."
+      )
+    } else {
+      plotOutput("p.user.ids")
     }
   })
 
