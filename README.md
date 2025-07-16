@@ -9,19 +9,22 @@
 
 # &epsilon;2Fold
 
+## Use of the app
+Please refer to the [Wiki](https://github.com/EricLarG4/Eps2Fold/wiki).
+
 ## Launching the app
 
-The app can be used on a web server (go to section 1), or run locally through:
+The app can be used on a [Web server](#1-run-the-app-online), or run locally through:
 
-* your own web browser (not install required; section 2)
-* an R interpreter (R install necessary, GUI optional; section 3)
-* in a Docker container. (docker install necessary, GUI optional; section 4).
+* [Your own web browser](#2-run-the-app-locally-in-your-web-browser) (not install required)
+* [An R interpreter](#3-run-the-app-directly-in-r) (R install necessary, GUI optional)
+* [In a Docker container](#4-run-the-app-in-a-docker-container) (docker install necessary, GUI optional.
 
 All dependencies will be installed automatically where necessary.
 
 ### 1. Run the app online
 
-Acess the web app on the [Connect Posit Cloud server](https://ericlarg4-eps2fold.share.connect.posit.cloud/).
+Access the web app on the [Connect Posit Cloud server](https://ericlarg4-eps2fold.share.connect.posit.cloud/).
 
 ### 2. Run the app locally in your web browser
 
@@ -69,7 +72,7 @@ where `R_PATH` is the path determined at step 1. For example:
 
 *Does not require to have R installed.*
 
-For the first use or to update the app, pull the image, otherwise proceed directly to 4.2.
+For the first use or to update the app, pull the image, otherwise proceed directly to [4.2](https://github.com/EricLarG4/Eps2Fold/edit/main/README.md#42-running-the-app).
 
 #### 4.1 Pulling the image
 
@@ -81,7 +84,7 @@ docker pull ghcr.io/ericlarg4/eps2fold:main
 
 #### 4.2 Running the app
 
-Proceed to either 2.2.1 or 2.2.2 if you prefer to use docker desktop.
+Proceed to either [4.2.1](https://github.com/EricLarG4/Eps2Fold/edit/main/README.md#421-terminal) for terminal-based launch, or [4.2.2](https://github.com/EricLarG4/Eps2Fold/edit/main/README.md#422-docker-desktop-program) if you prefer to use docker desktop.
 
 ##### 4.2.1 Terminal
 
@@ -96,13 +99,20 @@ docker run --rm -p 3838:3838 ghcr.io/ericlarg4/eps2fold:main
 
 ##### 4.2.2 Docker desktop program
 
-1. In the "Images" tab, run the image by clicking on the "play" button, then indicate *3838* as *Host port* in the optional settings.
-2. In the Containers/Apps tab, click on the `Open in browser` icon.
-3. Open your browser and go to [http://localhost:3838/](http://localhost:3838/)
+1. In the "Images" tab, run the image by clicking on the "play" button
+
+<img width="948" height="91" alt="image" src="https://github.com/user-attachments/assets/5b4df8f0-caed-4832-9bcc-e7eef788a677" />
+
+2. indicate *3838* as *Host port* in the optional settings and click on *Run*
+
+<img width="596" height="573" alt="image" src="https://github.com/user-attachments/assets/f1ba0d12-fce8-4142-8ebf-fb047f428d48" />
+
+3. Click on 3838:3838 on the container page that opened (you can also find it on the *Containers* page
+
+<img width="1062" height="347" alt="image" src="https://github.com/user-attachments/assets/948ea6ed-1082-4962-b171-561bffa86945" />
+
 4. To stop the process, click on the stop button
 5. Optionally, to remove the container (the image will remained available), click on the trash button.
-
-If you want to stop and remove the container once you're done with the app, click on the remove icon.
 
 ## Use of the app
 
