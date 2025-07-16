@@ -1068,10 +1068,6 @@ server <- shinyServer(function(input, output, session) {
     pca.cd.twss()
   })
 
-  output$pca.cd.twss.2 <- renderPlot({
-    pca.cd.twss()
-  })
-
   pca.cd.gap <- reactive({
     clusGap(
       pca.cd()$ind$coord,
@@ -1111,10 +1107,6 @@ server <- shinyServer(function(input, output, session) {
     pca.cd.gap()
   })
 
-  output$pca.cd.gap.2 <- renderPlot({
-    pca.cd.gap()
-  })
-
   #k-means clustering
   pca.cd.km <- reactive({
     set.seed(42)
@@ -1129,64 +1121,15 @@ server <- shinyServer(function(input, output, session) {
 
   #### Analytics ----
 
-  ##### Scree----
-
-  pca.cd.scree <- reactive({
-    pca.cd.scree <- data.frame(pca.cd()$eig) %>%
-      mutate(dim = seq_along(data.frame(pca.cd()$eig))) %>%
-      # mutate(dim.cum.sum = cumsum(dim)) %>%
-      filter(dim <= 10) %>%
-      ggplot(aes(x = dim, y = percentage.of.variance)) +
-      geom_bar(
-        stat = 'identity',
-        aes(fill = -dim),
-        show.legend = FALSE
-      ) +
-      geom_point(
-        aes(
-          x = dim,
-          y = cumsum(percentage.of.variance)
-        ),
-        size = 5
-      ) +
-      geom_line(
-        aes(
-          x = dim,
-          y = cumsum(percentage.of.variance)
-        ),
-        size = 1
-      ) +
-      custom.theme.markdown +
-      scale_x_continuous(expand = c(0, 0), limits = c(0, NA)) +
-      scale_y_continuous(expand = c(0, NA), limits = c(0, 105)) +
-      labs(
-        y = 'Variance contribution (%)',
-        x = 'Dimension'
-      )
-
-    #diagnostics
-    # save(pca.cd.scree, file = "scree.rdata")
-
-    return(pca.cd.scree)
-  })
-
-  output$pca.cd.scree <- renderPlot({
-    pca.cd.scree()
-  })
-
-  output$pca.cd.scree.2 <- renderPlot({
-    pca.cd.scree()
-  })
-
   ##### Factor map----
   pca.cd.fac.map <- reactive({
     pca.cd.fac.map <- data.frame(pca.cd()$var$cos2) %>%
-      select(input$dim.cd) %>%
+      select(input$dim.pca) %>%
       mutate(
         var = as.numeric(substr(rownames(data.frame(pca.cd()$var$cos2)), 4, 6))
       ) %>%
       pivot_longer(
-        cols = seq_along(input$dim.cd),
+        cols = seq_along(input$dim.pca),
         names_to = 'dim',
         values_to = 'cos2'
       ) %>%
@@ -1224,9 +1167,6 @@ server <- shinyServer(function(input, output, session) {
   output$pca.cd.fac.map <- renderPlot({
     pca.cd.fac.map()
   })
-  output$pca.cd.fac.map.2 <- renderPlot({
-    pca.cd.fac.map()
-  })
 
   ##### Correlation circle----
 
@@ -1234,12 +1174,12 @@ server <- shinyServer(function(input, output, session) {
 
   pca.cd.var.cor <- reactive({
     data.frame(pca.cd()$var$cor) %>%
-      select(input$dim.cd[1], input$dim.cd[2]) %>%
+      select(input$dim.pca[1], input$dim.pca[2]) %>%
       mutate(var = rownames(data.frame(pca.cd()$var$cor))) %>%
       magrittr::set_colnames(c("Dim.1", "Dim.2", "var")) %>%
       left_join(
         data.frame(pca.cd()$var$cos2) %>%
-          select(input$dim.cd[1], input$dim.cd[2]) %>%
+          select(input$dim.pca[1], input$dim.pca[2]) %>%
           magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
           mutate(sum.cos2 = Dim.1 + Dim.2) %>%
           select(sum.cos2) %>%
@@ -1277,8 +1217,8 @@ server <- shinyServer(function(input, output, session) {
       scale_x_continuous(limits = c(-1, 1)) +
       scale_y_continuous(limits = c(-1, 1)) +
       labs(
-        y = input$dim.cd[2],
-        x = input$dim.cd[1]
+        y = input$dim.pca[2],
+        x = input$dim.pca[1]
       ) +
       custom.theme.markdown +
       scale_color_continuous(
@@ -1292,19 +1232,17 @@ server <- shinyServer(function(input, output, session) {
   output$pca.cd.var.cor <- renderPlot({
     pca.cd.var.cor()
   })
-  output$pca.cd.var.cor.2 <- renderPlot({
-    pca.cd.var.cor()
-  })
+
 
   #### Variable coordinates-------
   pca.cd.var.coord <- reactive({
     data.frame(pca.cd()$var$coord) %>%
-      select(input$dim.cd[1], input$dim.cd[2]) %>%
+      select(input$dim.pca[1], input$dim.pca[2]) %>%
       magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
       mutate(var = rownames(data.frame(pca.cd()$var$coord))) %>%
       left_join(
         data.frame(pca.cd()$var$cos2) %>%
-          select(input$dim.cd[1], input$dim.cd[2]) %>%
+          select(input$dim.pca[1], input$dim.pca[2]) %>%
           magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
           mutate(sum.cos2 = Dim.1 + Dim.2) %>%
           select(sum.cos2) %>%
@@ -1343,17 +1281,15 @@ server <- shinyServer(function(input, output, session) {
         guide = guide_colorbar(barwidth = 15)
       ) +
       labs(
-        y = input$dim.cd[2],
-        x = input$dim.cd[1]
+        y = input$dim.pca[2],
+        x = input$dim.pca[1]
       )
   })
 
   output$pca.cd.var.coord <- renderPlot({
     pca.cd.var.coord()
   })
-  output$pca.cd.var.coord.2 <- renderPlot({
-    pca.cd.var.coord()
-  })
+
 
   #### Individuals coordinates--------
 
@@ -1444,7 +1380,7 @@ server <- shinyServer(function(input, output, session) {
 
   pca.cd.coord <- reactive({
     data.frame(pca.cd()$ind$coord) %>%
-      select(c("Dim.1", "Dim.2")[1], c("Dim.1", "Dim.2")[2]) %>%
+      select(input$dim.pca[1], input$dim.pca[2]) %>%
       cbind(training.cd()) %>%
       add_column(km = pca.cd.km()$cluster) %>%
       left_join(
@@ -1466,8 +1402,8 @@ server <- shinyServer(function(input, output, session) {
       ) %>%
       pca.plotR(
         .,
-        dim.1 = c("Dim.1", "Dim.2")[1],
-        dim.2 = c("Dim.1", "Dim.2")[2],
+        dim.1 = input$dim.pca[1],
+        dim.2 = input$dim.pca[2],
         color = input$ref.color,
         shape = input$ref.color,
         symbol_scaling = input$pca.cd.symbol,
@@ -1486,7 +1422,7 @@ server <- shinyServer(function(input, output, session) {
 
   pca.cd.coord.2 <- reactive({
     data.frame(pca.cd()$ind$coord) %>%
-      select(input$dim.cd.2[1], input$dim.cd.2[2]) %>%
+      select(input$dim.pca[1], input$dim.pca[2]) %>%
       cbind(training.cd()) %>%
       add_column(km = pca.cd.km()$cluster) %>%
       left_join(
@@ -1508,8 +1444,8 @@ server <- shinyServer(function(input, output, session) {
       ) %>%
       pca.plotR(
         .,
-        dim.1 = input$dim.cd.2[1],
-        dim.2 = input$dim.cd.2[2],
+        dim.1 = input$dim.pca[1],
+        dim.2 = input$dim.pca[2],
         color = input$pca.color.cd.2,
         shape = input$pca.shape.cd.2
       )
@@ -1518,62 +1454,6 @@ server <- shinyServer(function(input, output, session) {
   output$pca.cd.coord.2 <- renderPlot({
     pca.cd.coord.2()
   })
-
-  output$dwn.pca.cd <- downloadHandler(
-    filename = function() {
-      paste("PCA - CD -- view 1", input$device, sep = ".")
-    },
-    content = function(file) {
-      if (input$device == "png") {
-        ggsave(
-          file,
-          plot = pca.cd.coord(),
-          device = input$device,
-          dpi = input$resolution,
-          width = input$width,
-          height = input$height,
-          scaling = input$scaling
-        )
-      } else {
-        ggsave(
-          file,
-          plot = pca.cd.coord(),
-          device = input$device,
-          dpi = input$resolution,
-          width = input$width,
-          height = input$height
-        )
-      }
-    }
-  )
-
-  output$dwn.pca.cd.2 <- downloadHandler(
-    filename = function() {
-      paste("PCA - CD -- view 2", input$device, sep = ".")
-    },
-    content = function(file) {
-      if (input$device == "png") {
-        ggsave(
-          file,
-          plot = pca.cd.coord.2(),
-          device = input$device,
-          dpi = input$resolution,
-          width = input$width,
-          height = input$height,
-          scaling = input$scaling
-        )
-      } else {
-        ggsave(
-          file,
-          plot = pca.cd.coord.2(),
-          device = input$device,
-          dpi = input$resolution,
-          width = input$width,
-          height = input$height
-        )
-      }
-    }
-  )
 
   #### Parameter table----
 
@@ -1681,10 +1561,6 @@ server <- shinyServer(function(input, output, session) {
     pca.ids.twss()
   })
 
-  output$pca.ids.twss.2 <- renderPlot({
-    pca.ids.twss()
-  })
-
   pca.ids.gap <- reactive({
     clusGap(
       pca.ids()$ind$coord,
@@ -1724,10 +1600,6 @@ server <- shinyServer(function(input, output, session) {
     pca.ids.gap()
   })
 
-  output$pca.ids.gap.2 <- renderPlot({
-    pca.ids.gap()
-  })
-
   #k-means clustering
   #done on all 5 kept dimensions
   pca.ids.km <- reactive({
@@ -1743,62 +1615,16 @@ server <- shinyServer(function(input, output, session) {
 
   #### Analytics----
 
-  ##### Scree----
-  pca.ids.scree <- reactive({
-    pca.ids.scree <- data.frame(pca.ids()$eig) %>%
-      mutate(dim = seq_along(data.frame(pca.ids()$eig))) %>%
-      filter(dim <= 10) %>%
-      ggplot(aes(x = dim, y = percentage.of.variance)) +
-      geom_bar(
-        stat = 'identity',
-        aes(fill = -dim),
-        show.legend = FALSE
-      ) +
-      geom_point(
-        aes(
-          x = dim,
-          y = cumsum(percentage.of.variance)
-        ),
-        size = 5
-      ) +
-      geom_line(
-        aes(
-          x = dim,
-          y = cumsum(percentage.of.variance)
-        ),
-        size = 1
-      ) +
-      custom.theme.markdown +
-      scale_x_continuous(expand = c(0, 0), limits = c(0, NA)) +
-      scale_y_continuous(expand = c(0, NA), limits = c(0, 105)) +
-      labs(
-        y = 'Variance contribution (%)',
-        x = 'Dimension'
-      )
-
-    #diagnostics
-    # save(pca.ids.scree, file = "scree.rdata")
-
-    return(pca.ids.scree)
-  })
-
-  output$pca.ids.scree <- renderPlot({
-    pca.ids.scree()
-  })
-
-  output$pca.ids.scree.2 <- renderPlot({
-    pca.ids.scree()
-  })
 
   ##### Factor map----
   pca.ids.fac.map <- reactive({
     pca.cd.fac.map <- data.frame(pca.ids()$var$cos2) %>%
-      select(input$dim.ids) %>%
+      select(input$dim.pca) %>%
       mutate(
         var = as.numeric(substr(rownames(data.frame(pca.ids()$var$cos2)), 5, 7))
       ) %>%
       pivot_longer(
-        cols = seq_along(input$dim.ids),
+        cols = seq_along(input$dim.pca),
         names_to = 'dim',
         values_to = 'cos2'
       ) %>%
@@ -1836,19 +1662,16 @@ server <- shinyServer(function(input, output, session) {
   output$pca.ids.fac.map <- renderPlot({
     pca.ids.fac.map()
   })
-  output$pca.ids.fac.map.2 <- renderPlot({
-    pca.ids.fac.map()
-  })
 
   ##### Correlation circle----
   pca.ids.var.cor <- reactive({
     data.frame(pca.ids()$var$cor) %>%
-      select(input$dim.ids[1], input$dim.ids[2]) %>%
+      select(input$dim.pca[1], input$dim.pca[2]) %>%
       mutate(var = rownames(data.frame(pca.ids()$var$cor))) %>%
       magrittr::set_colnames(c("Dim.1", "Dim.2", "var")) %>%
       left_join(
         data.frame(pca.ids()$var$cos2) %>%
-          select(input$dim.ids[1], input$dim.ids[2]) %>%
+          select(input$dim.pca[1], input$dim.pca[2]) %>%
           magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
           mutate(sum.cos2 = Dim.1 + Dim.2) %>%
           select(sum.cos2) %>%
@@ -1886,8 +1709,8 @@ server <- shinyServer(function(input, output, session) {
       scale_x_continuous(limits = c(-1, 1)) +
       scale_y_continuous(limits = c(-1, 1)) +
       labs(
-        y = input$dim.ids[2],
-        x = input$dim.ids[1]
+        y = input$dim.pca[2],
+        x = input$dim.pca[1]
       ) +
       custom.theme.markdown +
       scale_color_continuous(
@@ -1902,20 +1725,16 @@ server <- shinyServer(function(input, output, session) {
     pca.ids.var.cor()
   })
 
-  output$pca.ids.var.cor.2 <- renderPlot({
-    pca.ids.var.cor()
-  })
-
   #### Variable coordinates-----
 
   pca.ids.var.coord <- reactive({
     data.frame(pca.ids()$var$coord) %>%
-      select(input$dim.ids[1], input$dim.ids[2]) %>%
+      select(input$dim.pca[1], input$dim.pca[2]) %>%
       magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
       mutate(var = rownames(data.frame(pca.ids()$var$coord))) %>%
       left_join(
         data.frame(pca.ids()$var$cos2) %>%
-          select(input$dim.ids[1], input$dim.ids[2]) %>%
+          select(input$dim.pca[1], input$dim.pca[2]) %>%
           magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
           mutate(sum.cos2 = Dim.1 + Dim.2) %>%
           select(sum.cos2) %>%
@@ -1948,8 +1767,8 @@ server <- shinyServer(function(input, output, session) {
       ) +
       custom.theme.markdown +
       labs(
-        y = input$dim.ids[2],
-        x = input$dim.ids[1]
+        y = input$dim.pca[2],
+        x = input$dim.pca[1]
       ) +
       scale_color_continuous(
         type = 'viridis',
@@ -1960,9 +1779,6 @@ server <- shinyServer(function(input, output, session) {
   })
 
   output$pca.ids.var.coord <- renderPlot({
-    pca.ids.var.coord()
-  })
-  output$pca.ids.var.coord.2 <- renderPlot({
     pca.ids.var.coord()
   })
 
@@ -2053,7 +1869,7 @@ server <- shinyServer(function(input, output, session) {
 
   pca.ids.coord <- reactive({
     data.frame(pca.ids()$ind$coord) %>%
-      select(c("Dim.1", "Dim.2"), c("Dim.1", "Dim.2")[2]) %>%
+      select(input$dim.pca[1], input$dim.pca[2]) %>%
       cbind(training.ids()) %>%
       add_column(km = pca.ids.km()$cluster) %>%
       left_join(
@@ -2075,8 +1891,8 @@ server <- shinyServer(function(input, output, session) {
       ) %>%
       pca.plotR(
         .,
-        dim.1 = c("Dim.1", "Dim.2")[1],
-        dim.2 = c("Dim.1", "Dim.2")[2],
+        dim.1 = input$dim.pca[1],
+        dim.2 = input$dim.pca[2],
         color = input$ref.color,
         shape = input$ref.color,
         symbol_scaling = input$pca.eps.symbol,
@@ -2095,7 +1911,7 @@ server <- shinyServer(function(input, output, session) {
 
   pca.ids.coord.2 <- reactive({
     data.frame(pca.ids()$ind$coord) %>%
-      select(input$dim.ids.2[1], input$dim.ids.2[2]) %>%
+      select(input$dim.pca[1], input$dim.pca[2]) %>%
       cbind(training.ids()) %>%
       add_column(km = pca.ids.km()$cluster) %>%
       left_join(
@@ -2117,8 +1933,8 @@ server <- shinyServer(function(input, output, session) {
       ) %>%
       pca.plotR(
         .,
-        dim.1 = input$dim.ids.2[1],
-        dim.2 = input$dim.ids.2[2],
+        dim.1 = input$dim.pca[1],
+        dim.2 = input$dim.pca[2],
         color = input$pca.color.ids.2,
         shape = input$pca.shape.ids.2
       )
@@ -2127,62 +1943,6 @@ server <- shinyServer(function(input, output, session) {
   output$pca.ids.coord.2 <- renderPlot({
     pca.ids.coord.2()
   })
-
-  output$dwn.pca.ids <- downloadHandler(
-    filename = function() {
-      paste("PCA - IDS -- view 1", input$device, sep = ".")
-    },
-    content = function(file) {
-      if (input$device == "png") {
-        ggsave(
-          file,
-          plot = pca.ids.coord(),
-          device = input$device,
-          dpi = input$resolution,
-          width = input$width,
-          height = input$height,
-          scaling = input$scaling
-        )
-      } else {
-        ggsave(
-          file,
-          plot = pca.ids.coord(),
-          device = input$device,
-          dpi = input$resolution,
-          width = input$width,
-          height = input$height
-        )
-      }
-    }
-  )
-
-  output$dwn.pca.ids.2 <- downloadHandler(
-    filename = function() {
-      paste("PCA - IDS -- view 2", input$device, sep = ".")
-    },
-    content = function(file) {
-      if (input$device == "png") {
-        ggsave(
-          file,
-          plot = pca.ids.coord.2(),
-          device = input$device,
-          dpi = input$resolution,
-          width = input$width,
-          height = input$height,
-          scaling = input$scaling
-        )
-      } else {
-        ggsave(
-          file,
-          plot = pca.ids.coord.2(),
-          device = input$device,
-          dpi = input$resolution,
-          width = input$width,
-          height = input$height
-        )
-      }
-    }
-  )
 
   #### Parameter table----
 
@@ -2970,7 +2730,7 @@ server <- shinyServer(function(input, output, session) {
     #merging
     cd.predict <- cd.predict.0 %>%
       as.data.frame() %>%
-      select(c("Dim.1", "Dim.2")[1], c("Dim.1", "Dim.2")[2]) %>%
+      select(input$dim.pca[1], input$dim.pca[2]) %>%
       magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
       cbind(user.cd()) %>%
       cbind(km = km.predict) %>%
@@ -2998,7 +2758,7 @@ server <- shinyServer(function(input, output, session) {
     #merging
     cd.predict <- cd.predict.0 %>%
       as.data.frame() %>%
-      select(input$dim.cd.2[1], input$dim.cd.2[2]) %>%
+      select(input$dim.pca[1], input$dim.pca[2]) %>%
       magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
       cbind(user.cd()) %>%
       cbind(km = km.predict) %>%
@@ -3061,7 +2821,7 @@ server <- shinyServer(function(input, output, session) {
       rbind(
         data.frame(pca.cd()$ind$coord) %>%
           ungroup() %>%
-          select(c("Dim.1", "Dim.2")[1], c("Dim.1", "Dim.2")[2]) %>%
+          select(input$dim.pca[1], input$dim.pca[2]) %>%
           magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
           cbind(training.cd()) %>%
           add_column(km = pca.cd.km()$cluster) %>%
@@ -3101,8 +2861,8 @@ server <- shinyServer(function(input, output, session) {
     pca.cd.coord %>%
       pca.plotR(
         .,
-        dim.1 = c("Dim.1", "Dim.2")[1],
-        dim.2 = c("Dim.1", "Dim.2")[2],
+        dim.1 = input$dim.pca[1],
+        dim.2 = input$dim.pca[2],
         color = input$ref.color,
         shape = input$ref.color,
         symbol_scaling = input$pca.cd.symbol,
@@ -3135,7 +2895,7 @@ server <- shinyServer(function(input, output, session) {
       rbind(
         data.frame(pca.cd()$ind$coord) %>%
           ungroup() %>%
-          select(input$dim.cd.2[1], input$dim.cd.2[2]) %>%
+          select(input$dim.pca[1], input$dim.pca[2]) %>%
           magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
           cbind(training.cd()) %>%
           add_column(km = pca.cd.km()$cluster) %>%
@@ -3175,8 +2935,8 @@ server <- shinyServer(function(input, output, session) {
     pca.cd.coord %>%
       pca.plotR(
         .,
-        dim.1 = input$dim.cd.2[1],
-        dim.2 = input$dim.cd.2[2],
+        dim.1 = input$dim.pca[1],
+        dim.2 = input$dim.pca[2],
         color = input$pca.color.cd.2,
         shape = input$pca.shape.cd.2
       )
@@ -3276,7 +3036,7 @@ server <- shinyServer(function(input, output, session) {
     #merging
     ids.predict <- ids.predict.0 %>%
       as.data.frame() %>%
-      select(c("Dim.1", "Dim.2")[1], c("Dim.1", "Dim.2")[2]) %>%
+      select(input$dim.pca[1], input$dim.pca[2]) %>%
       magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
       cbind(user.ids()) %>%
       cbind(km = km.predict) %>%
@@ -3304,7 +3064,7 @@ server <- shinyServer(function(input, output, session) {
     #merging
     ids.predict <- ids.predict.0 %>%
       as.data.frame() %>%
-      select(input$dim.ids.2[1], input$dim.ids.2[2]) %>%
+      select(input$dim.pca[1], input$dim.pca[2]) %>%
       magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
       cbind(user.ids()) %>%
       cbind(km = km.predict) %>%
@@ -3367,7 +3127,7 @@ server <- shinyServer(function(input, output, session) {
       rbind(
         data.frame(pca.ids()$ind$coord) %>%
           ungroup() %>%
-          select(c("Dim.1", "Dim.2")[1], c("Dim.1", "Dim.2")[2]) %>%
+          select(input$dim.pca[1], input$dim.pca[2]) %>%
           magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
           cbind(training.ids()) %>%
           add_column(km = pca.ids.km()$cluster) %>%
@@ -3407,8 +3167,8 @@ server <- shinyServer(function(input, output, session) {
     pca.ids.coord %>%
       pca.plotR(
         .,
-        dim.1 = c("Dim.1", "Dim.2")[1],
-        dim.2 = c("Dim.1", "Dim.2")[2],
+        dim.1 = input$dim.pca[1],
+        dim.2 = input$dim.pca[2],
         color = input$ref.color,
         shape = input$ref.color,
         symbol_scaling = input$pca.eps.symbol,
@@ -3441,7 +3201,7 @@ server <- shinyServer(function(input, output, session) {
       rbind(
         data.frame(pca.ids()$ind$coord) %>%
           ungroup() %>%
-          select(input$dim.ids.2[1], input$dim.ids.2[2]) %>%
+          select(input$dim.pca[1], input$dim.pca[2]) %>%
           magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
           cbind(training.ids()) %>%
           add_column(km = pca.ids.km()$cluster) %>%
@@ -3481,8 +3241,8 @@ server <- shinyServer(function(input, output, session) {
     pca.ids.coord %>%
       pca.plotR(
         .,
-        dim.1 = input$dim.ids.2[1],
-        dim.2 = input$dim.ids.2[2],
+        dim.1 = input$dim.pca[1],
+        dim.2 = input$dim.pca[2],
         color = input$pca.color.ids.2,
         shape = input$pca.shape.ids.2
       )
