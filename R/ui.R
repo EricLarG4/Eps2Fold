@@ -195,11 +195,18 @@ ui <- bslib::page_navbar(
           multiple = TRUE,
           sliderInput(
             inputId = "ncp",
-            label = "PCA dimensions",
+            label = "PCA dimensions to compute",
             min = 2,
             max = 10,
             value = 3,
             step = 1
+          ),
+          selectInput(
+            inputId = "dim.pca",
+            label = "Dimensions to plot",
+            choices = paste0("Dim.", 1:10),
+            multiple = TRUE,
+            selected = c("Dim.1", "Dim.2")
           ),
           input_switch(
             id = "scale.unit",
