@@ -803,10 +803,25 @@ server <- shinyServer(function(input, output, session) {
       )
 
     norm_col <- if (input$ids.norm == "Δε") "delta.eps.ids" else "norm.ids"
-    axis_label_text <- if (input$ids.norm == "Δε")
-      "&Delta;&epsilon; (M<sup>-1</sup>cm<sup>-1</sup>)" else "Normalized IDS"
+    axis_label_text <- if (input$ids.norm == "Δε") {
+      "&Delta;&epsilon; (M<sup>-1</sup>cm<sup>-1</sup>)"
+    } else {
+      "Normalized IDS"
+    }
 
-    render_ref_plot(ref.ids, input, norm_col, axis_label_text)
+    render_ref_plot(
+      ref.ids,
+      input,
+      norm_col,
+      axis_label_text,
+      legend_position = input$legend.position.plot.eps,
+      symbol_scaling = input$plot.eps.symbol,
+      axis_text_scaling = input$plot.eps.text,
+      line_scaling = input$plot.eps.line,
+      legend_text_scaling = input$plot.eps.legend,
+      panel_spacing = input$plot.eps.spacing,
+      panel_cols = input$plot.eps.cols
+    )
   })
 
   output$p.ref.cd <- renderPlot({
@@ -826,10 +841,25 @@ server <- shinyServer(function(input, output, session) {
       )
 
     norm_col <- if (input$cd.norm == "Δε") "delta.eps.cd" else "norm.cd"
-    axis_label_text <- if (input$cd.norm == "Δε")
-      "&Delta;&epsilon; (M<sup>-1</sup>cm<sup>-1</sup>)" else "Normalized CD"
+    axis_label_text <- if (input$cd.norm == "Δε") {
+      "&Delta;&epsilon; (M<sup>-1</sup>cm<sup>-1</sup>)"
+    } else {
+      "Normalized CD"
+    }
 
-    render_ref_plot(ref.cd, input, norm_col, axis_label_text)
+    render_ref_plot(
+      ref.cd,
+      input,
+      norm_col,
+      axis_label_text,
+      legend_position = input$legend.position.plot.cd,
+      symbol_scaling = input$plot.cd.symbol,
+      axis_text_scaling = input$plot.cd.text,
+      line_scaling = input$plot.cd.line,
+      legend_text_scaling = input$plot.cd.legend,
+      panel_spacing = input$plot.cd.spacing,
+      panel_cols = input$plot.cd.cols
+    )
   })
 
   # PCA----
@@ -1436,10 +1466,17 @@ server <- shinyServer(function(input, output, session) {
       ) %>%
       pca.plotR(
         .,
-        dim.1 = input$dim.cd[1],
-        dim.2 = input$dim.cd[2],
-        color = input$pca.color.cd,
-        shape = input$pca.shape.cd
+        dim.1 = c("Dim.1", "Dim.2")[1],
+        dim.2 = c("Dim.1", "Dim.2")[2],
+        color = input$ref.color,
+        shape = input$ref.color,
+        symbol_scaling = input$pca.cd.symbol,
+        label_scaling = input$pca.cd.label,
+        axis_text_scaling = input$pca.cd.text,
+        legend_text_scaling = input$pca.cd.legend,
+        line_scaling = input$pca.cd.line,
+        force_scaling = input$pca.cd.force,
+        legend_position = input$legend.position.cd
       )
   })
 
@@ -2038,10 +2075,17 @@ server <- shinyServer(function(input, output, session) {
       ) %>%
       pca.plotR(
         .,
-        dim.1 = input$dim.ids[1],
-        dim.2 = input$dim.ids[2],
-        color = input$pca.color.ids,
-        shape = input$pca.shape.ids
+        dim.1 = c("Dim.1", "Dim.2")[1],
+        dim.2 = c("Dim.1", "Dim.2")[2],
+        color = input$ref.color,
+        shape = input$ref.color,
+        symbol_scaling = input$pca.eps.symbol,
+        label_scaling = input$pca.eps.label,
+        axis_text_scaling = input$pca.eps.text,
+        legend_text_scaling = input$pca.eps.legend,
+        line_scaling = input$pca.eps.line,
+        force_scaling = input$pca.eps.force,
+        legend_position = input$legend.position.eps
       )
   })
 
@@ -2688,32 +2732,32 @@ server <- shinyServer(function(input, output, session) {
 
   output$p.user.uv <- renderPlot({
     req(file.toggle.user() != "no")
-      user.uv.input() %>%
-        filter(oligo %in% input$user.seq.oligo) %>%
-        ggplot(
-          aes(
-            x = wl,
-            y = eps,
-            color = cation,
-            group = cation
-          )
-        ) +
-        geom_line(
-          size = 1,
-          show.legend = T
-        ) +
-        facet_wrap(
-          ~oligo,
-          ncol = 4
-        ) +
-        labs(
-          x = "&lambda; (nm)",
-          y = "&epsilon; (M<sup>-1</sup> cm<sup>-1</sup>)",
-          color = "Cation"
-        ) +
-        custom.theme.markdown +
-        scale_y_continuous(n.breaks = 3) +
-        scale_x_continuous(expand = c(0, 0))
+    user.uv.input() %>%
+      filter(oligo %in% input$user.seq.oligo) %>%
+      ggplot(
+        aes(
+          x = wl,
+          y = eps,
+          color = cation,
+          group = cation
+        )
+      ) +
+      geom_line(
+        size = 1,
+        show.legend = T
+      ) +
+      facet_wrap(
+        ~oligo,
+        ncol = 4
+      ) +
+      labs(
+        x = "&lambda; (nm)",
+        y = "&epsilon; (M<sup>-1</sup> cm<sup>-1</sup>)",
+        color = "Cation"
+      ) +
+      custom.theme.markdown +
+      scale_y_continuous(n.breaks = 3) +
+      scale_x_continuous(expand = c(0, 0))
   })
 
   ##### IDS----
@@ -2971,7 +3015,7 @@ server <- shinyServer(function(input, output, session) {
     } else {
       cd.predict() %>%
         ungroup() %>%
-        select(oligo, Dim.1, Dim.2) %>% 
+        select(oligo, Dim.1, Dim.2) %>%
         datatable(
           style = "bootstrap",
           extensions = c('Buttons', 'Responsive', 'Scroller'),
@@ -3057,10 +3101,17 @@ server <- shinyServer(function(input, output, session) {
     pca.cd.coord %>%
       pca.plotR(
         .,
-        dim.1 = input$dim.cd[1],
-        dim.2 = input$dim.cd[2],
-        color = input$pca.color.cd,
-        shape = input$pca.shape.cd
+        dim.1 = c("Dim.1", "Dim.2")[1],
+        dim.2 = c("Dim.1", "Dim.2")[2],
+        color = input$ref.color,
+        shape = input$ref.color,
+        symbol_scaling = input$pca.cd.symbol,
+        label_scaling = input$pca.cd.label,
+        axis_text_scaling = input$pca.cd.text,
+        legend_text_scaling = input$pca.cd.legend,
+        line_scaling = input$pca.cd.line,
+        force_scaling = input$pca.cd.force,
+        legend_position = input$legend.position.cd
       )
   })
 
@@ -3264,13 +3315,13 @@ server <- shinyServer(function(input, output, session) {
 
   #####plots----
 
-    output$predict.ids.table <- renderDT(server = FALSE, {
+  output$predict.ids.table <- renderDT(server = FALSE, {
     if (file.toggle.user() == 'no') {
       return(NULL)
     } else {
       ids.predict() %>%
         ungroup() %>%
-        select(oligo, Dim.1, Dim.2) %>% 
+        select(oligo, Dim.1, Dim.2) %>%
         datatable(
           style = "bootstrap",
           extensions = c('Buttons', 'Responsive', 'Scroller'),
@@ -3356,10 +3407,17 @@ server <- shinyServer(function(input, output, session) {
     pca.ids.coord %>%
       pca.plotR(
         .,
-        dim.1 = input$dim.ids[1],
-        dim.2 = input$dim.ids[2],
-        color = input$pca.color.ids,
-        shape = input$pca.shape.ids
+        dim.1 = c("Dim.1", "Dim.2")[1],
+        dim.2 = c("Dim.1", "Dim.2")[2],
+        color = input$ref.color,
+        shape = input$ref.color,
+        symbol_scaling = input$pca.eps.symbol,
+        label_scaling = input$pca.eps.label,
+        axis_text_scaling = input$pca.eps.text,
+        legend_text_scaling = input$pca.eps.legend,
+        line_scaling = input$pca.eps.line,
+        force_scaling = input$pca.eps.force,
+        legend_position = input$legend.position.eps
       )
   })
 
@@ -3546,7 +3604,7 @@ server <- shinyServer(function(input, output, session) {
       ) +
       geom_line(linewidth = 0.8) +
       geom_point(
-        data = . %>% 
+        data = . %>%
           filter(wl == input$calc_wavelength),
         size = 5,
         show.legend = FALSE
@@ -3567,6 +3625,6 @@ server <- shinyServer(function(input, output, session) {
         expand = c(0, 0),
         labels = function(x) format(x, scientific = TRUE)
       ) +
-        coord_cartesian(clip = 'off')
+      coord_cartesian(clip = 'off')
   })
 })
