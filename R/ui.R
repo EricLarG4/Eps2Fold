@@ -114,7 +114,7 @@ ui <- bslib::page_navbar(
         )
       ),
       conditionalPanel(
-        condition = "input.nav === 'Data'",
+        condition = "input.nav === 'Home' | input.nav === 'PCA explorer'",
         accordion_panel(
           id = 'tabinput',
           title = "Data input",
@@ -141,46 +141,32 @@ ui <- bslib::page_navbar(
           ),
           link_template_ref,
           link_template_user
-        ),
-        accordion_panel(
-          title = 'Data filters',
-          icon = icon('filter'),
-          open = TRUE,
-          multiple = TRUE,
-          uiOutput("ref.seq.topo.0_ui"),
-          uiOutput("ref.seq.confomer.0_ui"),
-          uiOutput("ref.seq.gba.0_ui"),
-          uiOutput("ref.seq.gba.stacks.0_ui"),
-          uiOutput("ref.seq.tetrad.0_ui"),
-          uiOutput("ref.seq.tetrad.id.0_ui"),
-          uiOutput("ref.seq.loop.0_ui"),
-          uiOutput("ref.seq.plus.minus.0_ui"),
-          uiOutput("ref.seq.groove.0_ui"),
-          uiOutput("ref.seq.cation.0_ui"),
-          uiOutput("ref.seq.oligo.0_ui"),
-          uiOutput("user.seq.oligo.0_ui")
         )
       ),
       conditionalPanel(
-        condition = "input.nav === 'Data plots'",
+        condition = "input.nav === 'Home'",
         accordion_panel(
           id = 'tabplot',
           title = 'Plot options',
           icon = icon("compass-drafting"),
           open = TRUE,
           multiple = TRUE,
-          input_switch(
-            id = "ids.ref.select",
-            label = "Theoretical UV reference",
-            value = TRUE
-          ),
-          sliderInput(
-            inputId = "wl",
-            label = "Wavelength (nm)",
-            min = 220,
-            max = 350,
-            value = c(220, 310),
-            step = 5
+          selectInput(
+            inputId = "ref.color",
+            label = "Grouping variable",
+            choices = c(
+              "Topology",
+              "Conformer",
+              "GBA",
+              "GBA stacks",
+              "Tetrads",
+              "Tetrad combination",
+              "Loop progression",
+              "Tetrad handedness",
+              "Grooves",
+              "Cation"
+            ),
+            selected = "GBA"
           ),
           selectInput(
             inputId = "ids.norm",
@@ -200,22 +186,18 @@ ui <- bslib::page_navbar(
             choices = c("Panels", "Superimposed", "Mean"),
             selected = "Panels"
           ),
-          selectInput(
-            inputId = "ref.color",
-            label = "Coloring",
-            choices = c(
-              "Topology",
-              "Conformer",
-              "GBA",
-              "GBA stacks",
-              "Tetrads",
-              "Tetrad combination",
-              "Loop progression",
-              "Tetrad handedness",
-              "Grooves",
-              "Cation"
-            ),
-            selected = "Topology"
+          sliderInput(
+            inputId = "wl",
+            label = "Wavelength (nm)",
+            min = 220,
+            max = 350,
+            value = c(220, 310),
+            step = 5
+          ),
+          input_switch(
+            id = "ids.ref.select",
+            label = "Theoretical UV reference",
+            value = TRUE
           )
         ),
         accordion_panel(
@@ -250,7 +232,8 @@ ui <- bslib::page_navbar(
         )
       ),
       conditionalPanel(
-        condition = "input.nav === 'PCA'",
+        condition = "input.nav === 'PCA explorer' | input.nav === 'Home'",
+        # condition = "input.nav === 'PCA explorer' | input.nav === 'Home'",
         accordion_panel(
           id = "tabpca",
           class = "collapse in",
@@ -318,6 +301,470 @@ ui <- bslib::page_navbar(
             max = 310,
             value = 260,
             step = 1
+          )
+        )
+      ),
+      accordion_panel(
+        title = "Theming",
+        selectInput(
+          "theme_select",
+          label = "Theme:",
+          choices = c(
+            "default",
+            "cerulean",
+            "cosmo",
+            "cyborg",
+            "darkly",
+            "flatly",
+            "journal",
+            "litera",
+            "lumen",
+            "lux",
+            "materia",
+            "minty",
+            "morph",
+            "pulse",
+            "quartz",
+            "sandstone",
+            "simplex",
+            "sketchy",
+            "slate",
+            "solar",
+            "spacelab",
+            "superhero",
+            "united",
+            "vapor",
+            "yeti",
+            "zephyr"
+          ),
+          selected = "cosmo",
+          multiple = FALSE,
+          width = "100%"
+        ),
+        #slider for font size
+        sliderInput(
+          inputId = "font_size",
+          label = "Font size:",
+          min = 0.1,
+          max = 2,
+          value = 0.9,
+          step = 0.1,
+          width = "100%"
+        )
+      )
+    )
+  ),
+  nav_panel(
+    id = "Home",
+    title = "Home",
+    icon = icon("house"),
+    navset_card_tab(
+      nav_panel(
+        title = 'Eps2Fold',
+        icon = icon("paper-plane"),
+        layout_column_wrap(
+          width = 1,
+          card(
+            full_screen = TRUE,
+            card_header(
+              "PCA plot",
+              tooltip(
+                bs_icon("info-circle"),
+                HTML(
+                  "<b>Expand</b> the view by clicking on the bottom-right button.<br>
+                   <b>Customize</b> the figure with the right sidebar.<br>
+                   <b>Copy or save as a PNG</b> by right-clicking on the image and selecting the <i>ad hoc</i> option."
+                )
+              )
+            ),
+            layout_sidebar(
+              fillable = TRUE,
+              sidebar = sidebar(
+                position = 'right',
+                open = "closed",
+                sliderInput(
+                  inputId = "pca.eps.symbol",
+                  label = "Symbol scaling",
+                  min = 0,
+                  max = 4,
+                  value = 1,
+                  step = 0.1
+                ),
+                sliderInput(
+                  inputId = "pca.eps.label",
+                  label = "Label scaling",
+                  min = 0,
+                  max = 4,
+                  value = 1,
+                  step = 0.1
+                ),
+                sliderInput(
+                  inputId = "pca.eps.force",
+                  label = "Label repulsion scaling",
+                  min = 0,
+                  max = 20,
+                  value = 1,
+                  step = 0.5
+                ),
+                sliderInput(
+                  inputId = "pca.eps.text",
+                  label = "Axis text scaling",
+                  min = 0,
+                  max = 4,
+                  value = 1,
+                  step = 0.1
+                ),
+                sliderInput(
+                  inputId = "pca.eps.legend",
+                  label = "Legend text scaling",
+                  min = 0,
+                  max = 4,
+                  value = 1,
+                  step = 0.1
+                ),
+                sliderInput(
+                  inputId = "pca.eps.line",
+                  label = "Line scaling",
+                  min = 0,
+                  max = 4,
+                  value = 1,
+                  step = 0.1
+                ),
+                selectizeInput(
+                  "legend.position.eps",
+                  "Legend position",
+                  list(
+                    "Bottom" = "bottom",
+                    "Right" = "right",
+                    "Left" = "left",
+                    "Top" = "top",
+                    "None" = "none"
+                  )
+                )
+              ),
+              #if user input supplied, show prediction, otherwise ref. panel PCA only
+              uiOutput("conditional_pca_plot_ids")
+            )
+          ),
+          card(
+            full_screen = TRUE,
+            card_header(
+              "Data plot",
+              tooltip(
+                bs_icon("info-circle"),
+                HTML(
+                  "<b>Expand</b> the view by clicking on the bottom-right button.<br>
+                   <b>Customize</b> the figure with the right sidebar.<br>
+                   <b>Copy or save as a PNG</b> by right-clicking on the image and selecting the <i>ad hoc</i> option."
+                )
+              )
+            ),
+            layout_sidebar(
+              fillable = TRUE,
+              sidebar = sidebar(
+                position = 'right',
+                open = "closed",
+                sliderInput(
+                  inputId = "plot.eps.symbol",
+                  label = "Spectrum line scaling",
+                  min = 0,
+                  max = 4,
+                  value = 1,
+                  step = 0.1
+                ),
+                sliderInput(
+                  inputId = "plot.eps.text",
+                  label = "Axis text scaling",
+                  min = 0,
+                  max = 4,
+                  value = 1,
+                  step = 0.1
+                ),
+                sliderInput(
+                  inputId = "plot.eps.legend",
+                  label = "Legend text scaling",
+                  min = 0,
+                  max = 4,
+                  value = 1,
+                  step = 0.1
+                ),
+                sliderInput(
+                  inputId = "plot.eps.line",
+                  label = "Axis line scaling",
+                  min = 0,
+                  max = 4,
+                  value = 1,
+                  step = 0.1
+                ),
+                sliderInput(
+                  inputId = "plot.eps.spacing",
+                  label = "Panel spacing scaling",
+                  min = 0,
+                  max = 4,
+                  value = 1,
+                  step = 0.1
+                ),
+                sliderInput(
+                  inputId = "plot.eps.cols",
+                  label = "Columns (0 = auto)",
+                  min = 0,
+                  max = 10,
+                  value = 0,
+                  step = 1
+                ),
+                selectizeInput(
+                  "legend.position.plot.eps",
+                  "Legend position",
+                  list(
+                    "Bottom" = "bottom",
+                    "Right" = "right",
+                    "Left" = "left",
+                    "Top" = "top",
+                    "None" = "none"
+                  )
+                )
+              ),
+              plotOutput(
+                "p.ref.ids",
+                height = "1200px"
+              )
+            )
+          )
+        )
+      ),
+      nav_panel(
+        title = 'CD',
+        icon = icon("circle-half-stroke"),
+        layout_column_wrap(
+          width = 1,
+          card(
+            height = "800px",
+            full_screen = TRUE,
+            card_header(
+              "PCA plot",
+              tooltip(
+                bs_icon("info-circle"),
+                HTML(
+                  "<b>Expand</b> the view by clicking on the bottom-right button.<br>
+                   <b>Customize</b> the figure with the right sidebar.<br>
+                   <b>Copy or save as a PNG</b> by right-clicking on the image and selecting the <i>ad hoc</i> option."
+                )
+              )
+            ),
+            layout_sidebar(
+              fillable = TRUE,
+              sidebar = sidebar(
+                position = 'right',
+                open = "closed",
+                sliderInput(
+                  inputId = "pca.cd.symbol",
+                  label = "Symbol scaling",
+                  min = 0,
+                  max = 4,
+                  value = 1,
+                  step = 0.1
+                ),
+                sliderInput(
+                  inputId = "pca.cd.label",
+                  label = "Label scaling",
+                  min = 0,
+                  max = 4,
+                  value = 1,
+                  step = 0.1
+                ),
+                sliderInput(
+                  inputId = "pca.cd.force",
+                  label = "Label repulsion scaling",
+                  min = 0,
+                  max = 20,
+                  value = 1,
+                  step = 0.5
+                ),
+                sliderInput(
+                  inputId = "pca.cd.text",
+                  label = "Axis text scaling",
+                  min = 0,
+                  max = 4,
+                  value = 1,
+                  step = 0.1
+                ),
+                sliderInput(
+                  inputId = "pca.cd.legend",
+                  label = "Legend text scaling",
+                  min = 0,
+                  max = 4,
+                  value = 1,
+                  step = 0.1
+                ),
+                sliderInput(
+                  inputId = "pca.cd.line",
+                  label = "Line scaling",
+                  min = 0,
+                  max = 4,
+                  value = 1,
+                  step = 0.1
+                ),
+                selectizeInput(
+                  "legend.position.cd",
+                  "Legend position",
+                  list(
+                    "Bottom" = "bottom",
+                    "Right" = "right",
+                    "Left" = "left",
+                    "Top" = "top",
+                    "None" = "none"
+                  )
+                )
+              ),
+              #if user input supplied, show prediction, otherwise ref. panel PCA only
+              uiOutput("conditional_pca_plot_cd")
+            )
+          ),
+          card(
+            full_screen = TRUE,
+            card_header(
+              "Data plot",
+              tooltip(
+                bs_icon("info-circle"),
+                HTML(
+                  "<b>Expand</b> the view by clicking on the bottom-right button.<br>
+                   <b>Customize</b> the figure with the right sidebar.<br>
+                   <b>Copy or save as a PNG</b> by right-clicking on the image and selecting the <i>ad hoc</i> option."
+                )
+              )
+            ),
+            layout_sidebar(
+              fillable = TRUE,
+              sidebar = sidebar(
+                position = 'right',
+                open = "closed",
+                sliderInput(
+                  inputId = "plot.cd.symbol",
+                  label = "Spectrum line scaling",
+                  min = 0,
+                  max = 4,
+                  value = 1,
+                  step = 0.1
+                ),
+                sliderInput(
+                  inputId = "plot.cd.text",
+                  label = "Axis text scaling",
+                  min = 0,
+                  max = 4,
+                  value = 1,
+                  step = 0.1
+                ),
+                sliderInput(
+                  inputId = "plot.cd.legend",
+                  label = "Legend text scaling",
+                  min = 0,
+                  max = 4,
+                  value = 1,
+                  step = 0.1
+                ),
+                sliderInput(
+                  inputId = "plot.cd.line",
+                  label = "Axis line scaling",
+                  min = 0,
+                  max = 4,
+                  value = 1,
+                  step = 0.1
+                ),
+                sliderInput(
+                  inputId = "plot.cd.spacing",
+                  label = "Panel spacing scaling",
+                  min = 0,
+                  max = 4,
+                  value = 1,
+                  step = 0.1
+                ),
+                sliderInput(
+                  inputId = "plot.cd.cols",
+                  label = "Columns (0 = auto)",
+                  min = 0,
+                  max = 10,
+                  value = 0,
+                  step = 1
+                ),
+                selectizeInput(
+                  "legend.position.plot.cd",
+                  "Legend position",
+                  list(
+                    "Bottom" = "bottom",
+                    "Right" = "right",
+                    "Left" = "left",
+                    "Top" = "top",
+                    "None" = "none"
+                  )
+                )
+              ),
+              plotOutput(
+                "p.ref.cd",
+                height = "1200px"
+              )
+            )
+          )
+        )
+      ),
+      nav_panel(
+        title = "UV",
+        icon = icon("sun"),
+        card(
+          full_screen = TRUE,
+          card_header(
+            "Reference panel",
+            tooltip(
+              bs_icon("info-circle"),
+              "Expand the view by clicking on the bottom-right button."
+            )
+          ),
+          plotOutput(
+            "p.ref.uv",
+            height = "1200px"
+          )
+        ),
+        card(
+          full_screen = TRUE,
+          card_header(
+            "User panel",
+            tooltip(
+              bs_icon("info-circle"),
+              "Expand the view by clicking on the bottom-right button."
+            )
+          ),
+          uiOutput("p.user.uv.ui", height = "1200px")
+        )
+      ),
+      nav_panel(
+        title = "User data plots",
+        icon = icon("user-plus"),
+
+        card(
+          full_screen = TRUE,
+          card_header(
+            "Eps2Fold",
+            tooltip(
+              bs_icon("info-circle"),
+              "Expand the view by clicking on the bottom-right button."
+            )
+          ),
+          uiOutput(
+            "p.user.ids.ui",
+            height = "1200px"
+          )
+        ),
+        card(
+          full_screen = TRUE,
+          card_header(
+            "CD",
+            tooltip(
+              bs_icon("info-circle"),
+              "Expand the view by clicking on the bottom-right button."
+            )
+          ),
+          uiOutput(
+            "p.user.cd.ui",
+            height = "1200px"
           )
         )
       )
@@ -390,370 +837,80 @@ ui <- bslib::page_navbar(
       )
     )
   ),
+  # nav_panel(
+  #   title = "Data plots",
+  #   icon = icon("chart-line"),
+  #   navset_card_tab(
+  #     nav_panel(
+  #       title = 'Reference',
+  #       icon = icon("table-cells-row-lock"),
+  #       navset_card_tab(
+  #         nav_panel(
+  #           title = "UV",
+  #           plotOutput(
+  #             "p.ref.uv",
+  #             height = "1200px"
+  #           )
+  #         ),
+  #         # nav_panel(
+  #         #   title = "Eps2Fold",
+  #         #   plotOutput(
+  #         #     "p.ref.ids",
+  #         #     height = "1200px"
+  #         #   )
+  #         # ),
+  #         nav_panel(
+  #           title = "CD",
+  #           plotOutput(
+  #             "p.ref.cd",
+  #             height = "1200px"
+  #           )
+  #         )
+  #       )
+  #     ),
+  #     nav_panel(
+  #       title = "User",
+  #       icon = icon('user-plus'),
+  #       navset_card_tab(
+  #         nav_panel(
+  #           title = "UV",
+  #           plotOutput(
+  #             "p.user.uv",
+  #             height = "1200px"
+  #           )
+  #         ),
+  #         nav_panel(
+  #           title = "Eps2Fold",
+  #           plotOutput(
+  #             "p.user.ids",
+  #             height = "1200px"
+  #           )
+  #         ),
+  #         nav_panel(
+  #           title = "CD",
+  #           plotOutput(
+  #             "p.user.cd",
+  #             height = "1200px"
+  #           )
+  #         )
+  #       )
+  #     )
+  #   )
+  # ),
   nav_panel(
-    title = "Data plots",
-    icon = icon("chart-line"),
-    navset_card_tab(
-      nav_panel(
-        title = 'Reference',
-        icon = icon("table-cells-row-lock"),
-        navset_card_tab(
-          nav_panel(
-            title = "UV",
-            plotOutput(
-              "p.ref.uv",
-              height = "1200px"
-            )
-          ),
-          nav_panel(
-            title = "Eps2Fold",
-            plotOutput(
-              "p.ref.ids",
-              height = "1200px"
-            )
-          ),
-          nav_panel(
-            title = "CD",
-            plotOutput(
-              "p.ref.cd",
-              height = "1200px"
-            )
-          )
-        )
-      ),
-      nav_panel(
-        title = "User",
-        icon = icon('user-plus'),
-        navset_card_tab(
-          nav_panel(
-            title = "UV",
-            plotOutput(
-              "p.user.uv",
-              height = "1200px"
-            )
-          ),
-          nav_panel(
-            title = "Eps2Fold",
-            plotOutput(
-              "p.user.ids",
-              height = "1200px"
-            )
-          ),
-          nav_panel(
-            title = "CD",
-            plotOutput(
-              "p.user.cd",
-              height = "1200px"
-            )
-          )
-        )
-      )
-    )
-  ),
-  nav_panel(
-    title = "PCA",
+    title = "PCA explorer",
     icon = icon("circle-nodes"),
     navset_card_tab(
-      nav_panel(
-        title = 'CD',
-        icon = icon("circle-half-stroke"),
-        layout_column_wrap(
-          width = 1 / 2,
-          # width = "600px",
-          # height = "600px",
-          card(
-            height = "800px",
-            full_screen = TRUE,
-            card_header(
-              "View 1",
-              tooltip(
-                bs_icon("info-circle"),
-                "Expand the view by clicking on the bottom-right button."
-              )
-            ),
-            layout_sidebar(
-              fillable = TRUE,
-              sidebar = sidebar(
-                position = 'right',
-                selectInput(
-                  inputId = "dim.cd",
-                  label = "Dimensions",
-                  choices = paste0("Dim.", 1:10),
-                  multiple = TRUE,
-                  selected = c("Dim.1", "Dim.2")
-                ),
-                selectInput(
-                  inputId = "pca.color.cd",
-                  label = "PCA colors",
-                  choices = c(
-                    "k-means",
-                    "Topology",
-                    "Conformer",
-                    "GBA",
-                    "GBA stacks",
-                    "Tetrads",
-                    "Tetrad combination",
-                    "Loop progression",
-                    'Tetrads x Loops',
-                    "Tetrad handedness",
-                    "Grooves",
-                    "Cation"
-                  ),
-                  selected = "Topology"
-                ),
-                selectInput(
-                  inputId = "pca.shape.cd",
-                  label = "PCA shapes",
-                  choices = c(
-                    "k-means",
-                    "Topology",
-                    "Conformer",
-                    "GBA",
-                    "GBA stacks",
-                    "Tetrads",
-                    "Tetrad combination",
-                    "Loop progression",
-                    'Tetrads x Loops',
-                    "Tetrad handedness",
-                    "Grooves",
-                    "Cation"
-                  ),
-                  selected = "Topology"
-                ),
-                downloadButton("dwn.pca.cd", "Download")
-              ),
-              #if user input supplied, show prediction, otherwise ref. panel PCA only
-              uiOutput("conditional_pca_plot_cd")
-            )
-          ),
-          card(
-            height = "800px",
-            full_screen = TRUE,
-            card_header(
-              "View 2",
-              tooltip(
-                bs_icon("info-circle"),
-                "Expand the view by clicking on the bottom-right button."
-              )
-            ),
-            layout_sidebar(
-              fillable = TRUE,
-              sidebar = sidebar(
-                position = 'right',
-                selectInput(
-                  inputId = "dim.cd.2",
-                  label = "Dimensions",
-                  choices = paste0("Dim.", 1:10),
-                  multiple = TRUE,
-                  selected = c("Dim.1", "Dim.2")
-                ),
-                selectInput(
-                  inputId = "pca.color.cd.2",
-                  label = "PCA colors",
-                  choices = c(
-                    "k-means",
-                    "Topology",
-                    "Conformer",
-                    "GBA",
-                    "GBA stacks",
-                    "Tetrads",
-                    "Tetrad combination",
-                    "Loop progression",
-                    'Tetrads x Loops',
-                    "Tetrad handedness",
-                    "Grooves",
-                    "Cation"
-                  ),
-                  selected = "GBA"
-                ),
-                selectInput(
-                  inputId = "pca.shape.cd.2",
-                  label = "PCA shapes",
-                  choices = c(
-                    "k-means",
-                    "Topology",
-                    "Conformer",
-                    "GBA",
-                    "GBA stacks",
-                    "Tetrads",
-                    "Tetrad combination",
-                    "Loop progression",
-                    'Tetrads x Loops',
-                    "Tetrad handedness",
-                    "Grooves",
-                    "Cation"
-                  ),
-                  selected = "GBA"
-                ),
-                downloadButton(
-                  "dwn.pca.cd.2",
-                  "Download"
-                )
-              ),
-              #if user input supplied, show prediction, otherwise ref. panel PCA only
-              uiOutput("conditional_pca_plot_cd_2")
-            )
-          ),
-          card(
-            height = "800px",
-            full_screen = TRUE,
-            card_header(
-              "Diagnostics",
-              tooltip(
-                bs_icon("info-circle"),
-                "Expand the view by clicking on the bottom-right button."
-              )
-            ),
-            navset_card_tab(
-              selected = 'Variable contributions',
-              nav_panel(
-                title = "Scree",
-                plotOutput(
-                  "pca.cd.scree",
-                  height = "800px"
-                )
-              ),
-              nav_panel(
-                title = "Factor map",
-                plotOutput(
-                  "pca.cd.fac.map",
-                  height = "800px"
-                )
-              ),
-              nav_panel(
-                title = "Correlation circle",
-                plotOutput(
-                  "pca.cd.var.cor",
-                  height = "800px"
-                )
-              ),
-              nav_panel(
-                title = "Variable contributions",
-                plotOutput(
-                  "pca.cd.var.coord",
-                  height = "800px"
-                )
-              ),
-              nav_panel(
-                title = "Total within sum of squares",
-                plotOutput(
-                  "pca.cd.twss",
-                  height = "800px"
-                )
-              ),
-              nav_panel(
-                title = "Gap statistic",
-                plotOutput(
-                  "pca.cd.gap",
-                  height = "800px"
-                )
-              )
-            )
-          ),
-          card(
-            height = "800px",
-            full_screen = TRUE,
-            card_header(
-              "PCA data",
-              tooltip(
-                bs_icon("info-circle"),
-                "Expand the view by clicking on the bottom-right button."
-              )
-            ),
-            navset_card_tab(
-              nav_panel(
-                title = "Data table",
-                DTOutput("pca.cd.table")
-              ),
-              nav_panel(
-                title = "Parameters table",
-                DTOutput("param.cd.table")
-              ),
-              nav_panel(
-                title = "Predict data table",
-                uiOutput("conditional_predict_cd_table")
-              )
-            )
-          )
-        )
-      ),
       nav_panel(
         title = 'Eps2Fold',
         icon = icon("paper-plane"),
         layout_column_wrap(
-          width = 1 / 2,
-          # width = "600px",
-          # height = "600px",
+          width = 1,
           card(
             height = "800px",
             full_screen = TRUE,
             card_header(
-              "View 1",
-              tooltip(
-                bs_icon("info-circle"),
-                "Expand the view by clicking on the bottom-right button."
-              )
-            ),
-            layout_sidebar(
-              fillable = TRUE,
-              sidebar = sidebar(
-                position = 'right',
-                selectInput(
-                  inputId = "dim.ids",
-                  label = "Dimensions",
-                  choices = paste0("Dim.", 1:10),
-                  multiple = TRUE,
-                  selected = c("Dim.1", "Dim.2")
-                ),
-                selectInput(
-                  inputId = "pca.color.ids",
-                  label = "PCA colors",
-                  choices = c(
-                    "k-means",
-                    "Topology",
-                    "Conformer",
-                    "GBA",
-                    "GBA stacks",
-                    "Tetrads",
-                    "Tetrad combination",
-                    "Loop progression",
-                    'Tetrads x Loops',
-                    "Tetrad handedness",
-                    "Grooves",
-                    "Cation"
-                  ),
-                  selected = "Topology"
-                ),
-                selectInput(
-                  inputId = "pca.shape.ids",
-                  label = "PCA shapes",
-                  choices = c(
-                    "k-means",
-                    "Topology",
-                    "Conformer",
-                    "GBA",
-                    "GBA stacks",
-                    "Tetrads",
-                    "Tetrad combination",
-                    "Loop progression",
-                    'Tetrads x Loops',
-                    "Tetrad handedness",
-                    "Grooves",
-                    "Cation"
-                  ),
-                  selected = "Topology"
-                ),
-                downloadButton("dwn.pca.ids", "Download")
-              ),
-              #if user input supplied, show prediction, otherwise ref. panel PCA only
-              uiOutput("conditional_pca_plot_ids")
-            )
-          ),
-          card(
-            height = "800px",
-            full_screen = TRUE,
-            card_header(
-              "View 2",
+              "PCA plot",
               tooltip(
                 bs_icon("info-circle"),
                 "Expand the view by clicking on the bottom-right button."
@@ -817,18 +974,11 @@ ui <- bslib::page_navbar(
               uiOutput("conditional_pca_plot_ids_2")
             )
           ),
-          card(
-            height = "800px",
-            full_screen = TRUE,
-            card_header(
-              "Diagnostics",
-              tooltip(
-                bs_icon("info-circle"),
-                "Expand the view by clicking on the bottom-right button."
-              )
-            ),
+          layout_column_wrap(
+            width = 0.5,
             navset_card_tab(
               selected = 'Variable contributions',
+              full_screen = TRUE,
               nav_panel(
                 title = "Scree",
                 plotOutput(
@@ -871,19 +1021,10 @@ ui <- bslib::page_navbar(
                   height = "800px"
                 )
               )
-            )
-          ),
-          card(
-            height = "800px",
-            full_screen = TRUE,
-            card_header(
-              "PCA data",
-              tooltip(
-                bs_icon("info-circle"),
-                "Expand the view by clicking on the bottom-right button."
-              )
             ),
             navset_card_tab(
+              selected = "Data table",
+              full_screen = TRUE,
               nav_panel(
                 title = "Data table",
                 DTOutput("pca.ids.table")
@@ -900,6 +1041,146 @@ ui <- bslib::page_navbar(
           )
         )
       ),
+      nav_panel(
+        title = 'CD',
+        icon = icon("circle-half-stroke"),
+        layout_column_wrap(
+          width = 1,
+          card(
+            height = "800px",
+            full_screen = TRUE,
+            card_header(
+              "PCA plot",
+              tooltip(
+                bs_icon("info-circle"),
+                "Expand the view by clicking on the bottom-right button."
+              )
+            ),
+            layout_sidebar(
+              fillable = TRUE,
+              sidebar = sidebar(
+                position = 'right',
+                selectInput(
+                  inputId = "dim.cd.2",
+                  label = "Dimensions",
+                  choices = paste0("Dim.", 1:10),
+                  multiple = TRUE,
+                  selected = c("Dim.1", "Dim.2")
+                ),
+                selectInput(
+                  inputId = "pca.color.cd.2",
+                  label = "PCA colors",
+                  choices = c(
+                    "k-means",
+                    "Topology",
+                    "Conformer",
+                    "GBA",
+                    "GBA stacks",
+                    "Tetrads",
+                    "Tetrad combination",
+                    "Loop progression",
+                    'Tetrads x Loops',
+                    "Tetrad handedness",
+                    "Grooves",
+                    "Cation"
+                  ),
+                  selected = "GBA"
+                ),
+                selectInput(
+                  inputId = "pca.shape.cd.2",
+                  label = "PCA shapes",
+                  choices = c(
+                    "k-means",
+                    "Topology",
+                    "Conformer",
+                    "GBA",
+                    "GBA stacks",
+                    "Tetrads",
+                    "Tetrad combination",
+                    "Loop progression",
+                    'Tetrads x Loops',
+                    "Tetrad handedness",
+                    "Grooves",
+                    "Cation"
+                  ),
+                  selected = "GBA"
+                ),
+                downloadButton(
+                  "dwn.pca.cd.2",
+                  "Download"
+                )
+              ),
+              #if user input supplied, show prediction, otherwise ref. panel PCA only
+              uiOutput("conditional_pca_plot_cd_2")
+            )
+          ),
+          layout_column_wrap(
+            width = 0.5,
+            navset_card_tab(
+              selected = 'Variable contributions',
+              full_screen = TRUE,
+              nav_panel(
+                title = "Scree",
+                plotOutput(
+                  "pca.cd.scree",
+                  height = "800px"
+                )
+              ),
+              nav_panel(
+                title = "Factor map",
+                plotOutput(
+                  "pca.cd.fac.map",
+                  height = "800px"
+                )
+              ),
+              nav_panel(
+                title = "Correlation circle",
+                plotOutput(
+                  "pca.cd.var.cor",
+                  height = "800px"
+                )
+              ),
+              nav_panel(
+                title = "Variable contributions",
+                plotOutput(
+                  "pca.cd.var.coord",
+                  height = "800px"
+                )
+              ),
+              nav_panel(
+                title = "Total within sum of squares",
+                plotOutput(
+                  "pca.cd.twss",
+                  height = "800px"
+                )
+              ),
+              nav_panel(
+                title = "Gap statistic",
+                plotOutput(
+                  "pca.cd.gap",
+                  height = "800px"
+                )
+              )
+            ),
+            navset_card_tab(
+              full_screen = TRUE,
+              selected = "Data table",
+              nav_panel(
+                title = "Data table",
+                DTOutput("pca.cd.table")
+              ),
+              nav_panel(
+                title = "Parameters table",
+                DTOutput("param.cd.table")
+              ),
+              nav_panel(
+                title = "Predict data table",
+                uiOutput("conditional_predict_cd_table")
+              )
+            )
+          )
+        )
+      )
     )
   ),
   nav_panel(
