@@ -44,7 +44,7 @@ ui <- bslib::page_navbar(
   id = "nav",
   window_title = "Eps2Fold - a Shiny app for Eps2Fold analysis",
   theme = bslib::bs_theme(
-    preset = 'zephyr',
+    preset = 'cosmo',
     font_scale = 0.9
   ),
   #Ensure that all accordions are open on page load, on all pages
@@ -931,6 +931,7 @@ ui <- bslib::page_navbar(
     )
   ),
   nav_spacer(),
+  nav_item(bslib::input_dark_mode()),
   nav_menu(
     title = "Links",
     align = "right",
