@@ -40,7 +40,14 @@ pca.plotR <- function(
   dim.1 = input$dim.cd[1],
   dim.2 = input$dim.cd[1],
   color = 'GBA',
-  shape = 'GBA'
+  shape = 'GBA',
+  legend_position = 'bottom',
+  symbol_scaling = 1,
+  label_scaling = 1,
+  axis_text_scaling = 1,
+  line_scaling = 1,
+  legend_text_scaling = 1,
+  force_scaling = 1
 ) {
   dim.1.cap <- gsub('Dim.', 'Dimension ', dim.1)
   dim.2.cap <- gsub('Dim.', 'Dimension ', dim.2)
@@ -87,14 +94,14 @@ pca.plotR <- function(
       show.legend = FALSE
     ) +
     geom_point(
-      size = 6,
-      stroke = 1.25,
+      size = 6 * symbol_scaling,
+      stroke = 1.25 * symbol_scaling,
       show.legend = TRUE
     ) +
     geom_text_repel(
       aes(label = oligo),
-      force = 20,
-      size = 8,
+      force = 20 * force_scaling,
+      size = 8 * label_scaling,
       point.padding = 1,
       min.segment.length = 0.75,
       show.legend = FALSE
@@ -102,17 +109,23 @@ pca.plotR <- function(
     theme(
       panel.background = element_blank(),
       strip.background = element_blank(),
-      legend.position = 'bottom',
+      legend.position = legend_position,
       legend.background = element_blank(),
       legend.box.background = element_blank(),
       legend.key = element_blank(),
-      legend.text = element_markdown(size = 18),
-      legend.title = element_markdown(size = 22),
-      axis.text = element_markdown(size = 18),
-      axis.title = element_markdown(size = 22),
-      strip.text = element_markdown(size = 20),
-      axis.line = element_line(size = 0.75),
-      axis.ticks = element_line(size = 0.75)
+      legend.text = element_markdown(size = 18 * legend_text_scaling),
+      legend.title = element_markdown(
+        size = 22 * legend_text_scaling,
+        face = 'bold'
+      ),
+      axis.text = element_markdown(size = 18 * axis_text_scaling),
+      axis.title = element_markdown(
+        size = 22 * axis_text_scaling,
+        face = 'bold'
+      ),
+      strip.text = element_markdown(size = 20 * axis_text_scaling),
+      axis.line = element_line(size = 0.75 * line_scaling),
+      axis.ticks = element_line(size = 0.75 * line_scaling)
     ) +
     labs(
       y = dim.2.cap,
@@ -132,7 +145,19 @@ circleFun <- function(center = c(0, 0), diameter = 1, npoints = 100) {
 # CD and IDS plots----
 
 ## Plotting function----
-render_ref_plot <- function(df, input, norm_col, axis_label_text) {
+render_ref_plot <- function(
+  df,
+  input,
+  norm_col,
+  axis_label_text,
+  legend_position = 'bottom',
+  symbol_scaling = 1,
+  axis_text_scaling = 1,
+  line_scaling = 1,
+  legend_text_scaling = 1,
+  panel_spacing = 1,
+  panel_cols = 0
+) {
   # Initialize color and sd columns
   df <- df %>%
     add_column(color = NA, sd.y = NA)
@@ -158,17 +183,51 @@ render_ref_plot <- function(df, input, norm_col, axis_label_text) {
   #Initialize plot
   p <- df %>%
     ggplot(aes(x = wl, y = y, color = color)) +
-    geom_hline(yintercept = 0) +
-    geom_vline(xintercept = c(295, 275, 262, 245), linetype = 'dashed') +
+    geom_hline(yintercept = 0, linewidth = 0.75 * line_scaling) +
+    geom_vline(
+      xintercept = c(295, 275, 262, 245),
+      linetype = 'dashed',
+      linewidth = 0.75 * line_scaling
+    ) +
     labs(
       x = "&lambda; (nm)",
       y = axis_label_text,
       color = input$ref.color,
       fill = input$ref.color
     ) +
-    custom.theme.markdown +
     scale_y_continuous(n.breaks = 3) +
-    scale_x_continuous(expand = c(0, 0))
+    scale_x_continuous(expand = c(0, 0)) +
+    theme(
+      panel.background = element_blank(),
+      panel.spacing = unit(2 * panel_spacing, "lines"),
+      strip.background = element_blank(),
+      legend.position = legend_position,
+      legend.background = element_blank(),
+      legend.box.background = element_blank(),
+      legend.key = element_blank(),
+      legend.text = element_markdown(
+        size = 18 * legend_text_scaling
+      ),
+      legend.title = element_markdown(
+        size = 22 * legend_text_scaling,
+      ),
+      axis.text = element_markdown(
+        size = 18 * axis_text_scaling
+      ),
+      axis.title.x = element_markdown(
+        size = 22 * axis_text_scaling
+      ),
+      axis.title.y = element_markdown(size = 22, angle = 90),
+      strip.text = element_markdown(
+        size = 20 * axis_text_scaling
+      ),
+      axis.line = element_line(
+        size = 0.75 * line_scaling
+      ),
+      axis.ticks = element_line(
+        size = 0.75 * line_scaling
+      )
+    )
 
   # If panel mode is "Mean", add geom_ribbon and geom_line of mean
   if (input$ref.panel == "Mean") {
@@ -192,18 +251,35 @@ render_ref_plot <- function(df, input, norm_col, axis_label_text) {
       ) +
       geom_line(
         data = df_mean,
-        size = 1,
+        size = 1 * symbol_scaling,
         show.legend = TRUE
       )
   } else {
     #else add lines of individuals
     p <- p +
-      geom_line(aes(group = oligo), size = 1, show.legend = TRUE)
+      geom_line(
+        aes(group = oligo),
+        size = 1 * symbol_scaling,
+        show.legend = TRUE
+      )
   }
 
-  # If panel mode is "Panels", add facet_wrap
-  if (input$ref.panel == "Panels") {
-    p <- p + facet_wrap(~oligo)
+  # If panel mode is "Oligo panels" add facet_wrap on oligo
+  if (input$ref.panel == "Oligo panels") {
+    if (panel_cols == 0) {
+      p <- p + facet_wrap(~oligo)
+    } else {
+      p <- p + facet_wrap(~oligo, ncol = panel_cols)
+    }
+  }
+
+  # If panel mode is "Group panels", add facet_wrap
+  if (input$ref.panel == "Group panels") {
+    if (panel_cols == 0) {
+      p <- p + facet_wrap(~color)
+    } else {
+      p <- p + facet_wrap(~color, ncol = panel_cols)
+    }
   }
 
   p
