@@ -174,250 +174,7 @@ server <- shinyServer(function(input, output, session) {
       unique()
   })
 
-  #### Picker inputs: filtering source----
-  output$ref.seq.topo.0_ui <- renderUI({
-    if (file.toggle() == 'no') {
-      selectizeInput(
-        "ref.seq.topo.0",
-        label = "Topology",
-        choices = "upload data first",
-        multiple = T
-      )
-    } else {
-      choices <- sort(unique(ref.seq()$topo))
-
-      selectizeInput(
-        "ref.seq.topo.0",
-        label = "Topology",
-        choices = choices,
-        selected = choices,
-        multiple = T
-      )
-    }
-  })
-
-  output$ref.seq.confomer.0_ui <- renderUI({
-    if (file.toggle() == 'no') {
-      selectizeInput(
-        "ref.seq.conformer.0",
-        label = "Conformer",
-        choices = "upload data first",
-        multiple = T
-      )
-    } else {
-      choices <- sort(unique(ref.seq()$conformer))
-
-      selectizeInput(
-        "ref.seq.conformer.0",
-        label = "Conformer",
-        choices = choices,
-        selected = choices,
-        multiple = T
-      )
-    }
-  })
-
-  output$ref.seq.gba.0_ui <- renderUI({
-    if (file.toggle() == 'no') {
-      selectizeInput(
-        "ref.seq.gba.0",
-        label = "GBA",
-        choices = "upload data first",
-        multiple = T
-      )
-    } else {
-      choices <- sort(unique(ref.seq()$gba))
-
-      selectizeInput(
-        "ref.seq.gba.0",
-        label = "GBA",
-        choices = choices,
-        selected = choices,
-        multiple = T
-      )
-    }
-  })
-
-  output$ref.seq.gba.stacks.0_ui <- renderUI({
-    if (file.toggle() == 'no') {
-      selectizeInput(
-        "ref.seq.gba.stacks.0",
-        label = "GBA stacks",
-        choices = "upload data first",
-        multiple = TRUE
-      )
-    } else {
-      choices <- sort(unique(ref.seq()$gba.stacks))
-
-      selectizeInput(
-        "ref.seq.gba.stacks.0",
-        label = "GBA stacks",
-        choices = choices,
-        selected = choices,
-        multiple = TRUE,
-        #add option to render HTML
-        options = list(
-          render = I(
-            "
-          {
-            item:   function(item, escape) { return '<div>' + item.label + '</div>'; },
-            option: function(item, escape) { return '<div>' + item.label + '</div>'; }
-          }
-        "
-          )
-        )
-      )
-    }
-  })
-
-  output$ref.seq.tetrad.0_ui <- renderUI({
-    if (file.toggle() == 'no') {
-      selectizeInput(
-        "ref.seq.tetrad.0",
-        label = "Tetrads",
-        choices = "upload data first",
-        multiple = T
-      )
-    } else {
-      choices <- sort(unique(ref.seq()$tetrad))
-
-      selectizeInput(
-        "ref.seq.tetrad.0",
-        label = "Tetrads",
-        choices = choices,
-        selected = choices,
-        multiple = T
-      )
-    }
-  })
-
-  output$ref.seq.tetrad.id.0_ui <- renderUI({
-    if (file.toggle() == 'no') {
-      selectizeInput(
-        "ref.seq.tetrad.id.0",
-        label = "Tetrad combination",
-        choices = "upload data first",
-        multiple = T
-      )
-    } else {
-      choices <- sort(unique(ref.seq()$tetrad.id))
-
-      selectizeInput(
-        "ref.seq.tetrad.id.0",
-        label = "Tetrad combination",
-        choices = choices,
-        selected = choices,
-        multiple = T
-      )
-    }
-  })
-
-  output$ref.seq.loop.0_ui <- renderUI({
-    if (file.toggle() == 'no') {
-      selectizeInput(
-        "ref.seq.loop.0",
-        label = "Loop progression",
-        choices = "upload data first",
-        multiple = T
-      )
-    } else {
-      choices <- sort(unique(ref.seq()$loop))
-
-      selectizeInput(
-        "ref.seq.loop.0",
-        label = "Loop progression",
-        choices = choices,
-        selected = choices,
-        multiple = T
-      )
-    }
-  })
-
-  output$ref.seq.plus.minus.0_ui <- renderUI({
-    if (file.toggle() == 'no') {
-      selectizeInput(
-        "ref.seq.plus.minus.0",
-        label = "Tetrad handedness",
-        choices = "upload data first",
-        multiple = T
-      )
-    } else {
-      choices <- sort(unique(ref.seq()$plus.minus))
-
-      selectizeInput(
-        "ref.seq.plus.minus.0",
-        label = "Tetrad handedness",
-        choices = choices,
-        selected = choices,
-        multiple = T
-      )
-    }
-  })
-
-  output$ref.seq.groove.0_ui <- renderUI({
-    if (file.toggle() == 'no') {
-      selectizeInput(
-        "ref.seq.groove.0",
-        label = "Grooves",
-        choices = "upload data first",
-        multiple = T
-      )
-    } else {
-      choices <- sort(unique(ref.seq()$groove))
-
-      selectizeInput(
-        "ref.seq.groove.0",
-        label = "Grooves",
-        choices = choices,
-        selected = choices,
-        multiple = T
-      )
-    }
-  })
-
-  output$ref.seq.cation.0_ui <- renderUI({
-    if (file.toggle() == 'no') {
-      selectizeInput(
-        "ref.seq.cation.0",
-        label = "Cation",
-        choices = "upload data first",
-        multiple = T
-      )
-    } else {
-      choices <- sort(unique(ref.seq()$salt))
-
-      selectizeInput(
-        "ref.seq.cation.0",
-        label = "Cation",
-        choices = choices,
-        selected = choices,
-        multiple = T
-      )
-    }
-  })
-
-  output$ref.seq.oligo.0_ui <- renderUI({
-    if (file.toggle() == 'no') {
-      selectizeInput(
-        "ref.seq.oligo.0",
-        label = "Oligonucleotide",
-        choices = "upload data first",
-        multiple = T
-      )
-    } else {
-      choices <- sort(unique(ref.seq()$oligo))
-
-      selectizeInput(
-        "ref.seq.oligo.0",
-        label = "Oligonucleotide",
-        choices = choices,
-        selected = choices,
-        multiple = T
-      )
-    }
-  })
-
-  #### Picker inputs: filtering plots----
+  #### Picker inputs: filtering source and plots----
   output$ref.seq.topo_ui <- renderUI({
     if (file.toggle() == 'no') {
       selectizeInput(
@@ -427,7 +184,7 @@ server <- shinyServer(function(input, output, session) {
         multiple = T
       )
     } else {
-      choices <- unique(input$ref.seq.topo.0)
+      choices <- sort(unique(ref.seq()$topo))
 
       selectizeInput(
         "ref.seq.topo",
@@ -448,7 +205,7 @@ server <- shinyServer(function(input, output, session) {
         multiple = T
       )
     } else {
-      choices <- unique(input$ref.seq.conformer.0)
+      choices <- sort(unique(ref.seq()$conformer))
 
       selectizeInput(
         "ref.seq.conformer",
@@ -469,7 +226,7 @@ server <- shinyServer(function(input, output, session) {
         multiple = T
       )
     } else {
-      choices <- unique(input$ref.seq.gba.0)
+      choices <- sort(unique(ref.seq()$gba))
 
       selectizeInput(
         "ref.seq.gba",
@@ -490,7 +247,7 @@ server <- shinyServer(function(input, output, session) {
         multiple = T
       )
     } else {
-      choices <- unique(input$ref.seq.gba.stacks.0)
+      choices <- sort(unique(ref.seq()$gba.stacks))
 
       selectizeInput(
         "ref.seq.gba.stacks",
@@ -522,7 +279,7 @@ server <- shinyServer(function(input, output, session) {
         multiple = T
       )
     } else {
-      choices <- unique(input$ref.seq.tetrad.0)
+      choices <- sort(unique(ref.seq()$tetrad))
 
       selectizeInput(
         "ref.seq.tetrad",
@@ -543,7 +300,7 @@ server <- shinyServer(function(input, output, session) {
         multiple = T
       )
     } else {
-      choices <- unique(input$ref.seq.tetrad.id.0)
+      choices <- sort(unique(ref.seq()$tetrad.id))
 
       selectizeInput(
         "ref.seq.tetrad.id",
@@ -564,7 +321,7 @@ server <- shinyServer(function(input, output, session) {
         multiple = T
       )
     } else {
-      choices <- unique(input$ref.seq.loop.0)
+      choices <- sort(unique(ref.seq()$loop))
 
       selectizeInput(
         "ref.seq.loop",
@@ -585,7 +342,7 @@ server <- shinyServer(function(input, output, session) {
         multiple = T
       )
     } else {
-      choices <- unique(input$ref.seq.plus.minus.0)
+      choices <- sort(unique(ref.seq()$plus.minus))
 
       selectizeInput(
         "ref.seq.plus.minus",
@@ -606,7 +363,7 @@ server <- shinyServer(function(input, output, session) {
         multiple = T
       )
     } else {
-      choices <- unique(input$ref.seq.groove.0)
+      choices <- sort(unique(ref.seq()$groove))
 
       selectizeInput(
         "ref.seq.groove",
@@ -630,8 +387,8 @@ server <- shinyServer(function(input, output, session) {
       selectizeInput(
         "ref.seq.cation",
         label = "Cation",
-        choices = unique(input$ref.seq.cation.0),
-        selected = unique(input$ref.seq.cation.0),
+        choices = sort(unique(ref.seq()$salt)),
+        selected = sort(unique(ref.seq()$salt)),
         multiple = T
       )
     }
@@ -649,8 +406,8 @@ server <- shinyServer(function(input, output, session) {
       selectizeInput(
         "ref.seq.oligo",
         label = "Oligonucleotide",
-        choices = unique(input$ref.seq.oligo.0),
-        selected = unique(input$ref.seq.oligo.0),
+        choices = sort(unique(ref.seq()$oligo)),
+        selected = sort(unique(ref.seq()$oligo)),
         multiple = T
       )
     }
@@ -665,17 +422,17 @@ server <- shinyServer(function(input, output, session) {
     } else {
       ref.seq() %>%
         filter(
-          salt %in% input$ref.seq.cation.0,
-          topo %in% input$ref.seq.topo.0,
-          conformer %in% input$ref.seq.conformer.0,
-          gba %in% input$ref.seq.gba.0,
-          gba.stacks %in% input$ref.seq.gba.stacks.0,
-          oligo %in% input$ref.seq.oligo.0,
-          tetrad %in% input$ref.seq.tetrad.0,
-          tetrad.id %in% input$ref.seq.tetrad.id.0,
-          loop %in% input$ref.seq.loop.0,
-          plus.minus %in% input$ref.seq.plus.minus.0,
-          groove %in% input$ref.seq.groove.0
+          salt %in% input$ref.seq.cation,
+          topo %in% input$ref.seq.topo,
+          conformer %in% input$ref.seq.conformer,
+          gba %in% input$ref.seq.gba,
+          gba.stacks %in% input$ref.seq.gba.stacks,
+          oligo %in% input$ref.seq.oligo,
+          tetrad %in% input$ref.seq.tetrad,
+          tetrad.id %in% input$ref.seq.tetrad.id,
+          loop %in% input$ref.seq.loop,
+          plus.minus %in% input$ref.seq.plus.minus,
+          groove %in% input$ref.seq.groove
         ) %>%
         mutate(conc = round(conc, 2)) %>%
         datatable(
@@ -1085,17 +842,17 @@ server <- shinyServer(function(input, output, session) {
     ref.set() %>%
       ungroup() %>%
       filter(
-        salt %in% input$ref.seq.cation.0,
-        topo %in% input$ref.seq.topo.0,
-        conformer %in% input$ref.seq.conformer.0,
-        gba %in% input$ref.seq.gba.0,
-        gba.stacks %in% input$ref.seq.gba.stacks.0,
-        oligo %in% input$ref.seq.oligo.0,
-        tetrad %in% input$ref.seq.tetrad.0,
-        tetrad.id %in% input$ref.seq.tetrad.id.0,
-        loop %in% input$ref.seq.loop.0,
-        plus.minus %in% input$ref.seq.plus.minus.0,
-        groove %in% input$ref.seq.groove.0
+        salt %in% input$ref.seq.cation,
+        topo %in% input$ref.seq.topo,
+        conformer %in% input$ref.seq.conformer,
+        gba %in% input$ref.seq.gba,
+        gba.stacks %in% input$ref.seq.gba.stacks,
+        oligo %in% input$ref.seq.oligo,
+        tetrad %in% input$ref.seq.tetrad,
+        tetrad.id %in% input$ref.seq.tetrad.id,
+        loop %in% input$ref.seq.loop,
+        plus.minus %in% input$ref.seq.plus.minus,
+        groove %in% input$ref.seq.groove
       ) %>%
       mutate(
         delta.eps = case_when(
@@ -1157,17 +914,17 @@ server <- shinyServer(function(input, output, session) {
       ungroup() %>%
       filter(
         !is.na(delta.eps.ids),
-        salt %in% input$ref.seq.cation.0,
-        topo %in% input$ref.seq.topo.0,
-        conformer %in% input$ref.seq.conformer.0,
-        gba %in% input$ref.seq.gba.0,
-        gba.stacks %in% input$ref.seq.gba.stacks.0,
-        oligo %in% input$ref.seq.oligo.0,
-        tetrad %in% input$ref.seq.tetrad.0,
-        tetrad.id %in% input$ref.seq.tetrad.id.0,
-        loop %in% input$ref.seq.loop.0,
-        plus.minus %in% input$ref.seq.plus.minus.0,
-        groove %in% input$ref.seq.groove.0
+        salt %in% input$ref.seq.cation,
+        topo %in% input$ref.seq.topo,
+        conformer %in% input$ref.seq.conformer,
+        gba %in% input$ref.seq.gba,
+        gba.stacks %in% input$ref.seq.gba.stacks,
+        oligo %in% input$ref.seq.oligo,
+        tetrad %in% input$ref.seq.tetrad,
+        tetrad.id %in% input$ref.seq.tetrad.id,
+        loop %in% input$ref.seq.loop,
+        plus.minus %in% input$ref.seq.plus.minus,
+        groove %in% input$ref.seq.groove
       ) %>%
       mutate(
         delta.eps = case_when(
@@ -1657,7 +1414,7 @@ server <- shinyServer(function(input, output, session) {
 
   pca.cd.coord <- reactive({
     data.frame(pca.cd()$ind$coord) %>%
-      select(input$dim.cd[1], input$dim.cd[2]) %>%
+      select(c("Dim.1", "Dim.2")[1], c("Dim.1", "Dim.2")[2]) %>%
       cbind(training.cd()) %>%
       add_column(km = pca.cd.km()$cluster) %>%
       left_join(
@@ -1785,17 +1542,17 @@ server <- shinyServer(function(input, output, session) {
 
   output$param.cd.table <- renderDT(server = FALSE, {
     combined_list <- list(
-      'Cations' = input$ref.seq.cation.0,
-      'Topologies' = input$ref.seq.topo.0,
-      'Conformers' = input$ref.seq.conformer.0,
-      'GBA' = input$ref.seq.gba.0,
-      'GBA stacks' = input$ref.seq.gba.stacks.0,
-      'Oligonucleotides' = input$ref.seq.oligo.0,
-      'Tetrad #' = input$ref.seq.tetrad.0,
-      'Tetrad combination' = input$ref.seq.tetrad.id.0,
-      'Loops' = input$ref.seq.loop.0,
-      '+/-' = input$ref.seq.plus.minus.0,
-      'Grooves' = input$ref.seq.groove.0,
+      'Cations' = input$ref.seq.cation,
+      'Topologies' = input$ref.seq.topo,
+      'Conformers' = input$ref.seq.conformer,
+      'GBA' = input$ref.seq.gba,
+      'GBA stacks' = input$ref.seq.gba.stacks,
+      'Oligonucleotides' = input$ref.seq.oligo,
+      'Tetrad #' = input$ref.seq.tetrad,
+      'Tetrad combination' = input$ref.seq.tetrad.id,
+      'Loops' = input$ref.seq.loop,
+      '+/-' = input$ref.seq.plus.minus,
+      'Grooves' = input$ref.seq.groove,
       'Max wavelength' = max(input$wl),
       'Min wavelength' = min(input$wl),
       'Theoretical UV reference' = input$ids.ref.select,
@@ -2259,7 +2016,7 @@ server <- shinyServer(function(input, output, session) {
 
   pca.ids.coord <- reactive({
     data.frame(pca.ids()$ind$coord) %>%
-      select(input$dim.ids[1], input$dim.ids[2]) %>%
+      select(c("Dim.1", "Dim.2"), c("Dim.1", "Dim.2")[2]) %>%
       cbind(training.ids()) %>%
       add_column(km = pca.ids.km()$cluster) %>%
       left_join(
@@ -2387,15 +2144,15 @@ server <- shinyServer(function(input, output, session) {
 
   output$param.ids.table <- renderDT(server = FALSE, {
     combined_list <- list(
-      'Cations' = input$ref.seq.cation.0,
-      'Topologies' = input$ref.seq.topo.0,
-      'GBA' = input$ref.seq.gba.0,
-      'Oligonucleotides' = input$ref.seq.oligo.0,
-      'Tetrad #' = input$ref.seq.tetrad.0,
-      'Tetrad combination' = input$ref.seq.tetrad.id.0,
-      'Loops' = input$ref.seq.loop.0,
-      '+/-' = input$ref.seq.plus.minus.0,
-      'Grooves' = input$ref.seq.groove.0,
+      'Cations' = input$ref.seq.cation,
+      'Topologies' = input$ref.seq.topo,
+      'GBA' = input$ref.seq.gba,
+      'Oligonucleotides' = input$ref.seq.oligo,
+      'Tetrad #' = input$ref.seq.tetrad,
+      'Tetrad combination' = input$ref.seq.tetrad.id,
+      'Loops' = input$ref.seq.loop,
+      '+/-' = input$ref.seq.plus.minus,
+      'Grooves' = input$ref.seq.groove,
       'Max wavelength' = max(input$wl),
       'Min wavelength' = min(input$wl),
       'Theoretical UV reference' = input$ids.ref.select,
@@ -2540,26 +2297,26 @@ server <- shinyServer(function(input, output, session) {
 
   #####picker inputs----
   ###### source----
-  output$user.seq.oligo.0_ui <- renderUI({
-    if (file.toggle.user() == 'no') {
-      selectizeInput(
-        "user.seq.oligo.0",
-        label = "User oligonucleotide",
-        choices = "upload data first",
-        multiple = T
-      )
-    } else {
-      choices <- sort(unique(user.seq()$oligo))
+  # output$user.seq.oligo.0_ui <- renderUI({
+  #   if (file.toggle.user() == 'no') {
+  #     selectizeInput(
+  #       "user.seq.oligo.0",
+  #       label = "User oligonucleotide",
+  #       choices = "upload data first",
+  #       multiple = T
+  #     )
+  #   } else {
+  #     choices <- sort(unique(user.seq()$oligo))
 
-      selectizeInput(
-        "user.seq.oligo.0",
-        label = "User oligonucleotide",
-        choices = choices,
-        selected = choices,
-        multiple = T
-      )
-    }
-  })
+  #     selectizeInput(
+  #       "user.seq.oligo.0",
+  #       label = "User oligonucleotide",
+  #       choices = choices,
+  #       selected = choices,
+  #       multiple = T
+  #     )
+  #   }
+  # })
 
   #######plot-----
   output$user.seq.oligo_ui <- renderUI({
@@ -2574,8 +2331,8 @@ server <- shinyServer(function(input, output, session) {
       selectizeInput(
         "user.seq.oligo",
         label = "Oligonucleotide",
-        choices = unique(input$user.seq.oligo.0),
-        selected = unique(input$user.seq.oligo.0),
+        choices = sort(unique(user.seq()$oligo)),
+        selected = sort(unique(user.seq()$oligo)),
         multiple = T
       )
     }
@@ -2631,7 +2388,7 @@ server <- shinyServer(function(input, output, session) {
         wl <= max(input$wl),
         wl >= min(input$wl),
         wl %% 1 == 0,
-        oligo %in% input$user.seq.oligo.0
+        oligo %in% input$user.seq.oligo
       ) %>%
       arrange(wl)
   })
@@ -2690,7 +2447,7 @@ server <- shinyServer(function(input, output, session) {
         wl >= min(input$wl),
         wl %% 1 == 0,
         !is.na(abs),
-        oligo %in% input$user.seq.oligo.0
+        oligo %in% input$user.seq.oligo
       )
   })
 
@@ -3142,7 +2899,7 @@ server <- shinyServer(function(input, output, session) {
     #merging
     cd.predict <- cd.predict.0 %>%
       as.data.frame() %>%
-      select(input$dim.cd[1], input$dim.cd[2]) %>%
+      select(c("Dim.1", "Dim.2")[1], c("Dim.1", "Dim.2")[2]) %>%
       magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
       cbind(user.cd()) %>%
       cbind(km = km.predict) %>%
@@ -3233,7 +2990,7 @@ server <- shinyServer(function(input, output, session) {
       rbind(
         data.frame(pca.cd()$ind$coord) %>%
           ungroup() %>%
-          select(input$dim.cd[1], input$dim.cd[2]) %>%
+          select(c("Dim.1", "Dim.2")[1], c("Dim.1", "Dim.2")[2]) %>%
           magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
           cbind(training.cd()) %>%
           add_column(km = pca.cd.km()$cluster) %>%
@@ -3441,7 +3198,7 @@ server <- shinyServer(function(input, output, session) {
     #merging
     ids.predict <- ids.predict.0 %>%
       as.data.frame() %>%
-      select(input$dim.ids[1], input$dim.ids[2]) %>%
+      select(c("Dim.1", "Dim.2")[1], c("Dim.1", "Dim.2")[2]) %>%
       magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
       cbind(user.ids()) %>%
       cbind(km = km.predict) %>%
@@ -3532,7 +3289,7 @@ server <- shinyServer(function(input, output, session) {
       rbind(
         data.frame(pca.ids()$ind$coord) %>%
           ungroup() %>%
-          select(input$dim.ids[1], input$dim.ids[2]) %>%
+          select(c("Dim.1", "Dim.2")[1], c("Dim.1", "Dim.2")[2]) %>%
           magrittr::set_colnames(c("Dim.1", "Dim.2")) %>%
           cbind(training.ids()) %>%
           add_column(km = pca.ids.km()$cluster) %>%
