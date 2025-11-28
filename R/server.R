@@ -2389,7 +2389,7 @@ server <- shinyServer(function(input, output, session) {
 
           user.ids.input <- user.uv.input() %>%
             filter(cation == 'cation') %>%
-            mutate(cation = 'no cation') %>% 
+            mutate(cation = 'no cation') %>%
             group_by(oligo, wl) %>%
             mutate(
               eps = dt.spec.calcR(
@@ -3082,6 +3082,8 @@ server <- shinyServer(function(input, output, session) {
     plotOutput(
       if (is.null(input$user.data)) {
         "pca.cd.coord.2"
+      } else if (nrow(user.cd.input()) == 0) {
+        "pca.cd.coord.2"
       } else {
         "predict.cd.coord.2"
       },
@@ -3393,6 +3395,8 @@ server <- shinyServer(function(input, output, session) {
   output$conditional_pca_plot_ids_2 <- renderUI({
     plotOutput(
       if (is.null(input$user.data)) {
+        "pca.ids.coord.2"
+      } else if (nrow(user.uv.input.cation()) == 0) {
         "pca.ids.coord.2"
       } else {
         "predict.ids.coord.2"
