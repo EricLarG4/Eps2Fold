@@ -117,3 +117,10 @@ docker run --rm -p 3838:3838 ghcr.io/ericlarg4/eps2fold:main
 ## Use of the app
 
 See the wiki.
+
+## Changelog
+
+### Version 1.2.0
+
+Eps2Fold can now work in CD or Eps2Fold-only modes for user predictions.
+Eps2Fold deals with empty or missing user data sheet by displaying the training set output only.

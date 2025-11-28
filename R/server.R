@@ -127,19 +127,19 @@ server <- shinyServer(function(input, output, session) {
         norm.ids = case_when(
           input$ids.norm == "-1/+1" ~
             2 *
-              (delta.eps.ids - min(delta.eps.ids)) /
-              (max(delta.eps.ids) - min(delta.eps.ids)) -
-              1,
+            (delta.eps.ids - min(delta.eps.ids)) /
+            (max(delta.eps.ids) - min(delta.eps.ids)) -
+            1,
           TRUE ~ delta.eps.ids
         ),
         norm.cd = case_when(
           input$cd.norm == "Δε/ε" ~ delta.eps.cd / eps,
           input$cd.norm == "-1/+1" ~
             2 *
-              (delta.eps.cd - min(delta.eps.cd, na.rm = TRUE)) /
-              (max(delta.eps.cd, na.rm = TRUE) -
-                min(delta.eps.cd, na.rm = TRUE)) -
-              1,
+            (delta.eps.cd - min(delta.eps.cd, na.rm = TRUE)) /
+            (max(delta.eps.cd, na.rm = TRUE) -
+              min(delta.eps.cd, na.rm = TRUE)) -
+            1,
           TRUE ~ delta.eps.cd
         )
       )
@@ -1233,7 +1233,6 @@ server <- shinyServer(function(input, output, session) {
     pca.cd.var.cor()
   })
 
-
   #### Variable coordinates-------
   pca.cd.var.coord <- reactive({
     data.frame(pca.cd()$var$coord) %>%
@@ -1289,7 +1288,6 @@ server <- shinyServer(function(input, output, session) {
   output$pca.cd.var.coord <- renderPlot({
     pca.cd.var.coord()
   })
-
 
   #### Individuals coordinates--------
 
@@ -1614,7 +1612,6 @@ server <- shinyServer(function(input, output, session) {
   })
 
   #### Analytics----
-
 
   ##### Factor map----
   pca.ids.fac.map <- reactive({
@@ -2145,114 +2142,236 @@ server <- shinyServer(function(input, output, session) {
   ##### CD----
 
   user.cd.input <- reactive({
-    user_cd_input <- read_excel(
-      input.file.user()$datapath,
-      sheet = "CD",
-      col_types = "numeric"
-    ) %>%
-      pivot_longer(
-        cols = 2:(ncol(.)),
-        names_to = 'oligo',
-        values_to = 'cd'
-      ) %>%
-      left_join(
-        user.seq(),
-        by = "oligo"
-      ) %>%
-      filter(
-        wl %% 1 == 0, #removing non integer wl to have the same number of data points than in IDS
-        !is.na(cd)
-      ) %>%
-      group_by(oligo) %>%
-      left_join(
-        user.uv.input() %>%
-          filter(cation == "none") %>%
-          select(wl, oligo, eps) %>%
-          unique() %>%
-          set_colnames(c("wl", "oligo", "eps.uv")),
-        by = c("oligo", "wl")
-      ) %>%
-      mutate(
-        cd = cd - mean(cd[wl > 320], na.rm = TRUE),
-        delta.eps = cd / (32980 * l * Concentration / 1E6)
-      ) %>%
-      mutate(
-        norm.cd = case_when(
-          input$cd.norm == "Δε/ε" ~ delta.eps / eps.uv,
-          input$cd.norm == "-1/+1" ~
-            2 *
+    # Read the Excel file
+    sheet_names <- excel_sheets(input.file.user()$datapath)
+
+    if (!"CD" %in% sheet_names) {
+      # Return empty data frame if CD sheet doesn't exist
+      return(
+        data.frame(
+          oligo = character(0),
+          wl = numeric(0),
+          cd = numeric(0),
+          Concentration = numeric(0),
+          eps.uv = numeric(0),
+          delta.eps = numeric(0),
+          norm.cd = numeric(0),
+          stringsAsFactors = FALSE
+        )
+      )
+    } else {
+      user_cd_raw <- read_excel(
+        input.file.user()$datapath,
+        sheet = "CD",
+        col_types = "numeric"
+      )
+
+      # Check if any columns (excluding wavelength column) have data
+      data_cols <- user_cd_raw[, -1]
+      has_data <- any(!is.na(data_cols))
+
+      if (!has_data) {
+        # Return empty data frame with expected structure for downstream compatibility
+        return(
+          data.frame(
+            oligo = character(0),
+            wl = numeric(0),
+            cd = numeric(0),
+            Concentration = numeric(0),
+            eps.uv = numeric(0),
+            delta.eps = numeric(0),
+            norm.cd = numeric(0),
+            stringsAsFactors = FALSE
+          )
+        )
+      }
+
+      # Proceed with normal processing if data exists
+      user_cd_input <- user_cd_raw %>%
+        pivot_longer(
+          cols = 2:(ncol(.)),
+          names_to = 'oligo',
+          values_to = 'cd'
+        ) %>%
+        left_join(
+          user.seq(),
+          by = "oligo"
+        ) %>%
+        filter(
+          wl %% 1 == 0, #removing non integer wl to have the same number of data points than in IDS
+          !is.na(cd)
+        ) %>%
+        group_by(oligo) %>%
+        # left_join(
+        #   user.uv.input() %>%
+        #     filter(cation == "none") %>%
+        #     select(wl, oligo, eps) %>%
+        #     unique() %>%
+        #     set_colnames(c("wl", "oligo", "eps.uv")),
+        #   by = c("oligo", "wl")
+        # ) %>%
+        mutate(
+          cd = cd - mean(cd[wl > 320], na.rm = TRUE),
+          delta.eps = cd / (32980 * l * Concentration / 1E6)
+        ) %>%
+        mutate(
+          norm.cd = case_when(
+            # input$cd.norm == "Δε/ε" ~ delta.eps / eps.uv,
+            input$cd.norm == "-1/+1" ~
+              2 *
               (delta.eps - min(delta.eps)) /
               (max(delta.eps) - min(delta.eps)) -
               1,
-          TRUE ~ delta.eps
-        )
-      ) %>%
-      ungroup() %>%
-      filter(
-        wl <= max(input$wl),
-        wl >= min(input$wl),
-        wl %% 1 == 0,
-        oligo %in% input$user.seq.oligo
-      ) %>%
-      arrange(wl)
+            TRUE ~ delta.eps
+          )
+        ) %>%
+        ungroup() %>%
+        filter(
+          wl <= max(input$wl),
+          wl >= min(input$wl),
+          wl %% 1 == 0,
+          oligo %in% input$user.seq.oligo
+        ) %>%
+        arrange(wl)
+
+      return(user_cd_input)
+    }
   })
 
   ##### UV----
 
   #data with cation
   user.uv.input.cation <- reactive({
-    read_excel(
-      input.file.user()$datapath,
-      sheet = "UV",
-      col_types = "numeric"
-    ) %>%
-      add_column(cation = 'cation') %>%
-      arrange(wl)
+    sheet_names <- excel_sheets(input.file.user()$datapath)
+
+    if (!"UV" %in% sheet_names) {
+      # Return empty data frame if UV sheet doesn't exist
+      return(
+        data.frame(
+          oligo = character(0),
+          wl = numeric(0),
+          abs = numeric(0),
+          Concentration = numeric(0),
+          eps.uv = numeric(0),
+          delta.eps = numeric(0),
+          norm.cd = numeric(0),
+          stringsAsFactors = FALSE
+        )
+      )
+    } else {
+      uv_cation_raw <- read_excel(
+        input.file.user()$datapath,
+        sheet = "UV",
+        col_types = "numeric"
+      )
+
+      # Check if any columns (excluding wavelength column) have data
+      data_cols <- uv_cation_raw[, -1]
+      has_data <- any(!is.na(data_cols))
+
+      if (!has_data) {
+        return(
+          data.frame(
+            wl = numeric(0),
+            cation = character(0),
+            stringsAsFactors = FALSE
+          )
+        )
+      } else {
+        uv_cation_raw %>%
+          add_column(cation = 'cation') %>%
+          arrange(wl)
+      }
+    }
   })
 
   #data without cation
   user.uv.input.no.cation <- reactive({
-    read_excel(
-      input.file.user()$datapath,
-      sheet = "UV - no cation",
-      col_types = "numeric"
-    ) %>%
-      add_column(cation = 'no cation')
+    sheet_names <- excel_sheets(input.file.user()$datapath)
+
+    if (!"UV - no cation" %in% sheet_names) {
+      # Return empty data frame if UV - no cation sheet doesn't exist
+      return(
+        data.frame(
+          oligo = character(0),
+          wl = numeric(0),
+          abs = numeric(0),
+          Concentration = numeric(0),
+          eps.uv = numeric(0),
+          delta.eps = numeric(0),
+          norm.cd = numeric(0),
+          stringsAsFactors = FALSE
+        )
+      )
+    } else {
+      uv_no_cation_raw <- read_excel(
+        input.file.user()$datapath,
+        sheet = "UV - no cation",
+        col_types = "numeric"
+      )
+
+      # Check if any columns (excluding wavelength column) have data
+      data_cols <- uv_no_cation_raw[, -1]
+      has_data <- any(!is.na(data_cols))
+
+      if (!has_data) {
+        return(
+          data.frame(
+            wl = numeric(0),
+            cation = character(0),
+            stringsAsFactors = FALSE
+          )
+        )
+      } else {
+        uv_no_cation_raw %>%
+          add_column(cation = 'no cation')
+      }
+    }
   })
 
   #merge data
   user.uv.input <- reactive({
-    user.uv.input.cation() %>%
-      pivot_longer(
-        cols = 2:(ncol(.) - 1),
-        values_to = 'abs',
-        names_to = 'oligo'
-      ) %>%
-      rbind(
-        user.uv.input.no.cation() %>%
-          pivot_longer(
-            cols = 2:(ncol(.) - 1),
-            values_to = 'abs',
-            names_to = 'oligo'
+    if (nrow(user.uv.input.cation()) > 0) {
+      x <- user.uv.input.cation() %>%
+        pivot_longer(
+          cols = 2:(ncol(.) - 1),
+          values_to = 'abs',
+          names_to = 'oligo'
+        )
+
+      if (nrow(user.uv.input.no.cation()) > 0) {
+        x <- x %>%
+          rbind(
+            user.uv.input.no.cation() %>%
+              pivot_longer(
+                cols = 2:(ncol(.) - 1),
+                values_to = 'abs',
+                names_to = 'oligo'
+              )
           )
-      ) %>%
-      left_join(
-        user.seq(),
-        by = "oligo"
-      ) %>%
-      group_by(oligo, cation) %>%
-      mutate(
-        abs = abs - mean(abs[wl > 320], na.rm = TRUE),
-        eps = abs / (1 * Concentration / 1E6)
-      ) %>%
-      ungroup() %>%
-      filter(
-        wl <= max(input$wl),
-        wl >= min(input$wl),
-        wl %% 1 == 0,
-        !is.na(abs),
-        oligo %in% input$user.seq.oligo
-      )
+      }
+
+      x %>%
+        left_join(
+          user.seq(),
+          by = "oligo"
+        ) %>%
+        group_by(oligo, cation) %>%
+        mutate(
+          abs = abs - mean(abs[wl > 320], na.rm = TRUE),
+          eps = abs / (1 * Concentration / 1E6)
+        ) %>%
+        ungroup() %>%
+        filter(
+          wl <= max(input$wl),
+          wl >= min(input$wl),
+          wl %% 1 == 0,
+          !is.na(abs),
+          oligo %in% input$user.seq.oligo
+        )
+    } else {
+      return(NULL)
+    }
   })
 
   ##### IDS----
@@ -2269,7 +2388,8 @@ server <- shinyServer(function(input, output, session) {
           incProgress(amount = 1 / 3)
 
           user.ids.input <- user.uv.input() %>%
-            filter(cation == 'no cation') %>%
+            filter(cation == 'cation') %>%
+            mutate(cation = 'no cation') %>%
             group_by(oligo, wl) %>%
             mutate(
               eps = dt.spec.calcR(
@@ -2298,9 +2418,9 @@ server <- shinyServer(function(input, output, session) {
         norm.ids = case_when(
           input$ids.norm == "-1/+1" ~
             2 *
-              (delta.eps - min(delta.eps)) /
-              (max(delta.eps) - min(delta.eps)) -
-              1,
+            (delta.eps - min(delta.eps)) /
+            (max(delta.eps) - min(delta.eps)) -
+            1,
           TRUE ~ delta.eps
         )
       )
@@ -2311,7 +2431,7 @@ server <- shinyServer(function(input, output, session) {
   ##### CD-----
 
   output$user.cd.input <- renderDT(server = FALSE, {
-    if (file.toggle.user() == 'no') {
+    if (file.toggle.user() == 'no' | (nrow(user.cd.input()) == 0)) {
       return(NULL)
     } else {
       user.cd.input() %>%
@@ -2370,6 +2490,8 @@ server <- shinyServer(function(input, output, session) {
       HTML(
         "Please upload a dataset to view the plot.<br>Use the Select user data file Browse button in the sidebar to navigate to your file."
       )
+    } else if (nrow(user.cd.input()) == 0) {
+      HTML("User file does not contain CD data")
     } else {
       plotOutput("p.user.cd")
     }
@@ -2428,7 +2550,11 @@ server <- shinyServer(function(input, output, session) {
   ##### UV----
 
   output$user.uv.input <- renderDT(server = FALSE, {
-    if (file.toggle.user() == 'no') {
+    if (
+      file.toggle.user() == 'no' |
+        nrow(user.uv.input.cation()) == 0 |
+        nrow(user.uv.input()) == 0
+    ) {
       return(NULL)
     } else {
       user.uv.input() %>%
@@ -2485,6 +2611,8 @@ server <- shinyServer(function(input, output, session) {
       HTML(
         "Please upload a dataset to view the plot.<br>Use the Select user data file Browse button in the sidebar to navigate to your file."
       )
+    } else if (nrow(user.uv.input.cation()) == 0) {
+      HTML("User file does not contain UV data")
     } else {
       plotOutput("p.user.uv")
     }
@@ -2581,6 +2709,8 @@ server <- shinyServer(function(input, output, session) {
       HTML(
         "Please upload a dataset to view the plot.<br>Use the Select user data file Browse button in the sidebar to navigate to your file."
       )
+    } else if (nrow(user.uv.input.cation()) == 0) {
+      HTML("User file does not contain UV data")
     } else {
       plotOutput("p.user.ids")
     }
@@ -2883,6 +3013,8 @@ server <- shinyServer(function(input, output, session) {
     plotOutput(
       if (is.null(input$user.data)) {
         "pca.cd.coord"
+      } else if (nrow(user.cd.input()) == 0) {
+        "pca.cd.coord"
       } else {
         "predict.cd.coord"
       },
@@ -2950,6 +3082,8 @@ server <- shinyServer(function(input, output, session) {
     plotOutput(
       if (is.null(input$user.data)) {
         "pca.cd.coord.2"
+      } else if (nrow(user.cd.input()) == 0) {
+        "pca.cd.coord.2"
       } else {
         "predict.cd.coord.2"
       },
@@ -2962,20 +3096,24 @@ server <- shinyServer(function(input, output, session) {
   ##### prep----
 
   user.ids <- reactive({
-    user.ids.input() %>%
-      mutate(
-        delta.eps = case_when(
-          input$ids.norm == "Δε" ~ delta.eps,
-          input$ids.norm == "295 nm" ~ norm.ids,
-          input$ids.norm == "-1/+1" ~ norm.ids
+    if (nrow(user.ids.input()) == 0) {
+      return(NULL)
+    } else {
+      user.ids.input() %>%
+        mutate(
+          delta.eps = case_when(
+            input$ids.norm == "Δε" ~ delta.eps,
+            input$ids.norm == "295 nm" ~ norm.ids,
+            input$ids.norm == "-1/+1" ~ norm.ids
+          )
+        ) %>%
+        select(oligo, wl, delta.eps) %>%
+        mutate(wl = paste0("ids-", wl)) %>%
+        pivot_wider(
+          names_from = wl,
+          values_from = delta.eps
         )
-      ) %>%
-      select(oligo, wl, delta.eps) %>%
-      mutate(wl = paste0("ids-", wl)) %>%
-      pivot_wider(
-        names_from = wl,
-        values_from = delta.eps
-      )
+    }
   })
 
   output$user.ids <- renderDT(server = FALSE, {
@@ -3189,6 +3327,8 @@ server <- shinyServer(function(input, output, session) {
     plotOutput(
       if (is.null(input$user.data)) {
         "pca.ids.coord"
+      } else if (nrow(user.uv.input.cation()) == 0) {
+        "pca.ids.coord"
       } else {
         "predict.ids.coord"
       },
@@ -3255,6 +3395,8 @@ server <- shinyServer(function(input, output, session) {
   output$conditional_pca_plot_ids_2 <- renderUI({
     plotOutput(
       if (is.null(input$user.data)) {
+        "pca.ids.coord.2"
+      } else if (nrow(user.uv.input.cation()) == 0) {
         "pca.ids.coord.2"
       } else {
         "predict.ids.coord.2"

@@ -129,7 +129,11 @@ ui <- bslib::page_navbar(
           selectInput(
             inputId = "cd.norm",
             label = "CD normalization",
-            choices = c("Δε", "Δε/ε", "-1/+1"),
+            choices = c(
+              "Δε", 
+              # "Δε/ε", 
+              "-1/+1"
+            ),
             selected = "Δε"
           ),
           selectInput(
