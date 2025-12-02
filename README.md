@@ -1,8 +1,13 @@
 ![R](https://img.shields.io/badge/r-%23276DC3.svg?style=for-the-badge&logo=r&logoColor=white)
 ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
 
-![CodeFactor Grade](https://img.shields.io/codefactor/grade/github/ericlarg4/eps2fold?style=for-the-badge)
+![GitHub Tag](https://img.shields.io/github/v/tag/EricLarG4/Eps2Fold?style=for-the-badge&label=Version)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/EricLarG4/Eps2Fold?style=for-the-badge)
+
+![Codacy grade](https://img.shields.io/codacy/grade/c659640d362a4b6e953b037ca6bef0a7?style=for-the-badge)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/ericlarg4/eps2fold/docker-publish.yml?style=for-the-badge)
+
+![GitHub Release Date](https://img.shields.io/github/release-date/EricLarG4/Eps2Fold?style=for-the-badge)
 ![GitHub last commit](https://img.shields.io/github/last-commit/ericlarg4/eps2fold?style=for-the-badge)
 
 ![GitHub License](https://img.shields.io/github/license/ericlarg4/eps2fold?style=for-the-badge)
