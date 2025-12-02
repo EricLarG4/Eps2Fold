@@ -83,7 +83,6 @@ def get_glycosidic_bond_angle(pdb, chain, residue, state=None):
 
 
 import os
-import statistics
 
 def twist_calc_fetch(pdb, chain, residue_1, residue_2):
     """
