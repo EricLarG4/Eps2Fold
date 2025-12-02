@@ -125,6 +125,13 @@ See the wiki.
 
 ## Changelog
 
+### Version 1.3.0
+
+**Much faster theoretical UV spectrum calculation**
+Now relies on fully vectorized data.table code, around 2 orders of magnitude faster than in v1.2.0. Data processing is now essentially instantaneous.
+
+Correction of epsilon calculation of user data when the pathlength is not 1 cm.
+
 ### Version 1.2.0
 
 Eps2Fold can now work in CD or Eps2Fold-only modes for user predictions.
