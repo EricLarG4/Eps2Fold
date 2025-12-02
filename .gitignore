@@ -20,6 +20,7 @@
 
 # RStudio files
 .Rproj.user/
+*.Rproj
 
 # produced vignettes
 vignettes/*.html
@@ -47,19 +48,21 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
-G4_IDS.Rproj
-app/scree.rdata
-user_cd.xlsx
-R/buffer.R
-bsui.R
-fluidui.R
-Investigate.html
-scree.rdata
-R/ref_cleanup.R
-data/Reference_data_archive.xlsx
-*.cif
-data/groove_width.csv
-*.pyc
 
-# Alternative user data file examples. Ignore all files starting by User data -
+# Data and binary artifacts to ignore
+*.cif
+*.pyc
+*.rdata
+
+# Local user/generated files
+user_cd.xlsx
+Investigate.html
+ref_cleanup.R
+Reference_data_archive.xlsx
+
+# Alternative user data file examples. Ignore all files starting by "User data"
+# in the /data directory
 data/User data - *
+data/User data_test - no 141.xlsx
+.gitignore
+data/User data_test.xlsx
