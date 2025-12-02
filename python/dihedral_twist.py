@@ -82,13 +82,16 @@ def get_glycosidic_bond_angle(pdb, chain, residue, state=None):
     return gba_angle
 
 
+import os
+import statistics
+
 def twist_calc_fetch(pdb, chain, residue_1, residue_2):
     """
     Calculate the average helical twist and glycosidic bond angles between a
     single stack of two bases across all models of a given PDB.
 
     Parameters:
-    pdb (str): PDB accession code.
+    pdb (str): PDB accession code or file path.
     chain (str): Chain identifier.
     residue_1 (int): First residue number.
     residue_2 (int): Second residue number.
@@ -98,11 +101,21 @@ def twist_calc_fetch(pdb, chain, residue_1, residue_2):
     degrees (rounded to 2 decimal places).
     """
     cmd.delete("all")
-    cmd.fetch(pdb)
+
+    # Check if the input is a file path
+    if os.path.isfile(pdb):
+        # Load the local file
+        cmd.load(pdb)
+        # Extract the base name of the file without extension to use as the object name
+        pdb_object_name = os.path.splitext(os.path.basename(pdb))[0]
+    else:
+        # Fetch the PDB structure
+        cmd.fetch(pdb)
+        pdb_object_name = pdb
 
     # Get the number of states (models)
-    state_count = cmd.count_states(pdb)
-    print(f"Found {state_count} states (models) in {pdb}")
+    state_count = cmd.count_states(pdb_object_name)
+    print(f"Found {state_count} states (models) in {pdb_object_name}")
 
     twist_angles = []
     gba1_angles = []
@@ -111,16 +124,16 @@ def twist_calc_fetch(pdb, chain, residue_1, residue_2):
     # Calculate angles for each state (model)
     for state in range(1, state_count + 1):
         try:
-            twist = twist_calc(pdb, chain, residue_1, residue_2, state=state)
-            gba1 = get_glycosidic_bond_angle(pdb, chain, residue_1, state=state)
-            gba2 = get_glycosidic_bond_angle(pdb, chain, residue_2, state=state)
+            twist = twist_calc(pdb_object_name, chain, residue_1, residue_2, state=state)
+            gba1 = get_glycosidic_bond_angle(pdb_object_name, chain, residue_1, state=state)
+            gba2 = get_glycosidic_bond_angle(pdb_object_name, chain, residue_2, state=state)
 
             twist_angles.append(twist)
             gba1_angles.append(gba1)
             gba2_angles.append(gba2)
             print(f"  State {state}: twist={twist}, gba1={gba1}, gba2={gba2}")
         except Exception as e:
-            print(f"  Error calculating angles for state {state} of {pdb}: {e}")
+            print(f"  Error calculating angles for state {state} of {pdb_object_name}: {e}")
             continue
 
     # Calculate averages
@@ -134,12 +147,12 @@ def twist_calc_fetch(pdb, chain, residue_1, residue_2):
     else:
         # Fall back to the first state if no valid states were found
         print(
-            f"  Warning: No valid states found for {pdb} {chain} {residue_1}-{residue_2}. Trying again with state=1 only."
+            f"  Warning: No valid states found for {pdb_object_name} {chain} {residue_1}-{residue_2}. Trying again with state=1 only."
         )
         try:
-            avg_twist = twist_calc(pdb, chain, residue_1, residue_2, state=1)
-            avg_gba1 = get_glycosidic_bond_angle(pdb, chain, residue_1, state=1)
-            avg_gba2 = get_glycosidic_bond_angle(pdb, chain, residue_2, state=1)
+            avg_twist = twist_calc(pdb_object_name, chain, residue_1, residue_2, state=1)
+            avg_gba1 = get_glycosidic_bond_angle(pdb_object_name, chain, residue_1, state=1)
+            avg_gba2 = get_glycosidic_bond_angle(pdb_object_name, chain, residue_2, state=1)
         except Exception as e:
             print(f"  Error with fallback calculation: {e}")
             avg_twist = 0.0
@@ -147,6 +160,7 @@ def twist_calc_fetch(pdb, chain, residue_1, residue_2):
             avg_gba2 = 0.0
 
     return avg_twist, avg_gba1, avg_gba2
+
 
 
 def twist_calc_iterate(pdb, chain, stack_pairs):
