@@ -60,3 +60,6 @@ data/Reference_data_archive.xlsx
 *.cif
 data/groove_width.csv
 *.pyc
+
+# Alternative user data file examples. Ignore all files starting by User data -
+data/User data - *
