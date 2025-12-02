@@ -2387,20 +2387,20 @@ server <- shinyServer(function(input, output, session) {
         {
           incProgress(amount = 1 / 3)
 
-          user.ids.input <- user.uv.input() %>%
-            filter(cation == 'cation') %>%
-            mutate(cation = 'no cation') %>%
-            group_by(oligo, wl) %>%
-            mutate(
-              eps = dt.spec.calcR(
-                input.contrib = dt.contributR(input.seq = seq),
-                input.wl = wl
-              )
-            ) %>%
-            rbind(
-              user.uv.input() %>%
-                filter(cation == 'cation')
-            )
+          user.ids.input <- as.data.table(user.uv.input())[cation == 'cation'][,
+            cation := 'no cation'
+          ][,
+            eps := NULL
+          ]
+
+          th_spectra <- generate_spectra(
+            sequences = unique(user.ids.input$seq),
+            wl_range = unique(user.ids.input$wl)
+          )
+
+          user.ids.input[th_spectra, on = .(seq, wl), eps := eps]
+
+          user.ids.input <- rbindlist(list(user.ids.input, user.uv.input()))
 
           incProgress(amount = 3 / 3)
         }
@@ -3407,83 +3407,199 @@ server <- shinyServer(function(input, output, session) {
 
   # UV calculator------
 
+  #UV parameters database----
+  #parameters for the extinction coefficient of oligodeoxynucleotides at 260 nm
+  #source: https://doi.org/10.1016/j.bpc.2007.12.004
+  nn.260 <- fread('data/db/epsilon260.csv')
+
+  #parameter ratio for ssDNA
+  nn.param <- fread('data/db/epsilondb.csv')
+
+  nn.param <- melt(
+    nn.param,
+    id.vars = "wl",
+    variable.name = "nn",
+    value.name = "ratio"
+  )
+
+  ## Placeholders----
+  ## Placeholder oligonucleotides for new row generation
+  placeholder_oligos <- c(
+    "21GG",
+    "22AG",
+    "23AG",
+    "24TTG",
+    "25TAG",
+    "45AG",
+    "Oxy30",
+    "Oxy28",
+    "c-myc",
+    "c-kit1",
+    "c-kit87-up",
+    "c-kit2",
+    "c-kit2GG",
+    "c-kit*",
+    "B-raf",
+    "K-ras 35B3",
+    "K-ras 35B1",
+    "N-myc",
+    "pilE-NG16",
+    "pilE-NG22",
+    "G4CT",
+    "T30177-TT",
+    "T95-2T",
+    "93del",
+    "J19",
+    "25CEB",
+    "26CEB",
+    "TBA",
+    "H-Bi-G4",
+    "16IT",
+    "16ITT",
+    "222T",
+    "222TT",
+    "[TG4T]4",
+    "[TG5T]4",
+    "[AG4T]4",
+    "[AG5T]4",
+    "Mito9",
+    "Mito86",
+    "21CC",
+    "22Py",
+    "24mutHtelo",
+    "22mutHtelo1234",
+    "22mutHtelo23"
+  )
+
+  # Corresponding sequences (5' to 3'), written explicitly as specified
+  placeholder_sequences <- c(
+    "GGGTTAGGGTTAGGGTTAGGG",
+    "AGGGTTAGGGTTAGGGTTAGGG",
+    "AGGGTTAGGGTTAGGGTTAGGGT",
+    "TTGGGTTAGGGTTAGGGTTAGGGA",
+    "TAGGGTTAGGGTTAGGGTTAGGGATT",
+    "GGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGG",
+    "TGGGGTTTTGGGGTTTTGGGGTTTTGGGGT",
+    "GGGGTTTTGGGGTTTTGGGGTTTTGGGG",
+    "TGAGGGTGGGTAGGGTGGGTAA",
+    "GGGAGGGGCGCTGGGAGGAGGG",
+    "AGGGAGGGGCGCTGGGAGGAGGG",
+    "CGGGCGGGCGCTAGGGAGGGT",
+    "GGGCGGGCGCTAGGGAGGG",
+    "GGCGAGGAGGGGCGTGGCCGGC",
+    "GGGCGGGAGGGGAAGGGAAGGGAA",
+    "AGGCGGTTGTGGGAAGGAGAGGGAGGGAGGGAGGGAG",
+    "AGGCGGTTGTGGGAAGGAGAGGGAGGGAGGGAGGGAGCAG",
+    "TAGGCGGGAGGGAGGAA",
+    "GGGTGGGTTGGGTGGG",
+    "TAGGGTGGGTTGGGTGGGAAT",
+    "GGGGCTGGGGCTGGGGCTGGGG",
+    "TTGTGGGTTGGGTGGGTGGGTT",
+    "TTGGGTGGGTGGGTGGGTT",
+    "GGGGTGGGAGGAGGTT",
+    "GGGTGGGTGGGTGGGT",
+    "AGGGTGGGTGGTTAAGTTGTGGGTGGGT",
+    "AAGGGTGGGTGGTTAAGTTGTGGGTGGGT",
+    "GGTTGGTGTGGTTGG",
+    "GGGACGTAGTGGG",
+    "TGGGTGGGTTTTTTGGGTGGGT",
+    "TTGGGTGGGTTTTTTGGGTGGGTT",
+    "TGGGTTGGGTTGGGTTGGGT",
+    "TTGGGTTGGGTTGGGTTGGGTT",
+    "TGGGGT",
+    "TGGGGGT",
+    "AGGGGT",
+    "AGGGGGT",
+    "TGGGGTGTCTTTGGGGTTTGGTTTTCGGGGTATGGGGT",
+    "TGTTAGGGTCATGGGCTGGGT",
+    "CCCCTAACCCCTAACCCCTAACCC",
+    "AATCACCAATCACCAATCC",
+    "TTACCGGTTACCGGTTACCGGTTACCGG",
+    "AGTGTTAGTGTTTAGTGTTTAGTGT",
+    "AGGGTTAGTGTTAAGTGTTTAGGG"
+  )
+
+  names(placeholder_sequences) <- placeholder_oligos
+
   ## User oligos----
   user_oligos <- reactiveVal(
-    data.frame(
-      oligo = "Oligo 1",
-      seq = sample(
-        c("TTAGGG", "TTAGGC", "TTTAGGG", "TTGGG", "TTACAGG", "TGGG", "TATGGG"),
-        1
-      ),
-      stringsAsFactors = FALSE
-    ) %>%
-      mutate(
-        eps_260 = dt.spec.calcR(
-          input.contrib = dt.contributR(input.seq = seq),
-          input.wl = 260
-        )
-      )
+    data.table(
+      seq = sample(placeholder_sequences, 1)
+    )[,
+      oligo := names(placeholder_sequences)[match(seq, placeholder_sequences)]
+    ][, .(oligo, seq)][, {
+      generate_spectra(sequences = seq, wl_range = 260)[,
+        .(oligo, seq, eps_260 = eps)
+      ]
+    }]
   )
 
   ## Render editable DataTable----
   output$spectra_user_input <- renderDT({
     datatable(
-      user_oligos() %>%
-        group_by(oligo, seq) %>%
-        mutate(
-          eps_260 = dt.spec.calcR(
-            input.contrib = dt.contributR(input.seq = seq),
-            input.wl = 260
-          )
-        ),
+      user_oligos(),
       colnames = c(
         "Oligonucleotide",
         "Sequence",
         "&epsilon;<sub>260nm</sub> (M<sup>-1</sup>cm<sup>-1</sup>)"
       ),
       editable = TRUE,
-      escape = FALSE #HTML rendering
+      escape = FALSE
     )
   })
 
   ### Track user edits and update reactiveVal----
   observeEvent(input$spectra_user_input_cell_edit, {
     info <- input$spectra_user_input_cell_edit
-    new_data <- user_oligos()
-    new_data[info$row, info$col] <- info$value # Use correct column index
-    user_oligos(new_data) # Update reactiveVal
+    dt <- copy(user_oligos())
+    col_name <- names(dt)[info$col]
+
+    if (is.numeric(dt[[col_name]])) {
+      dt[info$row, (col_name) := as.numeric(info$value)]
+    } else {
+      dt[info$row, (col_name) := info$value]
+    }
+
+    if (col_name == "seq") {
+      eps_val <- generate_spectra(
+        sequences = info$value,
+        wl_range = 260
+      )[seq == info$value, eps][1]
+      dt[info$row, eps_260 := eps_val]
+    }
+
+    user_oligos(dt)
   })
 
   ### Add a new row when button is clicked
   observeEvent(input$add_row, {
-    new_data <- user_oligos()
-    row_number <- nrow(new_data) + 1
-    new_row <- data.frame(
-      oligo = paste0("Oligo ", row_number),
-      seq = sample(
-        c("TTAGGG", "TTAGGC", "TTTAGGG", "TTGGG", "TTACAGG", "TGGG", "TATGGG"),
-        1
-      ),
-      stringsAsFactors = FALSE
-    ) %>%
-      mutate(
-        eps_260 = dt.spec.calcR(
-          input.contrib = dt.contributR(input.seq = seq),
-          input.wl = 260
-        )
-      )
-    user_oligos(rbind(new_data, new_row)) # Append new row
+    dt <- copy(user_oligos())
+
+    new_row <- data.table(
+      seq = sample(placeholder_sequences, 1)
+    )[,
+      oligo := names(placeholder_sequences)[match(seq, placeholder_sequences)]
+    ][, .(oligo, seq)][, {
+      val <- generate_spectra(sequences = seq, wl_range = 260)[seq == seq[1], eps][1]
+      .(oligo = oligo, seq = seq, eps_260 = val)
+    }]
+
+    dup_mask <- new_row$oligo %in% dt$oligo
+    new_row[dup_mask, oligo := paste0(oligo, "_copy")]
+
+    user_oligos(rbindlist(list(dt, new_row), use.names = TRUE, fill = TRUE))
   })
 
   ## Perform calculations based on updated data----
   user_oligos_calc <- reactive({
-    as.data.table(user_oligos()) %>%
-      group_by(oligo, seq) %>%
-      expand(wl = 220:310) %>%
-      mutate(
-        contrib = map(seq, dt.contributR),
-        eps = map2_dbl(wl, contrib, dt.spec.calcR)
-      )
+    as.data.table(user_oligos())[,
+      {
+        spec <- generate_spectra(sequences = seq, wl_range = 220:310)
+        # spec[, oligo := oligo]
+        spec
+      },
+      by = oligo
+    ]
   })
 
   ## Render updated plot----

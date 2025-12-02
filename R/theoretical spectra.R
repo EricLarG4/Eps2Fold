@@ -1,91 +1,66 @@
-#Dependencies----
-
-#librarian::shelf(tidyverse, data.table, tictoc, readxl)
-
-library('tidyverse')
+# Dependencies----
 library('data.table')
-library('readxl')
+library('stringr')
 
-#UV parameters database----
+#' Generate theoretical spectra for nucleotide sequences
+#'
+#' @param sequences Character vector of nucleotide sequences.
+#' @param wl_range Integer vector of wavelengths (nm) over which spectra are computed.
+#'
+#' @return data.table with columns `seq`, `wl`, and `eps`.
+#' @export
+#'
+#' @examples
+#' # generate_spectra(c("ATCG", "GCTA"), wl_range = 220:310)
+generate_spectra <- function(sequences, wl_range = 215:310) {
+  # sanity-check inputs
+  stopifnot(length(sequences) > 0)
 
-#parameters for the extinction coefficient of oligodeoxynucleotides at 260 nm
-#source: https://doi.org/10.1016/j.bpc.2007.12.004
-nn.260 <- fread('data/db/epsilon260.csv')
+  # assign ID to each sequence to retain ordering after expansions
+  seq_dt <- data.table(seq = sequences)[, seq_id := .I]
 
-#parameter ratio for ssDNA
-nn.param <- fread('data/db/epsilondb.csv') %>% 
-  pivot_longer(cols = 2:ncol(.),
-                values_to = "ratio",
-                names_to = "nn") %>% 
-  as.data.table()
+  # for every sequence, extract terminal bases and adjacent dinucleotide motifs
+  seq_pairs <- seq_dt[
+    ,
+    {
+      n <- str_length(seq)
+      if (n == 0) {
+        stop("Empty sequence provided.")
+      }
 
+      pair_positions <- if (n > 1) paste0(1:(n - 1), "-", 2:n) else character()
+      pair_motifs <- if (n > 1) str_sub(seq, 1:(n - 1), 2:n) else character()
 
-#Contributions of pairs of nt at 260 nm----
-dt.contributR <- function(input.seq){
-  
-  #initialisation with first and last nucleotides alone
-  epsilon.calc <- data.table(
-    position = c(1, str_length(input.seq)), #first and last position
-    nn = c(substr(input.seq, 1, 1), #first and last nt name
-           substr(input.seq, str_length(input.seq), str_length(input.seq)))
-  )
-  
-  #extraction of all nt pairs position and name
-  for (i in 1:(str_length(input.seq) - 1)) {
-    buffer <- data.table(position = paste(i, i + 1, sep = '-'),
-                         nn = substr(input.seq, i, i + 1)
-    )
-    epsilon.calc <- rbindlist(list(epsilon.calc, buffer)) 
+      data.table(
+        position = c(1, n, pair_positions),
+        nn = c(
+          str_sub(seq, 1, 1),      # first base contribution
+          str_sub(seq, n, n),      # last base contribution
+          pair_motifs              # internal dinucleotide contributions
+        )
+      )
+    },
+    by = .(seq_id, seq)
+  ]
+
+  # attach epsilon contributions (scaled) for each motif
+  seq_pairs[nn.260, on = "nn", contrib := epsij * 1000]
+
+  # ensure every motif found a match in the epsilon lookup table
+  if (seq_pairs[is.na(contrib), .N] > 0) {
+    stop("Some motifs are missing from the epsilon database.")
   }
-  
-  #association of each nt pair with its 260 nm parameter from db
-  epsilon.calc[nn.260, on = 'nn', contrib := epsij*1000]
-  
-  epsilon.calc
+
+  # restrict epsilon ratios to requested wavelength range
+  nn_param_subset <- nn.param[wl %in% wl_range]
+
+  # join spectra ratios to motifs, sum contributions per sequence/wavelength
+  nn_param_subset[
+    seq_pairs,
+    on = "nn",
+    allow.cartesian = TRUE
+  ][,
+    .(eps = sum(ratio * contrib)),
+    by = .(seq, wl)
+  ][order(seq, wl)]
 }
-
-
-#Contributions of pairs of nt at all wavelength---- 
-
-#Determined from contribution at 260 nm (dt.contributR()) and ratios from db (nn.param)
-
-dt.spec.calcR <- function(input.wl, input.contrib){
-  
-  #Select wavelength in db
-  nn.param <- nn.param[wl == input.wl]
-  
-  #Join ratio from db to each pair or nt
-  input.contrib[nn.param, on = .(nn), ratio := ratio]
-  
-  #Calculate the contribution of each pair of nt from ratio
-  input.contrib[,by = position, ratioed.contrib := ratio*contrib]
-  
-  #Sum across sequences to get epsilon
-  eps <- input.contrib[, sum(ratioed.contrib)]
-  
-}
-
-
-# # #Example----
-# # 
-# ##Example data----
-# oligo.table <- data.frame(
-#   oligo = rep(c("22AG", "24TTG"), 310-220+1),
-#   seq = rep(c("AGGGTTAGGGTTAGGGTTAGGG", "TTGGGTTAGGGTTAGGGTTAGGGA"), 310-220+1),
-#   wl = 220:310
-# )
-
-
-# ##Example calculation----
-# tic()
-# oligo.spec <- oligo.table %>%
-#   group_by(seq, wl) %>% 
-#   mutate(
-#     eps = dt.spec.calcR(input.contrib = dt.contributR(input.seq = seq), input.wl = wl)
-#   )
-# toc()
-
-
-# ##Example plot----
-# ggplot(oligo.spec, aes(x = wl, y = eps, color = oligo)) +
-#   geom_line()
