@@ -537,84 +537,93 @@ server <- shinyServer(function(input, output, session) {
   output$ref.uv <- renderDT(server = FALSE, {
     if (file.toggle() == 'no') {
       return(NULL)
-    } else {
-      ref.set() %>%
-        mutate(
-          conc = round(conc, 2),
-          abs = round(abs, 3)
-        ) %>%
-        select(c(
-          "oligo.number",
-          "oligo",
-          "description",
-          "sequence",
-          "nt",
-          "eps",
-          "salt",
-          "topo",
-          "conformer",
-          "feature",
-          "gba",
-          "gba.stacks",
-          "tetrad",
-          "tetrad.id",
-          "loop",
-          "plus.minus",
-          "groove",
-          "conc",
-          "wl",
-          "abs",
-          "uv.eps"
-        )) %>%
-        datatable(
-          style = "bootstrap",
-          extensions = c('Buttons', 'Responsive', 'Scroller'),
-          colnames = c(
-            "Wavelength (nm)" = "wl",
-            "Name" = "oligo",
-            "A" = "abs",
-            "#" = "oligo.number",
-            "&epsilon;<sub>260nm</sub> (M<sup>-1</sup>cm<sup>-1</sup>)" = "eps",
-            "Experimental &epsilon; (M<sup>-1</sup>cm<sup>-1</sup>)" = "uv.eps",
-            "Cation" = "salt",
-            "C (µM)" = "conc",
-            "Sequence" = "sequence",
-            "Number of nucleotides" = "nt",
-            "Topology" = "topo",
-            "Conformer" = "conformer",
-            "Other feature" = "feature",
-            "Description" = "description",
-            "GBA" = "gba",
-            "GBA stacks" = "gba.stacks",
-            "Tetrads" = "tetrad",
-            "Loop progression" = "loop",
-            "Tetrad combination" = "tetrad.id",
-            "Loop progression" = "loop",
-            "Tetrad handedness" = "plus.minus",
-            "Grooves" = "groove"
-          ),
-          rownames = F,
-          escape = FALSE,
-          filter = 'top',
-          autoHideNavigation = T,
-          options = list(
-            deferRender = TRUE,
-            scrollY = 200,
-            scroller = F,
-            pageLength = 25,
-            autoWidth = F,
-            dom = 'Bfrtip',
-            buttons = list(
-              list(extend = 'copy'),
-              list(extend = 'csv', title = NULL, filename = "reference uv"),
-              list(extend = 'excel', title = NULL, filename = "reference uv"),
-              list(extend = 'colvis')
-            ),
-            title = NULL,
-            columnDefs = list(list(visible = FALSE, targets = c(2:6, 9, 17)))
-          )
-        )
     }
+
+    sheet <- ref.set() %>%
+      mutate(
+        conc = round(conc, 2),
+        abs = round(abs, 3)
+      ) %>%
+      select(
+        oligo.number,
+        oligo,
+        description,
+        sequence,
+        nt,
+        eps,
+        salt,
+        topo,
+        conformer,
+        feature,
+        gba,
+        gba.stacks,
+        tetrad,
+        tetrad.id,
+        loop,
+        plus.minus,
+        groove,
+        conc,
+        wl,
+        abs,
+        uv.eps
+      )
+
+    hidden_targets <- which(
+      names(sheet) %in%
+        c("oligo.number", "sequence", "description", "plus.minus", "groove")
+    ) -
+      1
+
+    DT::datatable(
+      sheet,
+      style = "bootstrap",
+      extensions = c("Buttons", "Responsive", "Scroller"),
+      colnames = c(
+        "#" = "oligo.number",
+        "Name" = "oligo",
+        "Description" = "description",
+        "Sequence" = "sequence",
+        "Number of nucleotides" = "nt",
+        "&epsilon;<sub>260nm</sub> (M<sup>-1</sup>cm<sup>-1</sup>)" = "eps",
+        "Cation" = "salt",
+        "Topology" = "topo",
+        "Conformer" = "conformer",
+        "Other feature" = "feature",
+        "GBA" = "gba",
+        "GBA stacks" = "gba.stacks",
+        "Tetrads" = "tetrad",
+        "Tetrad combination" = "tetrad.id",
+        "Loop progression" = "loop",
+        "Tetrad handedness" = "plus.minus",
+        "Grooves" = "groove",
+        "C (µM)" = "conc",
+        "Wavelength (nm)" = "wl",
+        "Absorbance (A)" = "abs",
+        "Experimental &epsilon; (M<sup>-1</sup>cm<sup>-1</sup>)" = "uv.eps"
+      ),
+      rownames = FALSE,
+      escape = FALSE,
+      filter = "top",
+      autoHideNavigation = TRUE,
+      options = list(
+        deferRender = TRUE,
+        scrollY = 600,
+        scroller = FALSE,
+        pageLength = 25,
+        autoWidth = FALSE,
+        dom = "Bfrtip",
+        buttons = list(
+          list(extend = "copy"),
+          list(extend = "csv", title = NULL, filename = "reference uv"),
+          list(extend = "excel", title = NULL, filename = "reference uv"),
+          list(extend = "colvis")
+        ),
+        title = NULL,
+        columnDefs = list(
+          list(visible = FALSE, targets = hidden_targets)
+        )
+      )
+    )
   })
 
   output$ref.ids <- renderDT(server = FALSE, {
@@ -681,7 +690,7 @@ server <- shinyServer(function(input, output, session) {
           autoHideNavigation = T,
           options = list(
             deferRender = TRUE,
-            scrollY = 200,
+            scrollY = 600,
             scroller = F,
             pageLength = 25,
             autoWidth = F,
@@ -761,7 +770,7 @@ server <- shinyServer(function(input, output, session) {
           autoHideNavigation = T,
           options = list(
             deferRender = TRUE,
-            scrollY = 200,
+            scrollY = 600,
             scroller = F,
             pageLength = 25,
             autoWidth = F,
@@ -914,7 +923,7 @@ server <- shinyServer(function(input, output, session) {
           autoHideNavigation = T,
           options = list(
             deferRender = TRUE,
-            scrollY = 200,
+            scrollY = 600,
             scroller = F,
             pageLength = 25,
             autoWidth = F,
@@ -985,7 +994,7 @@ server <- shinyServer(function(input, output, session) {
           autoHideNavigation = T,
           options = list(
             deferRender = TRUE,
-            scrollY = 200,
+            scrollY = 600,
             scroller = F,
             pageLength = 25,
             autoWidth = F,
@@ -1357,7 +1366,7 @@ server <- shinyServer(function(input, output, session) {
           autoHideNavigation = T,
           options = list(
             deferRender = TRUE,
-            scrollY = 200,
+            scrollY = 600,
             scroller = F,
             pageLength = 25,
             autoWidth = F,
@@ -1495,7 +1504,7 @@ server <- shinyServer(function(input, output, session) {
         autoHideNavigation = T,
         options = list(
           deferRender = TRUE,
-          scrollY = 200,
+          scrollY = 600,
           scroller = F,
           pageLength = 25,
           autoWidth = F,
@@ -1845,7 +1854,7 @@ server <- shinyServer(function(input, output, session) {
           autoHideNavigation = T,
           options = list(
             deferRender = TRUE,
-            scrollY = 200,
+            scrollY = 600,
             scroller = F,
             pageLength = 25,
             autoWidth = F,
@@ -1981,7 +1990,7 @@ server <- shinyServer(function(input, output, session) {
         autoHideNavigation = T,
         options = list(
           deferRender = TRUE,
-          scrollY = 200,
+          scrollY = 600,
           scroller = F,
           pageLength = 25,
           autoWidth = F,
@@ -2443,7 +2452,9 @@ server <- shinyServer(function(input, output, session) {
         ) %>%
         setcolorder(c(
           "oligo",
+          "seq",
           "Concentration",
+          "l", 
           "wl",
           "cd",
           "delta.eps",
@@ -2458,7 +2469,9 @@ server <- shinyServer(function(input, output, session) {
             "Molar ellipticity" = "delta.eps",
             "Ellipticity (mdeg)" = "cd",
             "Concentration (µM)" = "Concentration",
-            "Normalized CD" = "norm.cd"
+            "Normalized CD" = "norm.cd",
+            "Pathlength (cm)" = "l",
+            "Sequence" = "seq"
           ),
           rownames = F,
           escape = T,
@@ -2466,7 +2479,7 @@ server <- shinyServer(function(input, output, session) {
           autoHideNavigation = T,
           options = list(
             deferRender = TRUE,
-            scrollY = 200,
+            scrollY = 600,
             scroller = F,
             pageLength = 25,
             autoWidth = F,
@@ -2503,7 +2516,7 @@ server <- shinyServer(function(input, output, session) {
 
     if (input$cd.norm == "Δε") {
       user.cd$y <- user.cd$delta.eps
-      axis.label <- "&Delta;&eps; (M<sup>-1</sup> cm<sup>-1</sup>)"
+      axis.label <- "&Delta;&epsilon; (M<sup>-1</sup> cm<sup>-1</sup>)"
     } else {
       user.cd$y <- user.cd$norm.cd
       axis.label <- "Normalized CD"
@@ -2560,49 +2573,48 @@ server <- shinyServer(function(input, output, session) {
       user.uv.input() %>%
         mutate(
           Concentration = round(Concentration, 2),
-          abs = round(abs, 2)
+          abs = round(abs, 2),
+          eps = round(eps, 0)
         ) %>%
         setcolorder(c(
           "oligo",
+          "seq",
           "cation",
           "Concentration",
+          "l",
           "wl",
           "abs",
           "eps"
         )) %>%
-        datatable(
-          style = "bootstrap",
-          extensions = c('Buttons', 'Responsive', 'Scroller'),
+        DT::datatable(
+          .,
+          extensions = c('Buttons'),
           colnames = c(
             "Wavelength (nm)" = "wl",
             "Name" = "oligo",
             "A" = "abs",
             "Cation?" = "cation",
             "Concentration (µM)" = "Concentration",
-            "Molar extinction coefficient" = "eps"
+            "Molar extinction coefficient" = "eps",
+            "Sequence" = "seq",
+            "Pathlength (cm)" = "l"
           ),
-          rownames = F,
-          escape = T,
-          filter = 'top',
-          autoHideNavigation = T,
+          rownames = FALSE,
+          escape = TRUE,
           options = list(
-            deferRender = TRUE,
-            scrollY = 200,
-            scroller = F,
-            pageLength = 25,
-            autoWidth = F,
-            dom = 'Bfrtip',
+            dom = 'Brftip',
             buttons = list(
               list(extend = 'copy'),
-              list(extend = 'csv', title = NULL, filename = "user uv"),
-              list(extend = 'excel', title = NULL, filename = "user uv"),
+              list(extend = 'csv', title = NULL, filename = "User_UV"),
+              list(
+                extend = 'excel',
+                title = NULL,
+                filename = "User_UV"
+              ),
               list(extend = 'colvis')
-            ),
-            title = NULL
-            # columnDefs = list(list(visible=FALSE, targets=c(0,2:6,9,12)))
+            )
           )
         )
-      # formatStyle(columns = 0:5, target = "cell", backgroundColor = "#272c30")
     }
   })
 
@@ -2663,7 +2675,9 @@ server <- shinyServer(function(input, output, session) {
         ) %>%
         setcolorder(c(
           "oligo",
+          "seq",
           "Concentration",
+          "l",
           "wl",
           "delta.eps",
           "norm.ids"
@@ -2675,10 +2689,12 @@ server <- shinyServer(function(input, output, session) {
             # "#" = "oligo.number",
             "Wavelength (nm)" = "wl",
             "Name" = "oligo",
-            "IDS" = "delta.eps",
+            "Eps2Fold" = "delta.eps",
             "C (µM)" = "Concentration",
-            "Normalized IDS" = "norm.ids",
-            "Molar extinction coefficient" = "eps"
+            "Normalized Eps2Fold" = "norm.ids",
+            "Molar extinction coefficient" = "eps",
+            "Pathlength (cm)" = "l",
+            "Sequence" = "seq"
           ),
           rownames = F,
           escape = T,
@@ -2686,7 +2702,7 @@ server <- shinyServer(function(input, output, session) {
           autoHideNavigation = T,
           options = list(
             deferRender = TRUE,
-            scrollY = 200,
+            scrollY = 600,
             scroller = F,
             pageLength = 25,
             autoWidth = F,
@@ -2817,7 +2833,7 @@ server <- shinyServer(function(input, output, session) {
           autoHideNavigation = T,
           options = list(
             deferRender = TRUE,
-            scrollY = 200,
+            scrollY = 600,
             scroller = F,
             pageLength = 25,
             autoWidth = F,
@@ -2920,7 +2936,7 @@ server <- shinyServer(function(input, output, session) {
           autoHideNavigation = T,
           options = list(
             deferRender = TRUE,
-            scrollY = 200,
+            scrollY = 600,
             scroller = F,
             pageLength = 25,
             autoWidth = F,
@@ -3130,7 +3146,7 @@ server <- shinyServer(function(input, output, session) {
           autoHideNavigation = T,
           options = list(
             deferRender = TRUE,
-            scrollY = 200,
+            scrollY = 600,
             scroller = F,
             pageLength = 25,
             autoWidth = F,
@@ -3234,7 +3250,7 @@ server <- shinyServer(function(input, output, session) {
           autoHideNavigation = T,
           options = list(
             deferRender = TRUE,
-            scrollY = 200,
+            scrollY = 600,
             scroller = F,
             pageLength = 25,
             autoWidth = F,
@@ -3580,7 +3596,10 @@ server <- shinyServer(function(input, output, session) {
     )[,
       oligo := names(placeholder_sequences)[match(seq, placeholder_sequences)]
     ][, .(oligo, seq)][, {
-      val <- generate_spectra(sequences = seq, wl_range = 260)[seq == seq[1], eps][1]
+      val <- generate_spectra(sequences = seq, wl_range = 260)[
+        seq == seq[1],
+        eps
+      ][1]
       .(oligo = oligo, seq = seq, eps_260 = val)
     }]
 

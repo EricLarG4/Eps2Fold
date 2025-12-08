@@ -778,7 +778,7 @@ ui <- bslib::page_navbar(
           ),
           nav_panel(
             title = "UV",
-            DTOutput("user.uv.input")
+            DTOutput("user.uv.input", height = "2400px")
           ),
           nav_panel(
             title = "Eps2Fold",
